@@ -1,11 +1,11 @@
 import React from "react";
 import FirebaseServices from "../../firebase/FirebaseServices";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, User } from "firebase/auth";
 
 const authInstance = FirebaseServices.getAuthInstance();
 
 interface IAuthContext {
-    user: any;
+    user: User | null;
     isLoggedIn: boolean,
     login: (username: string, password: string) => void,
     logout: () => void,
@@ -24,7 +24,7 @@ export const useAuth = () => {
 };
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-    const [user, setUser] = React.useState<any>(null);
+    const [user, setUser] = React.useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
     const login = (email: string, password: string) => {

@@ -1,19 +1,27 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './components/context/AuthContext';
+import { ModalContextProvider } from './components/context/ModalContext';
 
+const Layout = lazy(() => import('./components/Layout'));
 const Home = lazy(() => import("./sites/Home"));
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <Suspense fallback={<div />}>
-      <AuthContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthContextProvider>
+      <ModalContextProvider>
+        <AuthContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthContextProvider>
+      </ModalContextProvider>
     </Suspense>
   );
 }
+
+export default App;
