@@ -4,7 +4,8 @@ import { AuthContextProvider } from './components/context/AuthContext';
 import { ModalContextProvider } from './components/context/ModalContext';
 
 const Layout = lazy(() => import('./components/Layout'));
-const Home = lazy(() => import("./sites/Home"));
+const Forums = lazy(() => import("./sites/Forums"));
+const WhatsNew = lazy(() => import("./sites/WhatsNew"));
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,8 @@ const App: React.FC = () => {
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Forums />} />
+                <Route path="/whats-new" element={<WhatsNew />} />
               </Route>
             </Routes>
           </BrowserRouter>
