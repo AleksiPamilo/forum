@@ -25,7 +25,7 @@ const Header = () => {
                             </div>
                             : <div className="flex flex-row gap-2">
                                 <Button onClick={handleModal}>Login</Button>
-                                <Button colors={{ background: "green-600", hover: "green-700" }} onClick={handleModal}>Register</Button>
+                                <Button colors={{ background: "bg-green-600 hover:bg-green-700" }} onClick={handleModal}>Register</Button>
                             </div>
                     }
                 </div>
