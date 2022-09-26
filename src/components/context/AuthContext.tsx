@@ -30,7 +30,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
     const [user, setUser] = React.useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
-    const checkLogin = () => {
+    const checkLogin = React.useCallback(() => {
         authInstance.onAuthStateChanged((user) => {
             if (user) {
                 setUser(user);
@@ -40,7 +40,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
                 setIsLoggedIn(false);
             }
         });
-    }
+    }, []);
 
     React.useEffect(() => {
         checkLogin();
