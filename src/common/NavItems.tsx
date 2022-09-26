@@ -3,7 +3,7 @@ interface INavItem {
     path: string,
 }
 
-export const forumItems: INavItem[] = [
+export const navItems: INavItem[] = [
     {
         title: "Forums",
         path: "/",
@@ -14,21 +14,4 @@ export const forumItems: INavItem[] = [
     },
 ];
 
-export const whatsNewItems: INavItem[] = [
-    {
-        title: "Forums",
-        path: "/",
-    },
-    {
-        title: "New posts",
-        path: "/whats-new/posts",
-    },
-    {
-        title: "New threads",
-        path: "/whats-new/threads",
-    },
-    {
-        title: "New profile posts",
-        path: "/whats-new/profile-posts",
-    },
-];
+export default navItems

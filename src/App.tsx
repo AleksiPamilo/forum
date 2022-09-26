@@ -10,8 +10,8 @@ const WhatsNew = lazy(() => import("./sites/WhatsNew"));
 const App: React.FC = () => {
   return (
     <Suspense fallback={<div />}>
-      <ModalContextProvider>
-        <AuthContextProvider>
+      <AuthContextProvider>
+        <ModalContextProvider>
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
@@ -20,8 +20,8 @@ const App: React.FC = () => {
               </Route>
             </Routes>
           </BrowserRouter>
-        </AuthContextProvider>
-      </ModalContextProvider>
+        </ModalContextProvider>
+      </AuthContextProvider>
     </Suspense>
   );
 }
