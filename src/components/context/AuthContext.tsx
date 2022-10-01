@@ -1,17 +1,17 @@
 import React from "react";
 import FirebaseServices from "../../firebase/FirebaseServices";
-import { User, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import FirebaseFunctions from "../../functions/firebase";
+import { User, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 const authInstance = FirebaseServices.getAuthInstance();
 
 interface IAuthContext {
-    user: User | null;
+    user: User | null,
     isLoggedIn: boolean,
-    checkLogin: () => void;
+    checkLogin: () => void,
     logout: () => void,
     login: (email: string, password: string) => Promise<{ success: boolean, message: string }>,
-    register: (email: string, password: string, username: string, photoUrl?: string) => Promise<{ success: boolean, message: string }>,
-    updateUser: (username?: string, photoURL?: string) => Promise<{ success: boolean, message: string }>
+    signUp: (email: string, password: string, username: string, photoFile?: File) => Promise<{ success: boolean, message: string }>,
 }
 
 const AuthContext = React.createContext<IAuthContext | undefined>(undefined);
@@ -51,31 +51,26 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
             const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
             setIsLoggedIn(true);
             setUser(userCredential.user);
-
             return { success: true, message: "Login Successful" };
         } catch {
             return { success: false, message: "Invalid Credentials" };
         }
     }
 
-    const register = async (email: string, password: string, username: string, photoUrl?: string) => {
+    const signUp = async (email: string, password: string, username: string, photoFile?: File) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(authInstance, email, password);
             setIsLoggedIn(true);
             setUser(userCredential.user);
 
-            updateUser(username, photoUrl);
+            FirebaseFunctions.updateUserProfile({ username, photoFile });
 
             return { success: true, message: "Registration Successful" };
-        } catch (e) {
-            if (e instanceof Error) {
-                if (password.length < 6) {
-                    return { success: false, message: "Password must be at least 6 characters" };
-                } else {
-                    return { success: false, message: "Registration failed" };
-                }
+        } catch {
+            if (password.length < 6) {
+                return { success: false, message: "Password must be at least 6 characters" };
             } else {
-                return { success: false, message: "Something went wrong. Try again!" };
+                return { success: false, message: "Registration failed" };
             }
         }
     }
@@ -86,22 +81,6 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
         setUser(null);
     }
 
-    const updateUser = async (username?: string, photoUrl?: string) => {
-        const user = authInstance.currentUser;
-        if (!user) return { success: false, message: "User not logged in" };
-
-        try {
-            await updateProfile(user, {
-                displayName: username ?? user.displayName ?? null,
-                photoURL: photoUrl ?? user.photoURL ?? "https://i.imgur.com/1u0ESiX.png",
-            });
-
-            return { success: true, message: "Profile updated successfully" };
-        } catch {
-            return { success: false, message: "Something unexpected happened. Try again!" };
-        }
-    }
-
     return (
         <AuthContext.Provider value={{
             user,
@@ -109,8 +88,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
             checkLogin,
             login,
             logout,
-            register,
-            updateUser,
+            signUp,
         }}>
             {children}
         </AuthContext.Provider>

@@ -3,6 +3,7 @@ import { useAuth, useModal } from "../../../hooks";
 import { FaTimes } from "react-icons/fa";
 import Button from "../../Button";
 import Input from "../../Input";
+import Dropzone from "../../Dropzone";
 
 type LoginProps = {
     isLogin?: boolean;
@@ -10,14 +11,14 @@ type LoginProps = {
 
 const Login: React.FC<LoginProps> = ({ isLogin }) => {
     const { closeModal } = useModal();
-    const { login: loginWithEmailAndPassword, register } = useAuth();
+    const { login: loginWithEmailAndPassword, signUp } = useAuth();
 
     const [login, setLogin] = useState<boolean>(isLogin ?? true);
     const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [photoUrl, setPhotoUrl] = useState<string>("");
+    const [photoFile, setPhotoFile] = useState<File | undefined>();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -60,7 +61,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             return;
         }
 
-        const x = await register(email, password, username, photoUrl);
+        const x = await signUp(email, password, username, photoFile);
         switch (x.success) {
             case true:
                 setErrorMessage(null);
@@ -102,11 +103,14 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                                 <FaTimes className="w-5 h-5" />
                             </Button>
                         </div>
-                        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
                         <Input type="text" placeholder="Username" value={username} onChange={e => setUsername(String(e.target.value))} />
-                        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
-                        <Input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(String(e.target.value))} />
-                        <Input type="text" placeholder="Photo URL (optional)" value={photoUrl} onChange={e => setPhotoUrl(String(e.target.value))} />
+                        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
+                        <Input type="password" autoComplete="new-password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
+                        <Input type="password" autoComplete="new-password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(String(e.target.value))} />
+                        <span>Profile Picture (optional)</span>
+                        <Dropzone onChange={(files) => setPhotoFile(files[0])} acceptedFiles={{
+                            "image/*": [".jpg", ".jpeg", ".png"]
+                        }} />
                         <div className="flex gap-1 justify-center">
                             <p className="text-gray-500">Already have an account?</p>
                             <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { setLogin(true); clearFields(); }}>Login</p>
@@ -114,10 +118,10 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                         <Button styles="w-full px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white" onClick={handleRegister}>Register</Button>
                     </div>
             }
-            <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-red-500" style={{ display: !!errorMessage ? "flex" : "none" }}>
+            <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-red-500 text-black" style={{ display: !!errorMessage ? "flex" : "none" }}>
                 {errorMessage}
             </div>
-            <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-green-500" style={{ display: !!successMessage ? "flex" : "none" }}>
+            <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-green-500 text-black" style={{ display: !!successMessage ? "flex" : "none" }}>
                 {successMessage}
             </div>
         </div>
