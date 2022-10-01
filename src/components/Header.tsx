@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth, useModal } from "../hooks";
 import logo from "../assets/logo.png";
 import Button from "./Button";
-import Login from "./modals/auth/loginSignup";
+import Login from "./modals/auth/LoginSignup";
 import Navigation from "./Navigation";
 import Dropdown from "./Dropdown";
 

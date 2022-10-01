@@ -64,6 +64,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
             setUser(userCredential.user);
 
             FirebaseFunctions.updateUserProfile({ username, photoFile });
+            FirebaseFunctions.auth.sendEmailVerification();
 
             return { success: true, message: "Registration Successful" };
         } catch {
