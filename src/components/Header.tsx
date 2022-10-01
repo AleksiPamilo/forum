@@ -40,7 +40,7 @@ const Header = () => {
                     {
                         isLoggedIn
                             ? <div className="flex flex-row gap-6">
-                                <p className="pt-2">Welcome, {user?.displayName ?? user?.email ?? "Unknown User"}!</p>
+                                <p className="pt-2 max-w-[8rem] md:max-w-[20rem] whitespace-nowrap overflow-hidden text-ellipsis">Welcome, {user?.displayName ?? user?.email ?? "Unknown User"}!</p>
                                 <Dropdown
                                     options={dropdownOptions}
                                     btnStyles="rounded-full w-10 h-10 bg-gray-500 hover:bg-zinc-500"

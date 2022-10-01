@@ -76,7 +76,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     }
 
     return (
-        <div className="bg-[#333333] w-[30rem] p-4 border text-white border-white shadow-xl">
+        <div className="bg-[#333333] w-[23rem] md:w-[30rem] p-4 rounded-md border text-white border-white shadow-xl">
             {
                 login
                     ? <div className="flex flex-col gap-2">
@@ -89,7 +89,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                         <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
                         <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
 
-                        <div className="flex gap-1 justify-center">
+                        <div className="flex gap-1 py-2 justify-center">
                             <p className="text-gray-500">Don't have an account?</p>
                             <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { setLogin(false); clearFields(); }}>Register</p>
                         </div>
@@ -111,7 +111,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                         <Dropzone onChange={(files) => setPhotoFile(files[0])} acceptedFiles={{
                             "image/*": [".jpg", ".jpeg", ".png"]
                         }} />
-                        <div className="flex gap-1 justify-center">
+                        <div className="flex gap-1 py-2 justify-center">
                             <p className="text-gray-500">Already have an account?</p>
                             <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { setLogin(true); clearFields(); }}>Login</p>
                         </div>
