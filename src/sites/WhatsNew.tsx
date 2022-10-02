@@ -1,4 +1,5 @@
 const WhatsNew: React.FC = () => {
+    document.title = "ForumX — Whats New";
     return (
         <div>
             WhatsNew

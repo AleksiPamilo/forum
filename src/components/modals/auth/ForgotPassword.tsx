@@ -1,9 +1,9 @@
 import React from "react";
-import FirebaseFunctions from "../../../functions/firebase";
+import FirebaseFunctions from "../../../functions";
 import { FaTimes } from "react-icons/fa";
 import Button from "../../Button";
 import Input from "../../Input";
-import { useModal } from "../../context/ModalContext";
+import { useModal } from "../../../hooks";
 
 const ForgotPassword: React.FC = () => {
     const { closeModal } = useModal();

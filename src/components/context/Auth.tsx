@@ -1,6 +1,6 @@
 import React from "react";
 import FirebaseServices from "../../firebase/FirebaseServices";
-import FirebaseFunctions from "../../functions/firebase";
+import FirebaseFunctions from "../../functions";
 import { User, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 const authInstance = FirebaseServices.getAuthInstance();
@@ -49,29 +49,28 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
     const login = async (email: string, password: string) => {
         try {
             const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
-            setIsLoggedIn(true);
-            setUser(userCredential.user);
-            return { success: true, message: "Login Successful" };
+            return { success: true, message: "Login Successful", user: userCredential.user, isLoggedIn: true };
         } catch {
-            return { success: false, message: "Invalid Credentials" };
+            return { success: false, message: "Invalid Credentials", user: null, isLoggedIn: false };
         }
     }
 
     const signUp = async (email: string, password: string, username: string, photoFile?: File) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(authInstance, email, password);
-            setIsLoggedIn(true);
-            setUser(userCredential.user);
-
-            FirebaseFunctions.updateUserProfile({ username, photoFile });
-            FirebaseFunctions.auth.sendEmailVerification();
-
-            return { success: true, message: "Registration Successful" };
+            const update = await FirebaseFunctions.user.updateProfile({ username, photoFile });
+            if (!update.success) {
+                await userCredential.user.delete();
+                return { success: false, message: update.message, user: null, isLoggedIn: false };
+            } else {
+                FirebaseFunctions.auth.sendEmailVerification();
+            }
+            return { success: true, message: "Registration Successful", user: userCredential.user, isLoggedIn: true };
         } catch {
             if (password.length < 6) {
-                return { success: false, message: "Password must be at least 6 characters" };
+                return { success: false, message: "Password must be at least 6 characters", user: null, isLoggedIn: false };
             } else {
-                return { success: false, message: "Registration failed" };
+                return { success: false, message: "Registration failed", user: null, isLoggedIn: false };
             }
         }
     }

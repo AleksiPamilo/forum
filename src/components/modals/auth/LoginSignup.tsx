@@ -5,11 +5,13 @@ import Input from "../../Input";
 import Button from "../../Button";
 import Dropzone from "../../Dropzone";
 import ForgotPassword from "./ForgotPassword";
+import FirebaseFunctions from "../../../functions";
 
 type LoginProps = {
     isLogin?: boolean;
 }
 
+const inputStyle = "px-4 py-2 rounded-md text-black bg-[#355af030] text-zinc-300 focus:outline-none focus:border focus:border-[#355af060]"
 const Login: React.FC<LoginProps> = ({ isLogin }) => {
     const { setModalContent, setIsModalOpen, closeModal } = useModal();
     const { login: loginWithEmailAndPassword, signUp } = useAuth();
@@ -52,6 +54,9 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     }
 
     const handleRegister = async () => {
+        setErrorMessage(null);
+        setSuccessMessage(null);
+
         if (email === "" || username === "" || password === "" || confirmPassword === "") {
             setSuccessMessage(null);
             setErrorMessage("Please fill in all fields");
@@ -61,6 +66,17 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             setErrorMessage("Passwords do not match");
             return;
         }
+
+        const isUsernameAvailable = await FirebaseFunctions.user.isUsernameAvailable(username);
+        if (!(username.length >= 3 && username.length <= 20)) {
+            setSuccessMessage(null);
+            setErrorMessage("Username must be between 3 and 20 characters");
+            return;
+        } else if (!isUsernameAvailable) {
+            setSuccessMessage(null);
+            setErrorMessage("Username is already taken");
+            return;
+        };
 
         const x = await signUp(email, password, username, photoFile);
         switch (x.success) {
@@ -82,50 +98,37 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     }
 
     return (
-        <div className="bg-[#333333] w-[23rem] md:w-[30rem] p-4 rounded-md border text-white border-white shadow-xl">
+        <div className="bg-[#03061a] w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-[#0c44ed20] shadow-xl">
+            <div className="flex justify-between mb-6">
+                <h1 className="text-2xl font-extrabold">{login ? "Login" : "Register"}</h1>
+                <Button colors={{ background: "bg-[#355af0] hover:bg-[#355af090]" }} onClick={closeModal}>
+                    <FaTimes className="w-5 h-5" />
+                </Button>
+            </div>
             {
                 login
                     ? <div className="flex flex-col gap-2">
-                        <div className="flex justify-between">
-                            <h1 className="text-2xl font-extrabold">Login</h1>
-                            <Button onClick={closeModal}>
-                                <FaTimes className="w-5 h-5" />
-                            </Button>
-                        </div>
-                        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
-                        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
+                        <Input styles={inputStyle} type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
+                        <Input styles={inputStyle} type="password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
                         <div className="flex pb-2">
                             <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { handlePasswordModal(); clearFields(); }}>Forgot Password?</p>
                         </div>
-                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white" onClick={handleLogin}>Login</Button>
-                        <div className="flex gap-1 py-2 justify-center">
-                            <p className="text-gray-500">Don't have an account?</p>
-                            <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { setLogin(false); clearFields(); }}>Register</p>
-                        </div>
+                        <Button styles="w-full px-4 py-2 rounded-md bg-[#355af0] hover:bg-[#355af090] text-white" onClick={handleLogin}>Login</Button>
                     </div>
 
                     : <div className="flex flex-col gap-2">
-                        <div className="flex justify-between">
-                            <h1 className="text-2xl font-extrabold">Register</h1>
-                            <Button onClick={closeModal}>
-                                <FaTimes className="w-5 h-5" />
-                            </Button>
-                        </div>
-                        <Input type="text" placeholder="Username" value={username} onChange={e => setUsername(String(e.target.value))} />
-                        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
-                        <Input type="password" autoComplete="new-password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
-                        <Input type="password" autoComplete="new-password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(String(e.target.value))} />
-                        <div className="pb-2">
+                        <Input styles={inputStyle} type="text" placeholder="Username" value={username} onChange={e => setUsername(String(e.target.value))} />
+                        <Input styles={inputStyle} type="email" placeholder="Email" value={email} onChange={e => setEmail(String(e.target.value))} />
+                        <Input styles={inputStyle} type="password" autoComplete="new-password" placeholder="Password" value={password} onChange={e => setPassword(String(e.target.value))} />
+                        <Input styles={inputStyle} type="password" autoComplete="new-password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(String(e.target.value))} />
+                        <div className="mt-5 mb-6">
                             <span>Profile Picture (optional)</span>
                             <Dropzone onChange={(files) => setPhotoFile(files[0])} acceptedFiles={{
                                 "image/*": [".jpg", ".jpeg", ".png"]
                             }} />
                         </div>
-                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white" onClick={handleRegister}>Register</Button>
-                        <div className="flex gap-1 py-2 justify-center">
-                            <p className="text-gray-500">Already have an account?</p>
-                            <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { setLogin(true); clearFields(); }}>Login</p>
-                        </div>
+                        <Button styles="w-full px-4 py-2 rounded-md bg-[#355af0] hover:bg-[#355af090] text-white" onClick={handleRegister}>Register</Button>
+
                     </div>
             }
             <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-red-500 text-white" style={{ display: !!errorMessage ? "flex" : "none" }}>
@@ -133,6 +136,14 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             </div>
             <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-green-500 text-white" style={{ display: !!successMessage ? "flex" : "none" }}>
                 {successMessage}
+            </div>
+            <div className="flex gap-1 py-2 justify-center">
+                <p className="text-gray-500">{
+                    login ? "Don't have an account?" : "Already have an account?"
+                }</p>
+                <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { setLogin(!login); clearFields(); }}>
+                    {login ? "Register" : "Login"}
+                </p>
             </div>
         </div>
     )

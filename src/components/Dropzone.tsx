@@ -22,7 +22,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ multiple, maxFiles, acceptedFiles, 
 
     return (
         <div className={`flex justify-center items-center w-full min-h-[5rem] rounded border-2 border-dashed
-            ${isDragAccept ? "border-green-500" : isDragReject ? "border-red-500" : "border-white hover:border-zinc-500"}
+            ${isDragAccept ? "border-green-500" : isDragReject ? "border-red-500" : "border-zinc-500 hover:border-zinc-400"}
         `} {...getRootProps()}>
             <input {...getInputProps()} />
             <p>{filenames?.join(", ") ?? "Click to select files or drag & drop"}</p>
