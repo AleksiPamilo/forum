@@ -12,9 +12,6 @@ const ForgotPassword: React.FC = () => {
     const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
 
     const handleForgotPassword = async () => {
-        setErrorMessage(null);
-        setSuccessMessage(null);
-
         if (email === "") {
             setSuccessMessage(null);
             setErrorMessage("Please fill in your email address");
