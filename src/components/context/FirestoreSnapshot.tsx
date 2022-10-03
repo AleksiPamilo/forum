@@ -1,7 +1,7 @@
 import { collection, onSnapshot, query } from "firebase/firestore";
 import React from "react";
 import FirebaseServices from "../../firebase/FirebaseServices";
-import { useStores } from "./RootStore";
+import { useStores } from "../../hooks";
 
 const FirestoreSnapshotProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const { setData } = useStores();

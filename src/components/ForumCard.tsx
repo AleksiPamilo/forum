@@ -1,6 +1,6 @@
 import React from "react";
 import { Forum } from "../mst";
-import { useStores } from "./context/RootStore";
+import { useStores } from "../hooks";
 import logo from "../assets/logo.png";
 
 type ForumCardProps = {

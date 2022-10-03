@@ -8,7 +8,7 @@ export const useStores = () => {
     const context = React.useContext(RootStoreContext);
 
     if (context === undefined) {
-        throw new Error('Call "useMst" only inside RootStoreContextProvider');
+        throw new Error('Call "useStores" only inside RootStoreContextProvider');
     }
 
     return context;

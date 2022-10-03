@@ -1,4 +1,5 @@
-import { useStores } from "../components/context/RootStore";
+import { observer } from "mobx-react-lite";
+import { useStores } from "../hooks";
 import ForumCard from "../components/ForumCard";
 
 const Forums: React.FC = () => {
@@ -23,4 +24,4 @@ const Forums: React.FC = () => {
     )
 }
 
-export default Forums;
+export default observer(Forums);
