@@ -1,5 +1,5 @@
 import React from "react";
-import FirebaseFunctions from "../../../functions";
+import Functions from "../../../functions";
 import { FaTimes } from "react-icons/fa";
 import Button from "../../Button";
 import Input from "../../Input";
@@ -18,7 +18,7 @@ const ForgotPassword: React.FC = () => {
             return;
         }
 
-        const x = await FirebaseFunctions.auth.requestPasswordReset(email);
+        const x = await Functions.firebase.requestPasswordReset(email);
         switch (x.success) {
             case true:
                 setEmail("");

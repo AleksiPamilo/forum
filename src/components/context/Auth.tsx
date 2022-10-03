@@ -1,6 +1,6 @@
 import React from "react";
 import FirebaseServices from "../../firebase/FirebaseServices";
-import FirebaseFunctions from "../../functions";
+import Functions from "../../functions";
 import { User, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 const authInstance = FirebaseServices.getAuthInstance();
@@ -58,7 +58,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
     const signUp = async (email: string, password: string, username: string, photoFile?: File) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(authInstance, email, password);
-            const update = await FirebaseFunctions.user.updateProfile({ username, photoFile });
+            const update = await Functions.firebase.updateProfile({ username, photoFile });
             if (!update.success) {
                 await userCredential.user.delete();
                 return { success: false, message: update.message, user: null, isLoggedIn: false };

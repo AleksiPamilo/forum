@@ -5,7 +5,7 @@ import Input from "../../Input";
 import Button from "../../Button";
 import Dropzone from "../../Dropzone";
 import ForgotPassword from "./ForgotPassword";
-import FirebaseFunctions from "../../../functions";
+import Functions from "../../../functions";
 
 type LoginProps = {
     isLogin?: boolean;
@@ -73,7 +73,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             return;
         }
 
-        const isUsernameAvailable = await FirebaseFunctions.user.isUsernameAvailable(username);
+        const isUsernameAvailable = await Functions.firebase.isUsernameAvailable(username);
         if (!(username.length >= 3 && username.length <= 20)) {
             setSuccessMessage(null);
             setErrorMessage("Username must be between 3 and 20 characters");

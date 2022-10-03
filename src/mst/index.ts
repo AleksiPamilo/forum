@@ -10,9 +10,9 @@ const ForumModel = types.model("Forum").props({
     id: types.identifier,
     categoryId: types.string,
     name: types.string,
-    createdAt: types.string,
+    createdAt: types.number,
     createdBy: types.string,
-    updatedAt: types.maybeNull(types.string),
+    updatedAt: types.maybeNull(types.number),
     updatedBy: types.maybeNull(types.string),
 });
 
@@ -21,9 +21,9 @@ const ThreadModel = types.model("Post").props({
     forumId: types.string,
     title: types.string,
     content: types.string,
-    createdAt: types.string,
+    createdAt: types.number,
     createdBy: types.string,
-    updatedAt: types.maybeNull(types.string),
+    updatedAt: types.maybeNull(types.number),
     updatedBy: types.maybeNull(types.string),
 });
 

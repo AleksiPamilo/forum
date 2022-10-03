@@ -1,19 +1,44 @@
-import { updateProfile } from "firebase/auth";
+import { sendEmailVerification, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
-import FirebaseServices from "../../firebase/FirebaseServices";
-import StorageFunctions from "./storageFunctions";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import FirebaseServices from "../firebase/FirebaseServices";
 
 const firestoreInstance = FirebaseServices.getFirestoreInstance();
 const authInstance = FirebaseServices.getAuthInstance();
-const Functions = {} as IUserFunctions;
+const storageInstance = FirebaseServices.getStorageInstance();
 
-export interface IUserFunctions {
+const Functions = {} as IFirebaseFunctions;
+
+export interface IFirebaseFunctions {
+    /* Auth Functions */
+
     /**
-     * @description Updates the user's profile
-     * @param username The username of the user
-     * @param photoFile The profile photo of the user
+     * @description Sends an password reset email to the user
+     * @param email The email of the user
      * @returns A promise that resolves to an object containing a success boolean and a message string
      */
+    requestPasswordReset: (email: string) => Promise<{ success: boolean, message: string }>,
+    /**
+     * @description Sends an email verification to the user
+     * @returns A promise that resolves to an object containing a success boolean and a message string
+     */
+    sendEmailVerification: () => Promise<{ success: boolean, message: string }>,
+
+    /* Storage Functions */
+    /**
+     * @description Uploads a photo to the storage
+     * @param photoFile The photo file to upload
+     * @returns A promise that resolves to an object containing a success boolean, a message string, and the url of the uploaded photo
+     */
+    uploadPhoto: (photoFile: File) => Promise<{ success: boolean, url: string | null }>,
+
+    /* User Functions */
+    /**
+    * @description Updates the user's profile
+    * @param username The username of the user
+    * @param photoFile The profile photo of the user
+    * @returns A promise that resolves to an object containing a success boolean and a message string
+    */
     updateProfile: ({ username, photoFile }: { username?: string, photoFile?: File }) => Promise<{ success: boolean, message: string }>,
     /**
      * @description Checks if the given username is available
@@ -29,6 +54,46 @@ export interface IUserFunctions {
     getUserByUID: (uid: string | null | undefined) => Promise<{ success: boolean, message: string, user: { username: string, photoUrl: string } }>
 }
 
+/* Auth Functions */
+Functions.requestPasswordReset = async (email) => {
+    try {
+        await sendPasswordResetEmail(authInstance, email);
+        return { success: true, message: "Password reset email sent" };
+    } catch {
+        return { success: false, message: "We couldn't find that account!" };
+    }
+}
+
+Functions.sendEmailVerification = async () => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+
+    try {
+        await sendEmailVerification(user);
+        return { success: true, message: "Email verification sent" };
+    } catch {
+        return { success: false, message: "We couldn't find that account!" };
+    }
+}
+
+/* Storage Functions */
+
+Functions.uploadPhoto = async (photoFile) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in", url: null };
+
+    const storageRef = ref(storageInstance, `profilepictures/${user.uid}`);
+
+    try {
+        await uploadBytes(storageRef, photoFile);
+        return { success: true, url: await getDownloadURL(storageRef) };
+    } catch {
+        return { success: false, url: null };
+    }
+}
+
+/* User Functions */
+
 Functions.updateProfile = async ({ username, photoFile }) => {
     const user = authInstance.currentUser;
     let photoUrl: string | null = null;
@@ -37,7 +102,7 @@ Functions.updateProfile = async ({ username, photoFile }) => {
     if (!username && !photoFile) return { success: false, message: "No changes to make" };
 
     if (photoFile) {
-        const uploaded = await StorageFunctions.uploadPhoto(photoFile);
+        const uploaded = await Functions.uploadPhoto(photoFile);
         if (uploaded.success) {
             photoUrl = uploaded.url;
         }
