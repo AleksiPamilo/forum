@@ -18,7 +18,7 @@ export interface IAuthFunctions {
     sendEmailVerification: () => Promise<{ success: boolean, message: string }>,
 }
 
-Functions.requestPasswordReset = async (email: string) => {
+Functions.requestPasswordReset = async (email) => {
     try {
         await sendPasswordResetEmail(authInstance, email);
         return { success: true, message: "Password reset email sent" };

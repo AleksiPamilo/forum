@@ -14,7 +14,7 @@ export interface IStorageFunctions {
     uploadPhoto: (photoFile: File) => Promise<{ success: boolean, url: string | null }>,
 }
 
-Functions.uploadPhoto = async (photoFile: File) => {
+Functions.uploadPhoto = async (photoFile) => {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in", url: null };
 

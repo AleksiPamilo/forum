@@ -21,6 +21,12 @@ export interface IUserFunctions {
      * @returns A promise that resolves to a boolean
      */
     isUsernameAvailable: (username: string) => Promise<boolean>,
+    /**
+     * @description Gets the user's data from the database
+     * @param uid The user's uid
+     * @returns A promise that resolves to an object containing the user's data
+     */
+    getUserByUID: (uid: string | null | undefined) => Promise<{ success: boolean, message: string, user: { username: string, photoUrl: string } }>
 }
 
 Functions.updateProfile = async ({ username, photoFile }) => {
@@ -68,7 +74,7 @@ Functions.updateProfile = async ({ username, photoFile }) => {
     }
 }
 
-Functions.isUsernameAvailable = async (username: string) => {
+Functions.isUsernameAvailable = async (username) => {
     username = username.toLowerCase();
     if (username.length >= 3 && username.length <= 20) {
         const snap = await getDoc(doc(firestoreInstance, "usernames", username));
@@ -79,6 +85,17 @@ Functions.isUsernameAvailable = async (username: string) => {
         }
     } else {
         return false;
+    }
+}
+
+Functions.getUserByUID = async (uid) => {
+    if (!uid) return { success: false, message: "User not logged in", user: { username: "", photoUrl: "" } };
+
+    const snap = await getDoc(doc(firestoreInstance, "users", uid));
+    if (snap.exists()) {
+        return { success: true, message: "", user: snap.data() as { username: string, photoUrl: string } };
+    } else {
+        return { success: false, message: "User not found", user: { username: "", photoUrl: "" } };
     }
 }
 
