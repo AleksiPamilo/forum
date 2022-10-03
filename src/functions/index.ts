@@ -1,21 +1,13 @@
-import FirebaseFunctions, { IFirebaseFunctions } from "./firebase";
-interface IFunctions {
-    firebase: IFirebaseFunctions,
+import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, } from "./firebase"
 
-    /**
-     * @description Gets the time elapsed since the given time
-     * @param time The time to compare
-     * @returns A string containing the time elapsed
-     */
-    timeElapsed: (time: number) => string,
-}
-
-const Functions = {} as IFunctions;
-Functions.firebase = { ...FirebaseFunctions };
-
-Functions.timeElapsed = (time) => {
-    const timeElapsed = Date.now() - time;
-    const seconds = Math.floor(timeElapsed / 1000);
+/**
+ * @description Gets the time elapsed since the given time
+ * @param time The time to compare
+ * @returns A string containing the time elapsed
+ */
+const timeElapsed = (time: number) => {
+    const timeAgo = Date.now() - time;
+    const seconds = Math.floor(timeAgo / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
@@ -37,4 +29,15 @@ Functions.timeElapsed = (time) => {
     }
 }
 
-export default Functions;
+const functions = {
+    timeElapsed,
+    firebase: {
+        requestPasswordReset,
+        sendEmailVerification,
+        updateProfile,
+        isUsernameAvailable,
+        getUserByUID,
+    }
+}
+
+export default functions;
