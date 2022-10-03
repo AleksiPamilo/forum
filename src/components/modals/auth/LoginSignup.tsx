@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth, useModal } from "../../../hooks";
-import { FaTimes } from "react-icons/fa";
+import { FaSpinner, FaTimes } from "react-icons/fa";
 import Input from "../../Input";
 import Button from "../../Button";
 import Dropzone from "../../Dropzone";
@@ -24,12 +24,15 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     const [photoFile, setPhotoFile] = useState<File | undefined>();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const clearFields = () => {
         setEmail("");
         setUsername("");
         setPassword("");
         setConfirmPassword("");
+        setPhotoFile(undefined);
+        setLoading(false);
     }
 
     const handleLogin = async () => {
@@ -39,6 +42,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             return;
         }
 
+        setLoading(true);
         const x = await loginWithEmailAndPassword(email, password);
         switch (x.success) {
             case true:
@@ -49,6 +53,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             case false:
                 setSuccessMessage(null);
                 setErrorMessage(x.message);
+                setLoading(false);
                 break;
         }
     }
@@ -57,6 +62,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
         setErrorMessage(null);
         setSuccessMessage(null);
 
+        setLoading(true);
         if (email === "" || username === "" || password === "" || confirmPassword === "") {
             setSuccessMessage(null);
             setErrorMessage("Please fill in all fields");
@@ -88,6 +94,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
             case false:
                 setSuccessMessage(null);
                 setErrorMessage(x.message);
+                setLoading(false);
                 break;
         }
     }
@@ -113,7 +120,16 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                         <div className="flex pb-2">
                             <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { handlePasswordModal(); clearFields(); }}>Forgot Password?</p>
                         </div>
-                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white" onClick={handleLogin}>Login</Button>
+                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white disabled:cursor-not-allowed" disabled={loading} onClick={handleLogin}>
+                            {loading ? (
+                                <div className="flex items-center justify-center">
+                                    <FaSpinner className="animate-spin w-5 h-5 mr-2" />
+                                    <span>Logging in...</span>
+                                </div>
+                            )
+                                : "Login"
+                            }
+                        </Button>
                     </div>
 
                     : <div className="flex flex-col gap-2">
@@ -127,8 +143,16 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                                 "image/*": [".jpg", ".jpeg", ".png"]
                             }} />
                         </div>
-                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white" onClick={handleRegister}>Register</Button>
-
+                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white disabled:cursor-not-allowed" disabled={loading} onClick={handleRegister}>
+                            {loading ? (
+                                <div className="flex items-center justify-center">
+                                    <FaSpinner className="animate-spin w-5 h-5 mr-2" />
+                                    <span>Registering...</span>
+                                </div>
+                            )
+                                : "Register"
+                            }
+                        </Button>
                     </div>
             }
             <div className="justify-center mt-4 w-full px-4 py-2 rounded-md bg-red-500 text-white" style={{ display: !!errorMessage ? "flex" : "none" }}>

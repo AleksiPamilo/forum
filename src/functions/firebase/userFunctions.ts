@@ -44,8 +44,9 @@ Functions.updateProfile = async ({ username, photoFile }) => {
             const usernameDoc = doc(firestoreInstance, "usernames", username.toLowerCase());
             const batch = writeBatch(firestoreInstance);
 
-            batch.set(userDoc, { username: username });
-            batch.set(usernameDoc, { uid: user.uid });
+            batch.set(userDoc, { username: username, photoUrl: photoUrl }, { merge: true });
+            batch.set(usernameDoc, { uid: user.uid }, { merge: true });
+
             await batch.commit()
                 .catch((error) => {
                     console.error("Error updating username:", error);

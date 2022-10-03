@@ -62,9 +62,8 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
             if (!update.success) {
                 await userCredential.user.delete();
                 return { success: false, message: update.message, user: null, isLoggedIn: false };
-            } else {
-                FirebaseFunctions.auth.sendEmailVerification();
             }
+
             return { success: true, message: "Registration Successful", user: userCredential.user, isLoggedIn: true };
         } catch {
             if (password.length < 6) {
