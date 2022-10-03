@@ -11,7 +11,7 @@ type LoginProps = {
     isLogin?: boolean;
 }
 
-const inputStyle = "px-4 py-2 rounded-md text-black bg-[#355af030] text-zinc-300 focus:outline-none focus:border focus:border-[#355af060]"
+const inputStyle = "px-4 py-2 rounded-md text-black bg-gray-900 text-zinc-300 focus:outline-none border border-slate-400 focus:border-[#355af060]"
 const Login: React.FC<LoginProps> = ({ isLogin }) => {
     const { setModalContent, setIsModalOpen, closeModal } = useModal();
     const { login: loginWithEmailAndPassword, signUp } = useAuth();
@@ -98,10 +98,10 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     }
 
     return (
-        <div className="bg-[#03061a] w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-[#0c44ed20] shadow-xl">
+        <div className="bg-zinc-900 w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-blue-900 shadow-xl">
             <div className="flex justify-between mb-6">
                 <h1 className="text-2xl font-extrabold">{login ? "Login" : "Register"}</h1>
-                <Button colors={{ background: "bg-[#355af0] hover:bg-[#355af090]" }} onClick={closeModal}>
+                <Button colors={{ background: "bg-blue-700 hover:bg-blue-800" }} onClick={closeModal}>
                     <FaTimes className="w-5 h-5" />
                 </Button>
             </div>
@@ -113,7 +113,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                         <div className="flex pb-2">
                             <p className="text-blue-500 cursor-pointer hover:underline" onClick={() => { handlePasswordModal(); clearFields(); }}>Forgot Password?</p>
                         </div>
-                        <Button styles="w-full px-4 py-2 rounded-md bg-[#355af0] hover:bg-[#355af090] text-white" onClick={handleLogin}>Login</Button>
+                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white" onClick={handleLogin}>Login</Button>
                     </div>
 
                     : <div className="flex flex-col gap-2">
@@ -127,7 +127,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
                                 "image/*": [".jpg", ".jpeg", ".png"]
                             }} />
                         </div>
-                        <Button styles="w-full px-4 py-2 rounded-md bg-[#355af0] hover:bg-[#355af090] text-white" onClick={handleRegister}>Register</Button>
+                        <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white" onClick={handleRegister}>Register</Button>
 
                     </div>
             }
