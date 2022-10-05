@@ -66,10 +66,12 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
         if (email === "" || username === "" || password === "" || confirmPassword === "") {
             setSuccessMessage(null);
             setErrorMessage("Please fill in all fields");
+            setLoading(false);
             return;
         } else if (password !== confirmPassword) {
             setSuccessMessage(null);
             setErrorMessage("Passwords do not match");
+            setLoading(false);
             return;
         }
 

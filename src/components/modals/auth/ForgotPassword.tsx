@@ -33,16 +33,16 @@ const ForgotPassword: React.FC = () => {
     }
 
     return (
-        <div className="bg-[#333333] w-[23rem] md:w-[30rem] p-4 rounded-md border text-white border-white shadow-xl">
+        <div className="bg-zinc-900 w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-blue-900 shadow-xl">
             <div className="flex flex-col gap-2">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-extrabold">Reset Password</h1>
-                    <Button onClick={() => closeModal()}>
+                    <Button colors={{ background: "bg-blue-700 hover:bg-blue-800" }} onClick={() => closeModal()}>
                         <FaTimes className="w-5 h-5" />
                     </Button>
                 </div>
-                <Input type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(String(e.target.value))} />
-                <Button styles="w-full px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white" onClick={handleForgotPassword}>Request a new Password</Button>
+                <Input styles="px-4 py-2 rounded-md text-black bg-gray-900 text-zinc-300 focus:outline-none border border-slate-400 focus:border-[#355af060]" type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(String(e.target.value))} />
+                <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white" onClick={handleForgotPassword}>Request a new Password</Button>
             </div>
             <div className="justify-center mt-2 w-full px-4 py-2 rounded-md bg-red-500 text-white" style={{ display: !!errorMessage ? "flex" : "none" }}>
                 {errorMessage}
