@@ -1,4 +1,4 @@
-import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, } from "./firebase"
+import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, getUserByUsername } from "./firebase"
 
 /**
  * @description Gets the time elapsed since the given time
@@ -29,7 +29,7 @@ const timeElapsed = (time: number) => {
     }
 }
 
-const functions = {
+const Functions = {
     timeElapsed,
     firebase: {
         requestPasswordReset,
@@ -37,7 +37,8 @@ const functions = {
         updateProfile,
         isUsernameAvailable,
         getUserByUID,
+        getUserByUsername
     }
 }
 
-export default functions;
+export default Functions;

@@ -148,3 +148,18 @@ export const getUserByUID = async (uid: string) => {
     }
 }
 
+/**
+ * @Description Gets the user's data from the database
+ * @param username The user's username
+ * @returns A promise that resolves to an object containing the user's data
+ */
+export const getUserByUsername = async (username?: string) => {
+    if (!username) return { success: false, message: "User Not Found", user: { username: "", photoUrl: "" } };
+
+    const snap = await getDoc(doc(firestoreInstance, "usernames", username.toLowerCase()));
+    if (snap.exists()) {
+        return getUserByUID(snap.data()?.uid);
+    } else {
+        return { success: false, message: "User not found", user: { username: "", photoUrl: "" } };
+    }
+}

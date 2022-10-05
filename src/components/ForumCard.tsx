@@ -43,7 +43,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                                     <img src={latestThreadCreator.photoUrl} alt="" className="w-10 h-10 border border-white rounded-full" />
                                     <div className="text-sm text-left text-gray-600 max-w-[10rem]">
                                         <p className="overflow-hidden text-ellipsis">{latestThread.title}</p>
-                                        <div className="flex flex-row gap-1">
+                                        <div className="flex flex-row gap-1 items-center">
                                             <p className="text-xs text-gray-600">{postedAgo} •</p>
                                             <Link to={`/profile/${latestThreadCreator.username}`} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestThreadCreator.username}</Link>
                                         </div>
