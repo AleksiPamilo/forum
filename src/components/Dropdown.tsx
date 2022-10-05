@@ -61,6 +61,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, btnStyles
                                 }
 
                                 onChange?.(option?.value ?? option.label);
+                                handleDropdown();
                             }}
                         >
                             {option.label}
