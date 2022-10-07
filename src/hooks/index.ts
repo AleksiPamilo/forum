@@ -1,6 +1,6 @@
-import { useAuth } from "../components/context/Auth";
-import { useModal } from "../components/context/Modal";
-import { useStores } from "../components/context/RootStore";
+import { useAuth } from "../components/context/AuthContext";
+import { useModal } from "../components/context/ModalContext";
+import { useStores } from "../components/context/RootStoreContext";
 
 export {
     useAuth,

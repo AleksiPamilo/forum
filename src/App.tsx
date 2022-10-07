@@ -1,10 +1,10 @@
 import { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthContextProvider } from './components/context/Auth';
-import { ModalContextProvider } from './components/context/Modal';
-import { RootStoreContextProvider } from './components/context/RootStore';
+import { AuthContextProvider } from './components/context/AuthContext';
+import { ModalContextProvider } from './components/context/ModalContext';
+import { RootStoreContextProvider } from './components/context/RootStoreContext';
 import { RootStore, initializeRootStore } from './mst';
-import FirestoreSnapshotProvider from './components/context/FirestoreSnapshot';
+import FirestoreSnapshotProvider from './components/context/FirestoreSnapshotProvider';
 
 const Layout = lazy(() => import('./components/Layouts/Layout'));
 const Forums = lazy(() => import("./sites/Forums"));
