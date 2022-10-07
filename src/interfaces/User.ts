@@ -5,27 +5,26 @@ export interface IUser {
     socials: {
         facebook?: {
             url: string,
-            name: string,
+            username: string,
         },
         instagram?: {
             url: string,
-            name: string,
+            username: string,
         },
         twitter?: {
             url: string,
-            name: string,
+            username: string,
         },
         linkedin?: {
             url: string,
-            name: string,
+            username: string,
         },
         github?: {
             url: string,
-            name: string,
+            username: string,
         },
         mail?: {
             email: string,
-            name: string,
         },
     },
 }

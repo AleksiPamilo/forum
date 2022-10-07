@@ -1,7 +1,9 @@
 import React from "react";
 import { FaSpinner } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import ProfileHeader from "../components/ProfileHeader";
+import ProfileHeader from "../components/Profile/ProfileHeader";
+import ProfilePosts from "../components/Profile/ProfilePosts";
+import Socials from "../components/Profile/Socials";
 // import Functions from "../functions";
 
 // MockData
@@ -39,9 +41,19 @@ const Profile: React.FC = () => {
     }
 
     return (
-        <div className="bg-[#171717] flex justify-center items-center mt-2">
-            <div className="w-[100rem] bg-zinc-800">
-                <ProfileHeader user={user} />
+        <div className="bg-[#171717] flex flex-col justify-center items-center mt-2">
+            <div className="max-w-[100rem]">
+                <div className="bg-zinc-800 rounded-lg my-3">
+                    <ProfileHeader user={user} />
+                </div>
+                <div className="flex flex-col md:flex-row w-full gap-3">
+                    <div className="flex flex-col rounded-md w-full md:w-1/4 bg-zinc-800">
+                        <Socials user={user} />
+                    </div>
+                    <div className="flex w-full rounded-md bg-zinc-800">
+                        <ProfilePosts />
+                    </div>
+                </div>
             </div>
         </div>
     )
