@@ -27,7 +27,7 @@ export const user: IUser = {
             username: "GithubAccount",
         },
         mail: {
-            email: "fake.email@noob.dev",
+            email: "fake.email@forum-d47ec.web.app",
         },
     }
 }
