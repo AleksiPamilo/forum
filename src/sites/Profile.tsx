@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
                         <Socials user={user} />
                     </div>
                     <div className="flex w-full rounded-md bg-zinc-800">
-                        <ProfilePosts />
+                        <ProfilePosts user={user} />
                     </div>
                 </div>
             </div>

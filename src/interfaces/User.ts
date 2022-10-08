@@ -1,3 +1,5 @@
+import { IProfilePost } from "./Post";
+
 export interface IUser {
     username: string,
     photoUrl: string,
@@ -27,4 +29,5 @@ export interface IUser {
             email: string,
         },
     },
+    posts: IProfilePost[],
 }
