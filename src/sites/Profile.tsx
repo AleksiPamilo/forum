@@ -2,25 +2,23 @@ import React from "react";
 import { FaSpinner } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import ProfileHeader from "../components/Profile/ProfileHeader";
-import ProfilePosts from "../components/Profile/ProfilePosts";
+import ProfilePosts from "../components/Profile/ProfileMessages";
 import Socials from "../components/Profile/Socials";
-// import Functions from "../functions";
-
-// MockData
-import { user } from "../mockdata/user";
+import Functions from "../functions";
+import { IUser } from "../interfaces/User";
 
 const Profile: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
-    //const [user, setUser] = React.useState<{ username: string, photoUrl: string } | null>(null);
+    const [user, setUser] = React.useState<IUser | null>(null);
     const { username } = useParams();
 
     React.useEffect(() => {
         setLoading(true);
-        // Functions.firebase.getUserByUsername(username).then((data) => {
-        //     setUser(data.user);
-        //     setLoading(false);
-        // });
-        setTimeout(() => setLoading(false), 150);
+
+        Functions.firebase.getUserByUsername(username).then((data) => {
+            setUser(data.user);
+            setLoading(false);
+        });
     }, [username]);
 
     if (loading) {

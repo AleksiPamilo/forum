@@ -1,6 +1,6 @@
 import { IUser } from "./User";
 
-export interface IProfilePost {
+export interface IProfileMessage {
     id: string,
     content: string,
     createdAt: number,

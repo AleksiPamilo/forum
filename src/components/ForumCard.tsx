@@ -10,14 +10,14 @@ type ForumCardProps = {
 
 const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
     const { getThreadCount, getLatestThread } = useStores();
-    const [latestThreadCreator, setLatestThreadCreator] = React.useState<{ username: string, photoUrl: string }>({ username: "", photoUrl: "" });
+    const [latestThreadCreator, setLatestThreadCreator] = React.useState<{ username: string | null, photoUrl: string | null }>({ username: "", photoUrl: "" });
     const latestThread = getLatestThread(forum.id);
     const postedAgo = Functions.timeElapsed(latestThread?.createdAt || 0);
 
     React.useEffect(() => {
         if (latestThread) {
             Functions.firebase.getUserByUID(latestThread.createdBy).then((data) => {
-                setLatestThreadCreator({ username: data.user.username, photoUrl: data.user.photoUrl });
+                setLatestThreadCreator({ username: data.user?.username ?? null, photoUrl: data.user?.photoUrl ?? null });
             });
         }
     }, [latestThread]);
@@ -40,7 +40,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                         {
                             latestThread ? (
                                 <div className="flex flex-row text-center gap-2">
-                                    <img src={latestThreadCreator.photoUrl} alt="" className="w-10 h-10 border border-white rounded-full" />
+                                    <img src={latestThreadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 border border-white rounded-full" />
                                     <div className="text-sm text-left text-gray-600 max-w-[10rem]">
                                         <p className="overflow-hidden text-ellipsis">{latestThread.title}</p>
                                         <div className="flex flex-row gap-1 items-center">

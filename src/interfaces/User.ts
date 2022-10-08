@@ -1,4 +1,4 @@
-import { IProfilePost } from "./Post";
+import { IProfileMessage } from "./Message";
 
 export interface IUser {
     username: string,
@@ -28,6 +28,6 @@ export interface IUser {
         mail?: {
             email: string,
         },
-    },
-    posts: IProfilePost[],
+    } | null,
+    messages: IProfileMessage[] | null,
 }

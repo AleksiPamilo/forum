@@ -2,6 +2,7 @@ import { sendEmailVerification as sendVerification, sendPasswordResetEmail, upda
 import { doc, getDoc, writeBatch } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
+import { IUser } from "../interfaces/User";
 
 const firestoreInstance = FirebaseServices.getFirestoreInstance();
 const authInstance = FirebaseServices.getAuthInstance();
@@ -138,13 +139,13 @@ export const isUsernameAvailable = async (username: string) => {
  * @returns A promise that resolves to an object containing the user's data
  */
 export const getUserByUID = async (uid: string) => {
-    if (!uid) return { success: false, message: "User not logged in", user: { username: "", photoUrl: "" } };
+    if (!uid) return { success: false, message: "User not logged in", user: null };
 
     const snap = await getDoc(doc(firestoreInstance, "users", uid));
     if (snap.exists()) {
-        return { success: true, message: "", user: snap.data() as { username: string, photoUrl: string } };
+        return { success: false, message: "User not found", user: snap.data() as IUser };
     } else {
-        return { success: false, message: "User not found", user: { username: "", photoUrl: "" } };
+        return { success: false, message: "User not found", user: null };
     }
 }
 
@@ -154,12 +155,12 @@ export const getUserByUID = async (uid: string) => {
  * @returns A promise that resolves to an object containing the user's data
  */
 export const getUserByUsername = async (username?: string) => {
-    if (!username) return { success: false, message: "User Not Found", user: { username: "", photoUrl: "" } };
+    if (!username) return { success: false, message: "User Not Found", user: null };
 
     const snap = await getDoc(doc(firestoreInstance, "usernames", username.toLowerCase()));
     if (snap.exists()) {
         return getUserByUID(snap.data()?.uid);
     } else {
-        return { success: false, message: "User not found", user: { username: "", photoUrl: "" } };
+        return { success: false, message: "User not found", user: null };
     }
 }
