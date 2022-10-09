@@ -7,13 +7,15 @@ import Dropdown from "../Dropdown";
 import { useAuth } from "../context/AuthContext";
 import { useModal } from "../context/ModalContext";
 import Button from "../Button";
+import { IUser } from "../../interfaces/User";
 
 type ProfileMessageProps = {
     message: IProfileMessage,
-    setMessages: React.Dispatch<React.SetStateAction<IProfileMessage[]>>
+    profileOwner: IUser,
+    setMessages: React.Dispatch<React.SetStateAction<IProfileMessage[]>>,
 };
 
-const ProfilePost: React.FC<ProfileMessageProps> = ({ message, setMessages }) => {
+const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, setMessages }) => {
     const { user } = useAuth();
     const { setModalContent, setIsModalOpen } = useModal();
 
@@ -28,7 +30,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, setMessages }) =>
                         {
                             label: "Delete Message",
                             onClick: () => {
-                                Functions.firebase.deleteProfileMessage(message)
+                                Functions.firebase.deleteProfileMessage(message, profileOwner.uid)
                                     .then((r) => {
                                         setModalContent(
                                             <div className="bg-zinc-600 flex flex-col w-[25rem] rounded-md border border-white p-4 text-white">

@@ -62,7 +62,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
 
             messages.push(message);
             setMessages(messages);
-            Functions.firebase.saveProfileMessage(message);
+            Functions.firebase.saveProfileMessage(message, user.uid);
             setShowEditor(false);
             setEditorState(EditorState.createEmpty());
         }
@@ -110,7 +110,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                     {
                         messages.length ?
                             messages.map((message) => (
-                                <ProfileMessage key={message.id} message={message} setMessages={setMessages} />
+                                <ProfileMessage key={message.id} message={message} setMessages={setMessages} profileOwner={user} />
                             )).sort((a, b) => b.props.message.createdAt - a.props.message.createdAt)
                             : showEditor
                                 ? null

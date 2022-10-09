@@ -171,11 +171,11 @@ export const getUserByUsername = async (username?: string) => {
  * @param message The message to save
  * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const saveProfileMessage = async (message: IProfileMessage) => {
+export const saveProfileMessage = async (message: IProfileMessage, profileOwnerUid: string) => {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
-    const userDoc = doc(firestoreInstance, "users", user.uid);
+    const userDoc = doc(firestoreInstance, "users", profileOwnerUid);
     const messages = await getDoc(userDoc).then((doc) => doc.data()?.messages ?? []);
 
     messages.push(message);
@@ -193,14 +193,13 @@ export const saveProfileMessage = async (message: IProfileMessage) => {
  * @param message The message to delete
  * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const deleteProfileMessage = async (message: IProfileMessage) => {
+export const deleteProfileMessage = async (message: IProfileMessage, profileOwnerUid: string) => {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
     if (message.createdBy.uid !== user.uid) return { success: false, message: "You can't delete this message!" };
 
-    const userDoc = doc(firestoreInstance, "users", user.uid);
+    const userDoc = doc(firestoreInstance, "users", profileOwnerUid);
     const messages = await getDoc(userDoc).then((doc) => doc.data()?.messages ?? []);
-
 
     const index = messages.findIndex((msg: IProfileMessage) => msg?.id === message.id);
     if (index !== -1) {

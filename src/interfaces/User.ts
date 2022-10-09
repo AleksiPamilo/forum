@@ -1,6 +1,7 @@
 import { IProfileMessage } from "./Message";
 
 export interface IUser {
+    uid: string,
     username: string,
     photoUrl: string,
     about: string,
