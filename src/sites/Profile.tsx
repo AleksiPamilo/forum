@@ -2,7 +2,7 @@ import React from "react";
 import { FaSpinner } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import ProfileHeader from "../components/Profile/ProfileHeader";
-import ProfilePosts from "../components/Profile/ProfileMessages";
+import ProfileMessages from "../components/Profile/ProfileMessages";
 import Socials from "../components/Profile/Socials";
 import Functions from "../functions";
 import { IUser } from "../interfaces/User";
@@ -49,7 +49,7 @@ const Profile: React.FC = () => {
                         <Socials user={user} />
                     </div>
                     <div className="flex w-full rounded-md bg-zinc-800">
-                        <ProfilePosts user={user} />
+                        <ProfileMessages user={user} />
                     </div>
                 </div>
             </div>

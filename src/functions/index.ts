@@ -1,4 +1,4 @@
-import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, getUserByUsername } from "./firebase"
+import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, getUserByUsername, saveProfileMessage, deleteProfileMessage } from "./firebase"
 
 /**
  * @description Gets the time elapsed since the given time
@@ -37,7 +37,9 @@ const Functions = {
         updateProfile,
         isUsernameAvailable,
         getUserByUID,
-        getUserByUsername
+        getUserByUsername,
+        saveProfileMessage,
+        deleteProfileMessage,
     }
 }
 

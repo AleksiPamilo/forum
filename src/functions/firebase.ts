@@ -1,8 +1,9 @@
 import { sendEmailVerification as sendVerification, sendPasswordResetEmail, updateProfile as updateUserProfile } from "firebase/auth";
-import { doc, getDoc, writeBatch } from "firebase/firestore";
+import { doc, getDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
 import { IUser } from "../interfaces/User";
+import { IProfileMessage } from "../interfaces/Message";
 
 const firestoreInstance = FirebaseServices.getFirestoreInstance();
 const authInstance = FirebaseServices.getAuthInstance();
@@ -162,5 +163,54 @@ export const getUserByUsername = async (username?: string) => {
         return getUserByUID(snap.data()?.uid);
     } else {
         return { success: false, message: "User not found", user: null };
+    }
+}
+
+/**
+ * @description Saves the message to the database
+ * @param message The message to save
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+*/
+export const saveProfileMessage = async (message: IProfileMessage) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+
+    const userDoc = doc(firestoreInstance, "users", user.uid);
+    const messages = await getDoc(userDoc).then((doc) => doc.data()?.messages ?? []);
+
+    messages.push(message);
+
+    try {
+        await updateDoc(userDoc, { messages: messages });
+        return { success: true, message: "Message saved successfully" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Deletes the message from the database
+ * @param message The message to delete
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+*/
+export const deleteProfileMessage = async (message: IProfileMessage) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (message.createdBy.uid !== user.uid) return { success: false, message: "You can't delete this message!" };
+
+    const userDoc = doc(firestoreInstance, "users", user.uid);
+    const messages = await getDoc(userDoc).then((doc) => doc.data()?.messages ?? []);
+
+
+    const index = messages.findIndex((msg: IProfileMessage) => msg?.id === message.id);
+    if (index !== -1) {
+        messages.splice(index, 1);
+    }
+
+    try {
+        await updateDoc(userDoc, { messages: messages });
+        return { success: true, message: "Message deleted successfully!" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
     }
 }
