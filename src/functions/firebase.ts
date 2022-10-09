@@ -80,8 +80,10 @@ export const updateProfile = async ({ username, photoFile }: { username: string,
     if (photoFile) {
         const uploaded = await uploadPhoto(photoFile);
         if (uploaded.success) {
-            photoUrl = uploaded.url;
+            photoUrl = uploaded.url ?? "https://i.imgur.com/1u0ESiX.png";
         }
+    } else {
+        photoUrl = "https://i.imgur.com/1u0ESiX.png"
     }
 
     if (username) {
