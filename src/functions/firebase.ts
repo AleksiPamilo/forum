@@ -146,7 +146,7 @@ export const getUserByUID = async (uid: string) => {
 
     const snap = await getDoc(doc(firestoreInstance, "users", uid));
     if (snap.exists()) {
-        return { success: false, message: "User not found", user: snap.data() as IUser };
+        return { success: false, message: "User not found", user: { ...snap.data(), uid: snap.id } as IUser };
     } else {
         return { success: false, message: "User not found", user: null };
     }

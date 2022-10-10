@@ -98,12 +98,12 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                 </div>
             </div>
             <div className="flex flex-col w-full">
-                <div className="mt-4 max-w-[78.2rem]" hidden={!showEditor}>
+                <div className="mt-4 " hidden={!showEditor}>
                     <Editor
                         placeholder="Leave a comment..."
                         editorState={editorState}
                         setEditorState={setEditorState}
-                        maxLength={500}
+                        maxLength={1000}
                     />
                 </div>
                 <div className="flex min-h-full flex-col gap-y-4 mt-4">

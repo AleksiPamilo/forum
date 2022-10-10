@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { useModal } from "../context/ModalContext";
 import Button from "../Button";
 import { IUser } from "../../interfaces/User";
+import { Link } from "react-router-dom";
 
 type ProfileMessageProps = {
     message: IProfileMessage,
@@ -56,7 +57,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={message.createdBy.photoUrl} />
             <div className="mt-2">
                 <div className="flex flex-row">
-                    <h1 className="font-bold text-blue-500 hover:cursor-pointer hover:underline">{message.createdBy.username}</h1>
+                    <Link to={`/profile/${message.createdBy.username}`} className="font-bold text-blue-500 hover:cursor-pointer hover:underline">{message.createdBy.username}</Link>
                     <span className="mx-4">—</span>
                     <h1 className="text-gray-400">{Functions.timeElapsed(message.createdAt)}</h1>
                 </div>
