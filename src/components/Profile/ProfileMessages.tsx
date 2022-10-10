@@ -112,11 +112,9 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                             messages.map((message) => (
                                 <ProfileMessage key={message.id} message={message} setMessages={setMessages} profileOwner={user} />
                             )).sort((a, b) => b.props.message.createdAt - a.props.message.createdAt)
-                            : showEditor
-                                ? null
-                                : <h1 className="flex self-center mt-4 text-xl font-bold bg-zinc-600 py-2 px-3 rounded-md">
-                                    There are no messages on {user.username}'s profile yet!
-                                </h1>
+                            : !showEditor && <h1 className="flex self-center mt-4 text-xl font-bold bg-zinc-600 py-2 px-3 rounded-md">
+                                There are no messages on {user.username}'s profile yet!
+                            </h1>
                     }
                 </div>
             </div>
