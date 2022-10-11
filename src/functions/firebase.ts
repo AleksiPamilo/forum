@@ -1,5 +1,5 @@
 import { sendEmailVerification as sendVerification, sendPasswordResetEmail, updateEmail, updateProfile as updateUserProfile } from "firebase/auth";
-import { doc, getDoc, updateDoc, writeBatch } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
 import { IUser } from "../interfaces/User";
@@ -92,19 +92,11 @@ export const updateProfile = async ({ username, photoFile }: { username?: string
     }
 
     if (username) {
-        const isAvailable = await isUsernameAvailable(username);
+        const isAvailable = await isUsernameAvailable(username.toLowerCase());
         if (isAvailable) {
             const userDoc = doc(firestoreInstance, "users", user.uid);
-            const usernameDoc = doc(firestoreInstance, "usernames", username.toLowerCase());
-            const batch = writeBatch(firestoreInstance);
-
-            batch.set(userDoc, { username: username, photoUrl: photoUrl }, { merge: true });
-            batch.set(usernameDoc, { uid: user.uid }, { merge: true });
-
-            await batch.commit()
-                .catch((error) => {
-                    console.error("Error updating username:", error);
-                });
+            await updateDoc(userDoc, { username: username, usernameLowercase: username.toLowerCase(), photoUrl: photoUrl })
+                .catch(() => { });
         }
     }
 
@@ -143,14 +135,11 @@ export const updateEmailAddress = async (email: string) => {
  * @returns A promise that resolves to a boolean
  */
 export const isUsernameAvailable = async (username: string) => {
-    username = username.toLowerCase();
     if (username.length >= 3 && username.length <= 20) {
-        const snap = await getDoc(doc(firestoreInstance, "usernames", username));
-        if (snap.exists()) {
-            return false;
-        } else {
-            return true;
-        }
+        const q = query(collection(firestoreInstance, "users"), where("usernameLowercase", "==", username));
+        const querySnapshot = await getDocs(q);
+
+        return querySnapshot.empty;
     } else {
         return false;
     }

@@ -1,4 +1,3 @@
-import { updateEmail } from "firebase/auth";
 import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, getUserByUsername, saveProfileMessage, deleteProfileMessage, updateEmailAddress } from "./firebase"
 
 /**
