@@ -1,4 +1,4 @@
-import { sendEmailVerification as sendVerification, sendPasswordResetEmail, updateProfile as updateUserProfile } from "firebase/auth";
+import { sendEmailVerification as sendVerification, sendPasswordResetEmail, updateEmail, updateProfile as updateUserProfile } from "firebase/auth";
 import { doc, getDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
@@ -70,7 +70,7 @@ export const uploadPhoto = async (photoFile: File) => {
 * @param photoFile The profile photo of the user
 * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const updateProfile = async ({ username, photoFile }: { username: string, photoFile?: File }) => {
+export const updateProfile = async ({ username, photoFile }: { username?: string, photoFile?: File }) => {
     const user = authInstance.currentUser;
     let photoUrl: string | null = null;
 
@@ -84,6 +84,11 @@ export const updateProfile = async ({ username, photoFile }: { username: string,
         }
     } else {
         photoUrl = "https://i.imgur.com/1u0ESiX.png"
+    }
+
+    if (photoFile && !username) {
+        const userDoc = doc(firestoreInstance, "users", user.uid);
+        await updateDoc(userDoc, { photoUrl }).catch(() => { });
     }
 
     if (username) {
@@ -100,8 +105,6 @@ export const updateProfile = async ({ username, photoFile }: { username: string,
                 .catch((error) => {
                     console.error("Error updating username:", error);
                 });
-        } else {
-            return { success: false, message: "Username not available" };
         }
     }
 
@@ -112,6 +115,23 @@ export const updateProfile = async ({ username, photoFile }: { username: string,
         });
 
         return { success: true, message: "Profile updated successfully" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Update User's Email Address
+ * @param email The new email address
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export const updateEmailAddress = async (email: string) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+
+    try {
+        await updateEmail(user, email);
+        return { success: true, message: "Email updated successfully" };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
     }

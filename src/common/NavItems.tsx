@@ -14,4 +14,9 @@ export const navItems: INavItem[] = [
     },
 ];
 
-export default navItems
+export const sidebarItems: INavItem[] = [
+    {
+        title: "General",
+        path: "/settings",
+    },
+];

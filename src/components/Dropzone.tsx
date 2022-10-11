@@ -21,7 +21,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ multiple, maxFiles, acceptedFiles, 
     });
 
     return (
-        <div className={`flex justify-center items-center w-full min-h-[5rem] rounded border-2 border-dashed
+        <div className={`flex justify-center items-center w-full min-h-[5rem] rounded border-2 border-dashed cursor-pointer
             ${isDragAccept ? "border-green-500" : isDragReject ? "border-red-500" : "border-zinc-500 hover:border-zinc-400"}
         `} {...getRootProps()}>
             <input {...getInputProps()} />

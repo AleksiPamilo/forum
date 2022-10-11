@@ -10,7 +10,7 @@ type InputProps = {
 }
 
 const Input: React.FC<InputProps> = ({ type, placeholder, value, styles, autoComplete, onChange }) => {
-    const defaultStyle = "px-4 py-2 rounded-md border border-gray-300 text-black";
+    const defaultStyle = "px-4 py-2 w-full rounded-md border border-gray-300 text-black";
 
     return (
         <input

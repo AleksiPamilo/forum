@@ -18,7 +18,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({ children, disa
     const defaultStyle = `
         ${colors?.text ? colors.text : "text-white"}
         ${colors?.background ? colors.background : "bg-blue-500 hover:bg-blue-600"}
-        ${disabled && colors?.disabled?.background && colors.disabled?.background}
+        ${disabled && colors?.disabled?.background ? colors.disabled?.background : "disabled:bg-gray-600"}
         px-4 py-2 rounded-md
     `;
 

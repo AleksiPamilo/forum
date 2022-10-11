@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import navItems from "../common/NavItems";
+import { navItems } from "../common/NavItems";
 
 const Navigation = () => {
     return (

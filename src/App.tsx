@@ -7,9 +7,11 @@ import { RootStore, initializeRootStore } from './mst';
 import FirestoreSnapshotProvider from './components/context/FirestoreSnapshotProvider';
 
 const Layout = lazy(() => import('./components/Layouts/Layout'));
+const SettingsLayout = lazy(() => import('./components/Layouts/SettingsLayout'));
 const Forums = lazy(() => import("./sites/Forums"));
 const WhatsNew = lazy(() => import("./sites/WhatsNew"));
 const Profile = lazy(() => import("./sites/Profile"));
+const Settings = lazy(() => import("./sites/Profile/Settings"));
 
 const App: React.FC = () => {
   const [state, setState] = useState<RootStore | undefined>();
@@ -36,6 +38,9 @@ const App: React.FC = () => {
                     <Route path="/whats-new" element={<WhatsNew />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/profile/:username" element={<Profile />} />
+                  </Route>
+                  <Route element={<SettingsLayout />}>
+                    <Route path="/settings" element={<Settings />} />
                   </Route>
                 </Routes>
               </BrowserRouter>

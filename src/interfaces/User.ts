@@ -7,13 +7,9 @@ export interface IUser {
     about: string,
     socials: [{
         id: string,
-        index: number,
+        icon: string,
         url: string,
         username: string,
-        icon: {
-            style: string,
-            name: string
-        }
     }] | null,
     messages: IProfileMessage[] | null,
 }
