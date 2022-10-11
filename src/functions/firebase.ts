@@ -169,11 +169,13 @@ export const getUserByUID = async (uid: string) => {
 export const getUserByUsername = async (username?: string) => {
     if (!username) return { success: false, message: "User Not Found", user: null };
 
-    const snap = await getDoc(doc(firestoreInstance, "usernames", username.toLowerCase()));
-    if (snap.exists()) {
-        return getUserByUID(snap.data()?.uid);
+    const q = query(collection(firestoreInstance, "users"), where("usernameLowercase", "==", username.toLowerCase()));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+        return { success: true, message: "User found", user: { ...querySnapshot.docs[0].data(), uid: querySnapshot.docs[0].id } as IUser };
     } else {
-        return { success: false, message: "User not found", user: null };
+        return { success: false, message: "User Not Found", user: null };
     }
 }
 

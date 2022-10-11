@@ -16,6 +16,10 @@ export const navItems: INavItem[] = [
 
 export const sidebarItems: INavItem[] = [
     {
+        title: "Forums",
+        path: "/",
+    },
+    {
         title: "General",
         path: "/settings",
     },

@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
         setLoading(true);
 
         Functions.firebase.getUserByUsername(username).then((data) => {
-            setUser(data.user);
+            setUser(data?.user);
             setLoading(false);
         });
     }, [username]);

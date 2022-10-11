@@ -18,7 +18,7 @@ export const initializeRootStore = () => {
         store = storeProcessor.create(data);
     } catch (error) {
         console.error("Error:", error)
-        store = storeProcessor.create();
+        store = storeProcessor.create({});
     }
 
     onSnapshot(store, snapshot => localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot)));
