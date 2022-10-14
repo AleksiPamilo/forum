@@ -7,7 +7,7 @@ const Forums: React.FC = () => {
 
     document.title = "ForumX — Forums";
     return (
-        <div className="mt-4 w-full md:w-[80%]">
+        <div className="mt-4 w-full">
             <div className="flex flex-col gap-8">
                 {categories.map((category) => (
                     <div key={category.id} className="flex flex-col divide-y rounded-t-md bg-zinc-400 border">

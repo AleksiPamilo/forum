@@ -5,7 +5,7 @@ import { requestPasswordReset, sendEmailVerification, updateProfile, isUsernameA
  * @param time The time to compare
  * @returns A string containing the time elapsed
  */
-const timeElapsed = (time: number) => {
+const timeAgo = (time: number) => {
     const timeAgo = Date.now() - time;
     const seconds = Math.floor(timeAgo / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -15,7 +15,7 @@ const timeElapsed = (time: number) => {
     const years = Math.floor(months / 12);
 
     if (seconds < 60) {
-        return `${seconds} second${seconds === 1 ? "" : "s"} ago`;
+        return "Just now";
     } else if (minutes < 60) {
         return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
     } else if (hours < 24) {
@@ -30,7 +30,7 @@ const timeElapsed = (time: number) => {
 }
 
 const Functions = {
-    timeElapsed,
+    timeAgo,
     firebase: {
         requestPasswordReset,
         sendEmailVerification,

@@ -12,7 +12,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
     const { getThreadCount, getLatestThread } = useStores();
     const [latestThreadCreator, setLatestThreadCreator] = React.useState<{ username: string | null, photoUrl: string | null }>({ username: "", photoUrl: "" });
     const latestThread = getLatestThread(forum.id);
-    const postedAgo = Functions.timeElapsed(latestThread?.createdAt || 0);
+    const postedAgo = Functions.timeAgo(latestThread?.createdAt || 0);
 
     React.useEffect(() => {
         if (latestThread) {
@@ -23,7 +23,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
     }, [latestThread]);
 
     return (
-        <div key={forum.id} className="flex bg-zinc-400 py-1 px-3 gap-2 hover:bg-zinc-500">
+        <Link to={`/threads/${forum.name}`} key={forum.id} className="flex bg-zinc-400 py-1 px-3 gap-2 hover:bg-zinc-500 hover:cursor-pointer" >
             <div className="flex items-center">
                 {/** Icon */}
             </div>
@@ -45,7 +45,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                                         <p className="overflow-hidden text-ellipsis">{latestThread.title}</p>
                                         <div className="flex flex-row gap-1 items-center">
                                             <p className="text-xs text-gray-600">{postedAgo} •</p>
-                                            <Link to={`/profile/${latestThreadCreator.username}`} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestThreadCreator.username}</Link>
+                                            <Link to={`/profiles/${latestThreadCreator.username}`} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestThreadCreator.username}</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
 
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

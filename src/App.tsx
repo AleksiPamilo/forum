@@ -12,6 +12,8 @@ const Forums = lazy(() => import("./sites/Forums"));
 const WhatsNew = lazy(() => import("./sites/WhatsNew"));
 const Profile = lazy(() => import("./sites/Profile"));
 const Settings = lazy(() => import("./sites/Profile/Settings"));
+const Threads = lazy(() => import("./sites/Threads"));
+const Thread = lazy(() => import("./sites/Thread"));
 
 const App: React.FC = () => {
   const [state, setState] = useState<RootStore | undefined>();
@@ -36,8 +38,12 @@ const App: React.FC = () => {
                   <Route element={<Layout />}>
                     <Route path="/" element={<Forums />} />
                     <Route path="/whats-new" element={<WhatsNew />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/profile/:username" element={<Profile />} />
+                    <Route path="/profiles" element={<Profile />} />
+                    <Route path="/profiles/:username" element={<Profile />} />
+                    <Route path="/thread" element={<Thread />} />
+                    <Route path="/thread/:title_id" element={<Thread />} />
+                    <Route path="/threads" element={<Threads />} />
+                    <Route path="/threads/:name" element={<Threads />} />
                   </Route>
                   <Route element={<SettingsLayout />}>
                     <Route path="/settings" element={<Settings />} />
