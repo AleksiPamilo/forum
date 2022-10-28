@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Thread } from "../mst";
 import { useStores } from "../hooks";
 import Functions from "../functions";
@@ -10,6 +10,7 @@ type ThreadCardProps = {
 }
 
 const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
+    const navigate = useNavigate();
     const { getMessagesByThreadId } = useStores();
     const [threadCreator, setThreadCreator] = React.useState<IUser | null>(null);
     const messages = getMessagesByThreadId(thread.id);
@@ -25,7 +26,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     }, [thread.createdBy]);
 
     return (
-        <Link to={`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`} key={thread.id} className="flex bg-zinc-400 py-1 px-3 gap-2 shadow-xl border border-white rounded-md hover:bg-zinc-500 hover:cursor-pointer" >
+        <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-zinc-900 py-1 px-3 gap-2 border-2 border-blue-600 hover:shadow-glow-10 hover:bg-[#101010] hover:cursor-pointer rounded-md" >
             <div className="flex items-center">
                 {/** Icon */}
             </div>
@@ -55,7 +56,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
                     </div>
                 </div>
             </div>
-        </Link>
+        </button>
     )
 }
 

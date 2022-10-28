@@ -16,7 +16,7 @@ const Threads: React.FC = () => {
     );
 
     return (
-        <div className="mt-4 gap-2 flex flex-col">
+        <div className="mt-4 gap-4 flex flex-col">
             {
                 threads.map((thread) => {
                     return <ThreadCard thread={thread} />
