@@ -17,7 +17,7 @@ const UpdateUsername: React.FC<UpdateUsernameProps> = ({ user }) => {
     const [success, setSuccess] = React.useState<string | null>(null);
 
     return (
-        <div className="w-[30rem] flex flex-col bg-zinc-600 p-4 rounded-md shadow-xl">
+        <div className="w-[30rem] flex flex-col bg-zinc-900 p-4 border-2 border-blue-600 shadow-glow-7 rounded-md">
             <div className="flex flex-row justify-between mb-6">
                 <h1 className="text-2xl font-bold text-white">Update Username</h1>
                 <Button onClick={closeModal}>

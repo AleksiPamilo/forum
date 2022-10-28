@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Forum } from "../mst";
 import { useStores } from "../hooks";
 import Functions from "../functions";
@@ -9,6 +9,7 @@ type ForumCardProps = {
 }
 
 const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
+    const navigate = useNavigate();
     const { getThreadCount, getLatestThread } = useStores();
     const [latestThreadCreator, setLatestThreadCreator] = React.useState<{ username: string | null, photoUrl: string | null }>({ username: "", photoUrl: "" });
     const latestThread = getLatestThread(forum.id);
@@ -23,7 +24,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
     }, [latestThread]);
 
     return (
-        <Link to={`/threads/${forum.name}`} key={forum.id} className="flex bg-zinc-400 py-1 px-3 gap-2 hover:bg-zinc-500 hover:cursor-pointer" >
+        <button onClick={() => navigate(`/threads/${forum.name}`)} key={forum.id} className="flex bg-black py-1 px-3 gap-2 hover:bg-[#101010] hover:cursor-pointer rounded-b-md" >
             <div className="flex items-center">
                 {/** Icon */}
             </div>
@@ -40,7 +41,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                         {
                             latestThread ? (
                                 <div className="flex flex-row text-center gap-2">
-                                    <img src={latestThreadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 border border-white rounded-full" />
+                                    <img src={latestThreadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 border bg-gray-500 border-white rounded-full" />
                                     <div className="text-sm text-left text-gray-600 max-w-[10rem]">
                                         <p className="overflow-hidden text-ellipsis">{latestThread.title}</p>
                                         <div className="flex flex-row gap-1 items-center">
@@ -55,7 +56,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
 
                 </div>
             </div>
-        </Link>
+        </button>
     )
 }
 

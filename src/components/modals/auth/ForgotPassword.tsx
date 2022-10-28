@@ -41,7 +41,7 @@ const ForgotPassword: React.FC = () => {
                         <FaTimes className="w-5 h-5" />
                     </Button>
                 </div>
-                <Input styles="px-4 py-2 rounded-md text-black bg-gray-900 text-zinc-300 focus:outline-none border border-slate-400 focus:border-[#355af060]" type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(String(e.target.value))} />
+                <Input styles="px-4 py-2 rounded-md text-black bg-gray-900 focus:outline-none border-2 border-[#355af060] focus:shadow-[0_0_5px_1px_rgba(33,54,163)]" type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(String(e.target.value))} />
                 <Button styles="w-full px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white" onClick={handleForgotPassword}>Request a new Password</Button>
             </div>
             <div className="justify-center mt-2 w-full px-4 py-2 rounded-md bg-red-500 text-white" style={{ display: !!errorMessage ? "flex" : "none" }}>

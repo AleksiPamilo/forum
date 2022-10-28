@@ -180,6 +180,24 @@ export const getUserByUsername = async (username?: string) => {
 }
 
 /**
+ * @description Saves user's about me to the database
+ * @param aboutMe The user's about me
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export const updateAboutMe = async (aboutMe: string) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+
+    try {
+        const userDoc = doc(firestoreInstance, "users", user.uid);
+        await updateDoc(userDoc, { about: aboutMe }).catch(() => { });
+        return { success: true, message: "About me saved successfully" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
  * @description Saves the message to the database
  * @param message The message to save
  * @returns A promise that resolves to an object containing a success boolean and a message string

@@ -11,7 +11,7 @@ type LoginProps = {
     isLogin?: boolean;
 }
 
-const inputStyle = "px-4 py-2 rounded-md text-black bg-gray-900 text-zinc-300 focus:outline-none border border-slate-400 focus:border-[#355af060]"
+const inputStyle = "px-4 py-2 rounded-md text-black bg-gray-900 focus:outline-none border-2 border-[#355af060] focus:shadow-[0_0_5px_1px_rgba(33,54,163)]"
 const Login: React.FC<LoginProps> = ({ isLogin }) => {
     const { setModalContent, setIsModalOpen, closeModal } = useModal();
     const { login: loginWithEmailAndPassword, signUp } = useAuth();
@@ -107,7 +107,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     }
 
     return (
-        <div className="bg-zinc-900 w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-blue-900 shadow-xl">
+        <div className="bg-black w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-blue-900 shadow-[0_0_10px_5px_rgba(33,54,163)]">
             <div className="flex justify-between mb-6">
                 <h1 className="text-2xl font-extrabold">{login ? "Login" : "Register"}</h1>
                 <Button colors={{ background: "bg-blue-700 hover:bg-blue-800" }} onClick={closeModal}>

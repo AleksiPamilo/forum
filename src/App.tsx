@@ -10,8 +10,9 @@ const Layout = lazy(() => import('./components/Layouts/Layout'));
 const SettingsLayout = lazy(() => import('./components/Layouts/SettingsLayout'));
 const Forums = lazy(() => import("./sites/Forums"));
 const WhatsNew = lazy(() => import("./sites/WhatsNew"));
-const Profile = lazy(() => import("./sites/Profile"));
+const Profile = lazy(() => import("./sites/Profile/Profile"));
 const Settings = lazy(() => import("./sites/Profile/Settings"));
+const SocialSettings = lazy(() => import("./sites/Profile/SocialSettings"));
 const Threads = lazy(() => import("./sites/Threads"));
 const Thread = lazy(() => import("./sites/Thread"));
 
@@ -47,6 +48,7 @@ const App: React.FC = () => {
                   </Route>
                   <Route element={<SettingsLayout />}>
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/settings/social" element={<SocialSettings />} />
                   </Route>
                 </Routes>
               </BrowserRouter>

@@ -23,4 +23,8 @@ export const sidebarItems: INavItem[] = [
         title: "General",
         path: "/settings",
     },
+    {
+        title: "Social",
+        path: "/settings/social",
+    }
 ];

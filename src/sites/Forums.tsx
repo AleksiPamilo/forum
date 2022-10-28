@@ -4,21 +4,21 @@ import ForumCard from "../components/ForumCard";
 
 const Forums: React.FC = () => {
     const { forums, categories } = useStores();
-
     document.title = "ForumX — Forums";
     return (
         <div className="mt-4 w-full">
             <div className="flex flex-col gap-8">
                 {categories.map((category) => (
-                    <div key={category.id} className="flex flex-col divide-y rounded-t-md bg-zinc-400 border">
-                        <h2 className="text-xl font-bold p-2 rounded-t-md bg-gray-500 border-b">{category.name}</h2>
-                        {forums.map((forum) => {
-                            if (forum.categoryId === category.id) {
-                                return <ForumCard key={forum.id} forum={forum} />;
-                            } else return null;
-                        })}
+                    <div key={category.id} className="flex flex-col divide-y divide-blue-800 border border-blue-600 shadow-[0_0_10px_4px_rgba(33,54,163)] rounded-[5px]">
+                        <h2 className="text-xl font-bold p-2 bg-blue-800 text-black rounded-t-sm">{category.name}</h2>
+                        {
+                            forums.map((forum) => (
+                                forum.categoryId === category.id ? <ForumCard forum={forum} /> : null
+                            ))
+                        }
                     </div>
-                ))}
+                )
+                )}
             </div>
         </div>
     )

@@ -21,7 +21,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
     const { setModalContent, setIsModalOpen } = useModal();
 
     return (
-        <div className="flex relative bg-zinc-600 rounded-md shadow-xl border border-white">
+        <div className="flex relative bg-zinc-800 rounded-md border border-blue-600 shadow-glow-1">
             <div className="absolute right-0 top-0 p-2" hidden={message.createdBy.uid !== user?.uid}>
                 <Dropdown
                     label={
@@ -34,7 +34,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
                                 Functions.firebase.deleteProfileMessage(message, profileOwner.uid)
                                     .then((r) => {
                                         setModalContent(
-                                            <div className="bg-zinc-600 flex flex-col w-[25rem] rounded-md border border-white p-4 text-white">
+                                            <div className="bg-black flex flex-col w-[25rem] rounded-md border border-blue-600 shadow-glow-5 p-4 text-white">
                                                 <div className="flex flex-row justify-between">
                                                     <h1 className="text-2xl font-bold">{r.success ? "Success!" : "Error!"}</h1>
                                                     <Button onClick={() => setIsModalOpen(false)}>Close</Button>

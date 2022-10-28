@@ -12,17 +12,21 @@ const Socials: React.FC<SocialsProps> = ({ user }) => {
             <h1 className="text-3xl text-center font-bold">Socials</h1>
             <div className="flex flex-col self-center md:self-start p-2 gap-4">
                 {
-                    user.socials?.map((social) => {
-                        const IconComponent = Icons[(social.icon) as keyof typeof Icons];
-                        return (
-                            <div>
-                                <a href={social.url} className="flex items-center gap-2 hover:underline">
-                                    <IconComponent className={`w-8 h-8 ${getStyle(social.icon)}`} />
-                                    <h1 className="text-base font-semibold whitespace-nowrap max-w-[15rem] truncate">{social.username}</h1>
-                                </a>
-                            </div>
-                        )
-                    })
+                    user.socials?.length
+                        ? user.socials?.map((social) => {
+                            const IconComponent = Icons[(social.icon) as keyof typeof Icons];
+                            return (
+                                <div>
+                                    <a href={social.url} className="flex items-center gap-2 hover:underline">
+                                        <IconComponent className={`w-8 h-8 ${getStyle(social.icon)}`} />
+                                        <h1 className="text-base font-semibold whitespace-nowrap max-w-[15rem] truncate">{social.username}</h1>
+                                    </a>
+                                </div>
+                            )
+                        })
+                        : <div className="text-center mt-4 px-3 py-2 bg-zinc-800 rounded-md border border-blue-600 shadow-glow-3">
+                            {user.username} hasn't linked any social accounts yet!
+                        </div>
                 }
             </div>
         </div>

@@ -3,10 +3,10 @@ import { navItems } from "../common/NavItems";
 
 const Navigation = () => {
     return (
-        <div className="flex w-full align-middle border-b border-gray-200">
+        <div className="flex w-full align-middle gap-3">
             {
                 navItems.map(x => (
-                    <Link to={x.path} className="text-lg font-semibold text-gray-300 py-2 p-4 rounded-md hover:bg-zinc-800">{x.title}</Link>
+                    <Link to={x.path} className="text-lg font-semibold px-3 rounded-t-md border-b-2 border-blue-600 hover:shadow-[0_0_15px_10px_rgba(0,0,255,.35)]">{x.title}</Link>
                 ))
             }
         </div>

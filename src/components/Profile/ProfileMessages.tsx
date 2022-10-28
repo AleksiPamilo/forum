@@ -81,7 +81,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                                 setShowEditor(!showEditor)
                             } else {
                                 setModalContent(
-                                    <div className="flex flex-col w-[25rem] text-white p-4 bg-zinc-600 rounded-md border border-white">
+                                    <div className="flex flex-col w-[25rem] text-white p-4 bg-black rounded-md border border-blue-600 shadow-glow-5">
                                         <div className="flex justify-between">
                                             <h1 className="text-2xl font-bold">Error!</h1>
                                             <Button onClick={() => setIsModalOpen(false)}>Close</Button>

@@ -11,7 +11,7 @@ const Layout = () => {
     const navigateTo = useNavigate();
 
     return (
-        <div className="flex min-w-[100vw] min-h-[100vh] bg-[#171717]">
+        <div className="flex min-w-[100vw] min-h-[100vh] bg-black">
             {
                 isLoggedIn
                     ? (

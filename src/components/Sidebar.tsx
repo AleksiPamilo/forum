@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
     const navigateTo = useNavigate();
 
     return (
-        <div className="flex flex-col relative items-center w-[15rem] h-screen bg-zinc-600">
+        <div className="flex flex-col relative items-center w-[15rem] h-screen bg-zinc-900">
             <Link to="/settings" className="pt-4">
                 <img src={logo} alt="logo" className="w-40 h-6" />
                 <h1 className="text-white text-xl font-semibold text-center mt-1">Settings</h1>
@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
                         sidebarItems.map((item, index) => (
                             <li key={index}>
                                 <Link to={item.path}>
-                                    <div className="text-sm font-medium py-2 px-8 rounded-md shadow-xl border border-white text-gray-300 bg-zinc-700 hover:bg-zinc-800">
+                                    <div className="text-sm font-medium py-2 px-8 rounded-md border border-blue-600 hover:shadow-glow-3 text-gray-300 bg-zinc-800 hover:bg-zinc-700">
                                         {item.title}
                                     </div>
                                 </Link>
@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
                         <Button onClick={() => {
                             logout();
                             navigateTo("/");
-                        }} styles="text-sm font-medium py-2 px-8 rounded-md shadow-xl border border-white text-gray-300 bg-zinc-700 hover:bg-zinc-800">
+                        }} styles="text-sm font-medium py-2 px-8 rounded-md border border-blue-600 hover:shadow-glow-3 text-gray-300 bg-zinc-800 hover:bg-zinc-700">
                             Logout
                         </Button>
                     </li>

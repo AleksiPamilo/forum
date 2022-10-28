@@ -17,7 +17,7 @@ const UpdateProfilePicture: React.FC<UpdateProfilePictureProps> = ({ user }) => 
     const [success, setSuccess] = React.useState<string | null>(null);
 
     return (
-        <div className="w-[30rem] flex flex-col bg-zinc-600 p-4 rounded-md shadow-xl">
+        <div className="w-[30rem] flex flex-col bg-zinc-900 p-4 border-2 border-blue-600 shadow-glow-7 rounded-md">
             <div className="flex flex-row justify-between mb-6">
                 <h1 className="text-2xl font-bold text-white">Update Profile Picture</h1>
                 <Button onClick={closeModal}>
@@ -30,6 +30,8 @@ const UpdateProfilePicture: React.FC<UpdateProfilePictureProps> = ({ user }) => 
             <div className="mt-2 flex justify-between">
                 {error && <p className="text-red-500 mt-2">{error}</p>}
                 {success && <p className="text-green-500 mt-2">{success}</p>}
+                {!error && !success && !photoFile && <p className="text-gray-500 mt-2">Select a file.</p>}
+                {!error && !success && photoFile && <p className="text-gray-500 mt-2">Continue by clicking save.</p>}
 
                 <Button colors={{ background: "bg-green-600 hover:bg-green-700" }} onClick={() => {
                     if (!user?.emailVerified) {
