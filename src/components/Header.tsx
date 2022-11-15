@@ -32,7 +32,7 @@ const Header = () => {
     ];
 
     return (
-        <header className="sticky">
+        <header className="sticky z-50">
             <div className="flex w-full pb-4 items-center justify-between align-middle">
                 <Link className="select-none" to="/">
                     <img className="select-none w-40 h-6" alt="" src={logo} />

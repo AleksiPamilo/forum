@@ -13,6 +13,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     const navigate = useNavigate();
     const { getMessagesByThreadId } = useStores();
     const [threadCreator, setThreadCreator] = React.useState<IUser | null>(null);
+    const [latestReply, setLatestReply] = React.useState<IUser | null>(null);
     const messages = getMessagesByThreadId(thread.id);
     const messageCount = messages?.length ?? 0;
     const latestMessage = messages[messages.length - 1];
@@ -23,7 +24,15 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
             .then((data) => {
                 setThreadCreator(data.user);
             });
-    }, [thread.createdBy]);
+
+        if (latestMessage) {
+            Functions.firebase.getUserByUID(latestMessage.createdBy)
+                .then((data) => {
+                    setLatestReply(data.user);
+                }
+                );
+        }
+    }, [thread.createdBy, latestMessage]);
 
     return (
         <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-black py-1 px-3 gap-2 border-2 border-blue-600 hover:shadow-glow-10 hover:cursor-pointer rounded-md" >
@@ -35,12 +44,12 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
                     {
                         thread ? (
                             <div className="flex flex-row text-center gap-2">
-                                <img src={threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
+                                <img src={latestReply?.photoUrl ?? threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
                                 <div className="text-sm text-left text-gray-600 max-w-[10rem]">
                                     <p className="overflow-hidden text-ellipsis">Latest Reply</p>
                                     <div className="flex flex-row gap-1 items-center">
                                         <p className="text-xs text-gray-600">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)} •</p>
-                                        <Link to={`/profiles/${threadCreator?.username}`} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{threadCreator?.username}</Link>
+                                        <Link to={`/profiles/${latestReply?.username ?? threadCreator?.username}`} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestReply?.username ?? threadCreator?.username}</Link>
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +58,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
                 </div>
                 <div className="col-start-12 self-end">
                     <div className="mr-12">
-                        <p className="text-sm text-gray-600">Threads:</p>
+                        <p className="text-sm text-gray-600">Replies:</p>
                         <p>{messageCount}</p>
                     </div>
                 </div>
