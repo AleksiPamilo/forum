@@ -53,6 +53,7 @@ const PostThread: React.FC = () => {
         if (!selected) return setError("Please select a forum.");
         if (!forum) return setError("Forum not found.");
         if (forum?.locked) return setError("This forum is locked.");
+        if (!Functions.isValidCharacter(title)) return setError("Your title contains invalid characters.");
 
         Functions.firebase.createThread({
             id: (new Date().getTime()).toString(36),

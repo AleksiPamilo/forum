@@ -31,8 +31,19 @@ const timeAgo = (time: number) => {
     }
 }
 
+/**
+ * @description Validates that a string doesn't contain special characters
+ * @param text The text to be validated
+ * @returns boolean
+ */
+const isValidCharacter = (text: string): boolean => {
+    const validCharacterRegex: RegExp = /^[a-zA-Z]*$/;
+    return validCharacterRegex.test(text);
+}
+
 const Functions = {
     timeAgo,
+    isValidCharacter,
     firebase: {
         requestPasswordReset,
         sendEmailVerification,
