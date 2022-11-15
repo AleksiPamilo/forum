@@ -27,32 +27,30 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
 
     return (
         <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-black py-1 px-3 gap-2 border-2 border-blue-600 hover:shadow-glow-10 hover:cursor-pointer rounded-md" >
-            <div className="flex items-center">
-                {/** Icon */}
-            </div>
-            <div className="flex w-full justify-between">
-                <div className="flex items-center float-left">
-                    <h2 className="text-2xl font-bold">{thread.title}</h2>
+            <div className="grid grid-cols-12 w-full items-center">
+                <div className="col-start-1 col-end-3 text-left">
+                    <h2 className="font-bold">{thread.title}</h2>
                 </div>
-                <div className="float-right mr-10">
-                    <div className="flex flex-row items-center gap-6">
-                        <div className="flex flex-col text-center">
-                            <p className="text-sm text-gray-600">Messages:</p>
-                            <p>{messageCount}</p>
-                        </div>
-                        {
-                            thread ? (
-                                <div className="flex flex-row text-center gap-2">
-                                    <img src={threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
-                                    <div className="text-sm text-gray-600 max-w-[10rem]">
-                                        <div className="flex flex-col w-full">
-                                            <p className="text-left overflow-hidden text-ellipsis">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)}</p>
-                                            <Link to={`/profiles/${threadCreator?.username}`} className="text-right overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{threadCreator?.username}</Link>
-                                        </div>
+                <div className="col-start-3 col-end-8 text-left">
+                    {
+                        thread ? (
+                            <div className="flex flex-row text-center gap-2">
+                                <img src={threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
+                                <div className="text-sm text-left text-gray-600 max-w-[10rem]">
+                                    <p className="overflow-hidden text-ellipsis">Latest Reply</p>
+                                    <div className="flex flex-row gap-1 items-center">
+                                        <p className="text-xs text-gray-600">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)} •</p>
+                                        <Link to={`/profiles/${threadCreator?.username}`} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{threadCreator?.username}</Link>
                                     </div>
                                 </div>
-                            ) : null
-                        }
+                            </div>
+                        ) : null
+                    }
+                </div>
+                <div className="col-start-12 self-end">
+                    <div className="mr-12">
+                        <p className="text-sm text-gray-600">Threads:</p>
+                        <p>{messageCount}</p>
                     </div>
                 </div>
             </div>
