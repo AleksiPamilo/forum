@@ -3,16 +3,23 @@ import { useParams } from "react-router-dom";
 import Editor from "../components/Editor";
 import ThreadPost from "../components/ThreadPost";
 import Functions from "../functions";
-import { useStores } from "../hooks";
+import { useAuth, useStores } from "../hooks";
 import { IUser } from "../interfaces/User";
 import { EditorState } from "draft-js";
+import { v4 as uuid } from "uuid";
+import Button from "../components/Button";
+import { stateToHTML } from "draft-js-export-html";
 
 const Thread: React.FC = () => {
     const { title_id } = useParams();
+    const { user: currentUser } = useAuth();
     const { getThreadById, getMessagesByThreadId } = useStores();
     const [user, setUser] = useState<IUser | null>(null);
     const [state, setState] = useState(EditorState.createEmpty());
-    const id = parseInt(title_id?.split(".")?.pop() ?? "0") ?? null;
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    const maxLength = 10000;
+    const id = title_id?.split(".")?.pop() ?? null;
     const thread = getThreadById(id);
     const messages = getMessagesByThreadId(id);
 
@@ -35,7 +42,7 @@ const Thread: React.FC = () => {
     return (
         <div className="flex flex-col mt-4 rounded-md gap-4 p-4">
             <div className="font-semibold">
-                <div className="flex flex-row justify-between w-full rounded-t-md bg-zinc-700 px-4 py-2">
+                <div className="flex flex-row justify-between w-full rounded-t-md bg-zinc-800 px-4 py-2">
                     <div className="flex flex-row gap-2">
                         <span>{thread.title}</span>
                         <span>•</span>
@@ -43,11 +50,12 @@ const Thread: React.FC = () => {
                     </div>
                     <span>{user?.username}</span>
                 </div>
-                <div className="w-full rounded-b-md bg-zinc-600 font-normal">
+                <div className="w-full rounded-b-md bg-zinc-900 font-normal">
                     <ThreadPost thread={thread} />
                 </div>
             </div>
 
+            <h1 className="" hidden={!messages.length}>Replies:</h1>
             <div className="flex flex-col gap-2">
                 {
                     messages.map((message) => (
@@ -55,10 +63,48 @@ const Thread: React.FC = () => {
                     ))
                 }
             </div>
+            {
+                thread?.locked
+                    ? <div className="bg-zinc-900 py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">This thread is locked from further communication by it's creator.</div>
+                    : (
+                        <div className="p-4 bg-zinc-900 rounded-md">
+                            <Editor editorState={state} setEditorState={setState} placeholder="Write a reply..." maxLength={maxLength} />
+                            <div className="flex flex-row items-center mt-2">
+                                <div className="flex flex-row w-full gap-2 justify-start">
+                                    <span hidden={!!!error} className="py-2 px-3 bg-zinc-800 rounded-md text-red-500">{error}</span>
+                                    <span hidden={!!!success} className="py-2 px-3 bg-zinc-800 rounded-md text-green-500">{success}</span>
+                                </div>
+                                <div className="flex flex-row w-full gap-2 justify-end items-center">
+                                    <p className="text-gray-500 py-2 px-3 bg-zinc-800 rounded-md">{state.getCurrentContent().getPlainText().length}/{maxLength} characters</p>
+                                    <Button onClick={() => {
+                                        if (currentUser) {
+                                            Functions.firebase.saveThreadReply({
+                                                id: uuid(),
+                                                threadId: thread.id,
+                                                content: stateToHTML(state.getCurrentContent()),
+                                                createdAt: new Date().getTime(),
+                                                createdBy: currentUser.uid ?? "",
+                                                updatedAt: null,
+                                                updatedBy: null,
+                                            }).then(() => {
+                                                setError(null);
+                                                setSuccess("Reply sent!");
+                                                setState(EditorState.createEmpty());
+                                                setTimeout(() => setSuccess(null), 5000);
+                                            }).catch((error) => {
+                                                setError(error.message);
+                                                setSuccess(null);
+                                            });
+                                        }
+                                    }}>
+                                        Reply
+                                    </Button>
 
-            <button className="cursor-default" onClick={() => alert("Not working yet...")}>
-                <Editor editorState={state} setEditorState={setState} placeholder="Write a reply..." maxLength={10000} />
-            </button>
+                                </div>
+                            </div>
+                        </div>
+                    )
+            }
         </div>
     );
 }

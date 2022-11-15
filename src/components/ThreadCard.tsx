@@ -26,7 +26,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     }, [thread.createdBy]);
 
     return (
-        <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-zinc-900 py-1 px-3 gap-2 border-2 border-blue-600 hover:shadow-glow-10 hover:bg-[#101010] hover:cursor-pointer rounded-md" >
+        <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-black py-1 px-3 gap-2 border-2 border-blue-600 hover:shadow-glow-10 hover:cursor-pointer rounded-md" >
             <div className="flex items-center">
                 {/** Icon */}
             </div>
@@ -43,7 +43,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
                         {
                             thread ? (
                                 <div className="flex flex-row text-center gap-2">
-                                    <img src={threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 border border-white rounded-full" />
+                                    <img src={threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
                                     <div className="text-sm text-gray-600 max-w-[10rem]">
                                         <div className="flex flex-col w-full">
                                             <p className="text-left overflow-hidden text-ellipsis">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)}</p>

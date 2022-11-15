@@ -1,9 +1,10 @@
 import { sendEmailVerification as sendVerification, sendPasswordResetEmail, updateEmail, updateProfile as updateUserProfile } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, updateDoc, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
 import { IUser } from "../interfaces/User";
 import { IProfileMessage } from "../interfaces/Message";
+import { Message, Thread } from "../mst";
 
 const firestoreInstance = FirebaseServices.getFirestoreInstance();
 const authInstance = FirebaseServices.getAuthInstance();
@@ -95,8 +96,8 @@ export const updateProfile = async ({ username, photoFile }: { username?: string
         const isAvailable = await isUsernameAvailable(username.toLowerCase());
         if (isAvailable) {
             const userDoc = doc(firestoreInstance, "users", user.uid);
-            await updateDoc(userDoc, { username: username, usernameLowercase: username.toLowerCase(), photoUrl: photoUrl })
-                .catch(() => { });
+            await setDoc(userDoc, { username: username, usernameLowercase: username.toLowerCase(), photoUrl: photoUrl })
+                .catch((e) => { });
         }
     }
 
@@ -105,7 +106,6 @@ export const updateProfile = async ({ username, photoFile }: { username?: string
             displayName: username ?? user.displayName,
             photoURL: photoUrl ?? user.photoURL ?? "https://i.imgur.com/1u0ESiX.png",
         });
-
         return { success: true, message: "Profile updated successfully" };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
@@ -240,6 +240,50 @@ export const deleteProfileMessage = async (message: IProfileMessage, profileOwne
     try {
         await updateDoc(userDoc, { messages: messages });
         return { success: true, message: "Message deleted successfully!" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Saves the thread reply to the database
+ * @param reply The reply to save
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export const saveThreadReply = async (reply: Message) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+
+    const messageDoc = doc(firestoreInstance, "forumx", "message")
+    const messages = await getDoc(messageDoc).then((doc) => doc.data()?.messages ?? []);
+    messages.push(reply);
+
+    try {
+        await updateDoc(messageDoc, { messages: messages });
+        return { success: true, message: "Reply saved successfully" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Creates a new thread in the database
+ * @param thread The post to create
+ * @returns A promise that resolves to an object containing a success boolean, a message string and thread location
+ */
+export const createThread = async (thread: Thread) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+
+    const threadDoc = doc(firestoreInstance, "forumx", "thread")
+    const threads = await getDoc(threadDoc).then((doc) => doc.data()?.threads ?? []);
+
+    threads.push(thread);
+
+    try {
+        await updateDoc(threadDoc, { threads: threads });
+        const threadLocation = `/thread/${thread.title}.${thread.id}`;
+        return { success: true, message: "Post created successfully", threadLocation: threadLocation };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
     }

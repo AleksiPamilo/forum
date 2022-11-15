@@ -16,7 +16,7 @@ const Sidebar: React.FC = () => {
                 <h1 className="text-white text-xl font-semibold text-center mt-1">Settings</h1>
             </Link>
             <div className="flex pt-20">
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-2 list-none">
                     {
                         sidebarItems.map((item, index) => (
                             <li key={index}>

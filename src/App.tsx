@@ -8,13 +8,14 @@ import FirestoreSnapshotProvider from './components/context/FirestoreSnapshotPro
 
 const Layout = lazy(() => import('./components/Layouts/Layout'));
 const SettingsLayout = lazy(() => import('./components/Layouts/SettingsLayout'));
-const Forums = lazy(() => import("./sites/Forums"));
+const LandingPage = lazy(() => import("./sites/LandingPage"));
 const WhatsNew = lazy(() => import("./sites/WhatsNew"));
 const Profile = lazy(() => import("./sites/Profile/Profile"));
 const Settings = lazy(() => import("./sites/Profile/Settings"));
 const SocialSettings = lazy(() => import("./sites/Profile/SocialSettings"));
-const Threads = lazy(() => import("./sites/Threads"));
+const Forums = lazy(() => import("./sites/Forums"));
 const Thread = lazy(() => import("./sites/Thread"));
+const PostThread = lazy(() => import("./sites/PostThread"));
 
 const App: React.FC = () => {
   const [state, setState] = useState<RootStore | undefined>();
@@ -37,14 +38,15 @@ const App: React.FC = () => {
               <BrowserRouter>
                 <Routes>
                   <Route element={<Layout />}>
-                    <Route path="/" element={<Forums />} />
+                    <Route path="/" element={<LandingPage />} />
                     <Route path="/whats-new" element={<WhatsNew />} />
                     <Route path="/profiles" element={<Profile />} />
                     <Route path="/profiles/:username" element={<Profile />} />
                     <Route path="/thread" element={<Thread />} />
                     <Route path="/thread/:title_id" element={<Thread />} />
-                    <Route path="/threads" element={<Threads />} />
-                    <Route path="/threads/:name" element={<Threads />} />
+                    <Route path="/forums" element={<LandingPage />} />
+                    <Route path="/forums/:slug" element={<Forums />} />
+                    <Route path="/post-thread" element={<PostThread />} />
                   </Route>
                   <Route element={<SettingsLayout />}>
                     <Route path="/settings" element={<Settings />} />

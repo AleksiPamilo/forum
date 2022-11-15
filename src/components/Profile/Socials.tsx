@@ -24,7 +24,7 @@ const Socials: React.FC<SocialsProps> = ({ user }) => {
                                 </div>
                             )
                         })
-                        : <div className="text-center mt-4 px-3 py-2 bg-zinc-800 rounded-md border border-blue-600 shadow-glow-3">
+                        : <div className="text-center mt-4 px-3 py-2 bg-black rounded-md border border-blue-600 shadow-glow-5">
                             {user.username} hasn't linked any social accounts yet!
                         </div>
                 }

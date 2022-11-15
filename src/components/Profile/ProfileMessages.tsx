@@ -20,33 +20,17 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
     const [messages, setMessages] = useState(user.messages ?? []);
     const [showEditor, setShowEditor] = useState<boolean>(false);
     const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     const handleSaveMessage = () => {
         if (!editorState.getCurrentContent().hasText()) {
-            setModalContent(
-                <div className="flex flex-col w-[25rem] text-white p-4 bg-zinc-600 rounded-md border border-white">
-                    <div className="flex justify-between">
-                        <h1 className="text-2xl font-bold">Error!</h1>
-                        <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-                    </div>
-                    <p className="mt-4 text-xl font-bold">Message content cannot be empty!</p>
-                </div>
-            );
-            setIsModalOpen(true);
+            setError("Comment cannot be empty!");;
             return;
         }
 
         if (!currentUser) {
-            setModalContent(
-                <div className="flex flex-col w-[25rem] text-white p-4 bg-zinc-600 rounded-md border border-white">
-                    <div className="flex justify-between">
-                        <h1 className="text-2xl font-bold">Error!</h1>
-                        <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-                    </div>
-                    <p className="mt-4 text-base font-bold">You must be logged in to comment on other people's profiles!</p>
-                </div>
-            );
-            setIsModalOpen(true);
+            setError("You must be logged in to comment on a profile!");
             return;
         } else {
             const message = {
@@ -63,8 +47,8 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
             messages.push(message);
             setMessages(messages);
             Functions.firebase.saveProfileMessage(message, user.uid);
-            setShowEditor(false);
             setEditorState(EditorState.createEmpty());
+            setSuccess("Message sent!");
         }
     }
 
@@ -73,12 +57,13 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
             <div className="flex flex-row justify-between">
                 <h1 className="text-3xl font-bold">Posts</h1>
                 <div className="flex flex-row gap-2">
-                    {showEditor && <Button onClick={handleSaveMessage}>Send</Button>}
                     <Button
                         colors={{ background: "bg-zinc-600 hover:bg-zinc-700", text: "text-white" }}
                         onClick={() => {
                             if (currentUser || showEditor) {
-                                setShowEditor(!showEditor)
+                                setError(null);
+                                setSuccess(null);
+                                setShowEditor(!showEditor);
                             } else {
                                 setModalContent(
                                     <div className="flex flex-col w-[25rem] text-white p-4 bg-black rounded-md border border-blue-600 shadow-glow-5">
@@ -86,7 +71,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                                             <h1 className="text-2xl font-bold">Error!</h1>
                                             <Button onClick={() => setIsModalOpen(false)}>Close</Button>
                                         </div>
-                                        <p className="mt-4 text-base font-bold">You must be logged in to comment on other people's profiles!</p>
+                                        <p className="mt-4 text-base font-bold">You must be logged in to comment on a profile!</p>
                                     </div>
                                 )
                                 setIsModalOpen(true);
@@ -98,13 +83,23 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                 </div>
             </div>
             <div className="flex flex-col w-full">
-                <div className="mt-4 " hidden={!showEditor}>
+                <div className="mt-4 bg-zinc-800 rounded-md p-2" hidden={!showEditor}>
                     <Editor
                         placeholder="Leave a comment..."
                         editorState={editorState}
                         setEditorState={setEditorState}
                         maxLength={1000}
                     />
+                    <div className="flex flex-row gap-2 items-center">
+                        <div className="flex flex-row w-full justify-start mt-2">
+                            <span hidden={!!!error} className="py-2 px-3 text-red-500 bg-zinc-900 rounded-md border border-blue-600 hover:shadow-glow-5">{error}</span>
+                            <span hidden={!!!success} className="py-2 px-3 text-green-500 bg-zinc-900 rounded-md border border-blue-600 hover:shadow-glow-5">{success}</span>
+                        </div>
+                        <div className="flex flex-row w-full gap-2 text-right justify-end items-center mt-2">
+                            <span className="py-2 px-3 bg-zinc-900 rounded-md text-gray-500 border border-blue-600 hover:shadow-glow-2">{editorState.getCurrentContent().getPlainText().length}/1000 characters</span>
+                            <Button onClick={handleSaveMessage}>Send</Button>
+                        </div>
+                    </div>
                 </div>
                 <div className="flex min-h-full flex-col gap-y-4 mt-4">
                     {
@@ -112,8 +107,8 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                             messages.map((message) => (
                                 <ProfileMessage key={message.id} message={message} setMessages={setMessages} profileOwner={user} />
                             )).sort((a, b) => b.props.message.createdAt - a.props.message.createdAt)
-                            : !showEditor && <h1 className="flex self-center mt-4 text-xl font-bold bg-zinc-600 py-2 px-3 rounded-md">
-                                There are no messages on {user.username}'s profile yet!
+                            : !showEditor && <h1 className="flex self-center mt-4 text-xl font-bold bg-black py-2 px-3 rounded-md border border-blue-600 shadow-glow-5">
+                                There are no comments on {user.username}'s profile yet!
                             </h1>
                     }
                 </div>

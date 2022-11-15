@@ -33,14 +33,14 @@ const ThreadPost: React.FC<ThreadPostProps> = ({ thread }) => {
     ];
 
     return (
-        <div className="flex relative w-full rounded-md p-4 bg-zinc-600">
+        <div className="flex w-full relative rounded-md p-4 bg-zinc-900">
             <div className="absolute right-0 top-0 p-2" hidden={thread.createdBy !== currentUser?.uid}>
                 <Dropdown
                     label={
                         <FiMoreHorizontal className="w-5 h-5" />
                     }
                     options={dropdownOptions}
-                    btnStyles="rounded-full py-2 px-2 bg-zinc-500 hover:bg-zinc-700"
+                    btnStyles="rounded-full py-2 px-2 bg-zinc-700 border hover:shadow-glow-2"
                 />
             </div>
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={user?.photoUrl} />

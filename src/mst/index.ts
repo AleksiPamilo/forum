@@ -10,6 +10,8 @@ const ForumModel = types.model("Forum").props({
     id: types.string,
     categoryId: types.string,
     name: types.string,
+    slug: types.string,
+    locked: types.boolean,
     createdAt: types.number,
     createdBy: types.string,
     updatedAt: types.maybeNull(types.number),
@@ -17,10 +19,11 @@ const ForumModel = types.model("Forum").props({
 });
 
 const ThreadModel = types.model("Thread").props({
-    id: types.number,
+    id: types.string,
     forumId: types.string,
     title: types.string,
     content: types.string,
+    locked: types.boolean,
     createdAt: types.number,
     createdBy: types.string,
     updatedAt: types.maybeNull(types.number),
@@ -29,7 +32,7 @@ const ThreadModel = types.model("Thread").props({
 
 const MessageModel = types.model("Message").props({
     id: types.identifier,
-    threadId: types.number,
+    threadId: types.string,
     content: types.string,
     createdAt: types.number,
     createdBy: types.string,
@@ -52,6 +55,15 @@ export const RootStoreModel = types.model("RootStore", {
         },
     }))
     .views(self => ({
+        getForumByName(forumName: string | null) {
+            return self.forums.find(f => f.name === forumName);
+        },
+        getForumBySlug(forumSlug: string | null) {
+            return self.forums.find(f => f.slug === forumSlug);
+        },
+        getForumNames() {
+            return self.forums.map(f => f.name);
+        },
         getThreadCount(forumId: Forum["id"]) {
             return self.threads.filter(thread => thread.forumId === forumId).length;
         },
@@ -63,8 +75,8 @@ export const RootStoreModel = types.model("RootStore", {
             if (!threadId) return null;
             return self.threads.find(thread => thread.id === threadId);
         },
-        getThreadsByForum(forumName: Forum["name"] | null) {
-            const forum = self.forums.find(forum => forum.name === forumName);
+        getThreadsByForum(forumSlug: Forum["slug"] | null) {
+            const forum = self.forums.find(forum => forum.slug === forumSlug);
             if (!forum) return [];
 
             return self.threads.filter(thread => thread.forumId === forum.id);

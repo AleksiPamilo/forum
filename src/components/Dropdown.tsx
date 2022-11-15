@@ -48,11 +48,11 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, btnStyles
             </Button>
 
             {open && (
-                <div className="absolute right-0 text-right mt-2 z-10 w-full min-w-[15rem] rounded border divide-gray-100 shadow dark:bg-gray-700 select-none cursor-pointer">
+                <div className="absolute right-0 text-right mt-2 z-50 w-full min-w-[15rem] rounded border divide-gray-100 shadow bg-gray-700 select-none cursor-pointer">
                     {options.map((option, index) => (
                         <div
                             key={index}
-                            className="py-2 px-4 rounded hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            className="py-2 px-4 rounded bg-gray-800 hover:bg-gray-700 text-white"
                             onClick={() => {
                                 if ("navigateTo" in option) {
                                     navigate(option.navigateTo);

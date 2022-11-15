@@ -51,7 +51,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
                             },
                         },
                     ]}
-                    btnStyles="rounded-full py-2 px-2 bg-zinc-500 hover:bg-zinc-700"
+                    btnStyles="rounded-full py-2 px-2 bg-zinc-700 hover:bg-zinc-600"
                 />
             </div>
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={message.createdBy.photoUrl} />
