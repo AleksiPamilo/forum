@@ -75,7 +75,7 @@ export const RootStoreModel = types.model("RootStore", {
             return threads[threads.length - 1];
         },
         getLatestThreads() {
-            return self.threads.slice(-5);
+            return self.threads.slice(-5).reverse();
         },
         getThreadById(threadId: Thread["id"] | null) {
             if (!threadId) return null;
