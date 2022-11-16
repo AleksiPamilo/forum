@@ -1,28 +1,31 @@
 import React, { useState } from "react";
 import { EditorState } from "draft-js";
 import Editor from "../components/Editor";
-import { useAuth, useStores } from "../hooks";
+import Login from "../components/modals/auth/LoginSignup";
+import { useAuth, useModal, useStores } from "../hooks";
 import Input from "../components/Input";
 import SearchableDropdown from "../components/SearchableDropdown";
 import Button from "../components/Button";
 import Functions from "../functions";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { stateToHTML } from "draft-js-export-html";
 
 const PostThread: React.FC = () => {
     const { isLoggedIn, user, isAdmin } = useAuth();
+    const { setIsModalOpen, setModalContent } = useModal();
     const { getForumByName, getForumNames, getForumBySlug, forums } = useStores();
     const navigate = useNavigate();
     const { search } = useLocation();
     const [state, setState] = useState(EditorState.createEmpty());
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState<string>("");
+    const [locked, setLocked] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [selected, setSelected] = useState<{ label: string, value: string } | null>(null);
     const lockedForums = [...forums.filter(x => x.locked).map(y => y.name)];
     const options = [...getForumNames().map((name) => ({ label: name, value: name.toLowerCase().replace(/\s/g, "-") }))].filter(x => {
         if (isAdmin) return true;
-        else return !lockedForums.includes(x.label)
+        else return !lockedForums.includes(x.label);
     });
     const forum = getForumByName(selected?.label ?? "");
 
@@ -43,6 +46,15 @@ const PostThread: React.FC = () => {
         <div className="flex flex-col items-center mt-24">
             <h1 className="text-4xl font-bold">403</h1>
             <p className="text-xl">You must be logged in to create a thread.</p>
+            <div className="flex flex-row items-center gap-2 mt-2">
+                <Button onClick={() => {
+                    setModalContent(<Login />);
+                    setIsModalOpen(true);
+                }}>
+                    Login
+                </Button>
+                <Link to="/" className="py-2 px-3 bg-blue-600 hover:shadow-glow-6 rounded-md">Back to front page</Link>
+            </div>
         </div>
     );
 
@@ -66,7 +78,7 @@ const PostThread: React.FC = () => {
             forumId: forum.id,
             title: title,
             content: stateToHTML(state?.getCurrentContent()),
-            locked: false,
+            locked: locked,
             createdAt: Date.now(),
             createdBy: user?.uid ?? "",
             updatedAt: null,
@@ -98,8 +110,14 @@ const PostThread: React.FC = () => {
                 </div>
                 <div className="flex flex-row justify-between items-center mt-4">
                     <div className="flex flex-col gap-y-2">
-                        <p>Please select the forum you would like to post to.</p>
-                        <SearchableDropdown onChange={(option) => setSelected(option)} options={options} label="Forum" selected={selected?.label} />
+                        <p className="flex flex-col">
+                            <span>Please select the forum you would like to post to.</span>
+                            <span>And wether the thread should be locked from conversation or not.</span>
+                        </p>
+                        <div className="flex flex-row gap-2">
+                            <SearchableDropdown onChange={(option) => setSelected(option)} options={options} label="Forum" selected={selected?.label} />
+                            <SearchableDropdown onChange={(option) => setLocked(option.value === "true")} options={[{ label: "Locked", value: "true" }, { label: "Unlocked", value: "false" }]} label="Locked" selected={locked ? "Locked" : "Unlocked"} />
+                        </div>
                     </div>
                     <div>
                         <Button onClick={() => handlePost()}>Post!</Button>

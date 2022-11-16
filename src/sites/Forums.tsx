@@ -2,10 +2,11 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import ThreadCard from "../components/ThreadCard";
-import { useStores } from "../hooks";
+import { useAuth, useStores } from "../hooks";
 
 const Threads: React.FC = () => {
     const { slug } = useParams();
+    const { isAdmin } = useAuth();
     const { getThreadsByForum, getForumBySlug } = useStores();
     const navigate = useNavigate();
     const threads = getThreadsByForum(slug ?? null);
@@ -22,7 +23,7 @@ const Threads: React.FC = () => {
 
     return (
         <div className="mt-4 gap-4 flex flex-col">
-            <div className="text-right py-2 px-3 absolute right-0 top-16">
+            <div className="text-right py-2 px-3 absolute right-0 top-16" hidden={forum?.locked && !isAdmin}>
                 <Button onClick={() => navigate("/post-thread?forum=" + forum?.slug)}>New Post</Button>
             </div>
             {

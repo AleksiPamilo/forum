@@ -107,7 +107,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     }
 
     return (
-        <div className="bg-black w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-blue-900 shadow-[0_0_10px_5px_rgba(33,54,163)]">
+        <div className="bg-black w-[23rem] md:w-[30rem] p-4 rounded-md border-2 text-white border-blue-900 shadow-glow-4">
             <div className="flex justify-between mb-6">
                 <h1 className="text-2xl font-extrabold">{login ? "Login" : "Register"}</h1>
                 <Button colors={{ background: "bg-blue-700 hover:bg-blue-800" }} onClick={closeModal}>
