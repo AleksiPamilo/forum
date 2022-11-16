@@ -1,6 +1,6 @@
 import { Editor as EditorComponent } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "./editor.css";
+
 const Editor = ({ maxLength, placeholder = "", editorState, setEditorState }) => {
     return (
         <EditorComponent

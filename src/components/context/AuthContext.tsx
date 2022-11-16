@@ -8,6 +8,7 @@ const authInstance = FirebaseServices.getAuthInstance();
 interface IAuthContext {
     user: User | null,
     isLoggedIn: boolean,
+    isAdmin: boolean,
     checkLogin: () => void,
     logout: () => void,
     login: (email: string, password: string) => Promise<{ success: boolean, message: string }>,
@@ -28,13 +29,19 @@ export const useAuth = () => {
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [user, setUser] = React.useState<User | null>(null);
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
 
     const checkLogin = React.useCallback(() => {
         authInstance.onAuthStateChanged((user) => {
             if (user) {
                 setUser(user);
                 setIsLoggedIn(true);
+
+                user.getIdTokenResult()
+                    .then((idTokenResult) => {
+                        setIsAdmin(!!idTokenResult.claims.admin);
+                    })
             } else {
                 setUser(null);
                 setIsLoggedIn(false);
@@ -84,6 +91,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
         <AuthContext.Provider value={{
             user,
             isLoggedIn,
+            isAdmin,
             checkLogin,
             login,
             logout,

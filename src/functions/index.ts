@@ -1,5 +1,18 @@
 import {
-    requestPasswordReset, sendEmailVerification, updateProfile, isUsernameAvailable, getUserByUID, getUserByUsername, saveProfileMessage, deleteProfileMessage, updateEmailAddress, updateAboutMe, saveThreadReply, createThread
+    requestPasswordReset,
+    sendEmailVerification,
+    updateProfile,
+    isUsernameAvailable,
+    getUserByUID,
+    getUserByUsername,
+    saveProfileMessage,
+    deleteProfileMessage,
+    updateEmailAddress,
+    updateAboutMe,
+    saveThreadReply,
+    createThread,
+    deleteThreadReply,
+    deleteThread,
 } from "./firebase"
 
 /**
@@ -56,7 +69,9 @@ const Functions = {
         updateEmail: updateEmailAddress,
         updateAboutMe,
         saveThreadReply,
-        createThread
+        createThread,
+        deleteThreadReply,
+        deleteThread,
     }
 }
 

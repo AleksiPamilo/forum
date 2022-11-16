@@ -7,9 +7,10 @@ import SearchableDropdown from "../components/SearchableDropdown";
 import Button from "../components/Button";
 import Functions from "../functions";
 import { useLocation, useNavigate } from "react-router-dom";
+import { stateToHTML } from "draft-js-export-html";
 
 const PostThread: React.FC = () => {
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn, user, isAdmin } = useAuth();
     const { getForumByName, getForumNames, getForumBySlug, forums } = useStores();
     const navigate = useNavigate();
     const { search } = useLocation();
@@ -19,7 +20,10 @@ const PostThread: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const [selected, setSelected] = useState<{ label: string, value: string } | null>(null);
     const lockedForums = [...forums.filter(x => x.locked).map(y => y.name)];
-    const options = [...getForumNames().map((name) => ({ label: name, value: name.toLowerCase().replace(/\s/g, "-") }))].filter(x => !lockedForums.includes(x.label));
+    const options = [...getForumNames().map((name) => ({ label: name, value: name.toLowerCase().replace(/\s/g, "-") }))].filter(x => {
+        if (isAdmin) return true;
+        else return !lockedForums.includes(x.label)
+    });
     const forum = getForumByName(selected?.label ?? "");
 
     React.useEffect(() => {
@@ -46,20 +50,22 @@ const PostThread: React.FC = () => {
         setError(null);
         setSuccess(null);
 
+        if (forum?.locked && !isAdmin) return setError("This forum is locked.");
         if (!user) return setError("You must be logged in to create a thread.");
         if (!title) return setError("Please enter a title.");
         if (state.getCurrentContent().getPlainText().length > 10000) return setError("Your thread is too long. Please shorten it.");
         if (state.getCurrentContent().getPlainText().length < 10) return setError("Your thread is too short. Please lengthen it.");
         if (!selected) return setError("Please select a forum.");
         if (!forum) return setError("Forum not found.");
-        if (forum?.locked) return setError("This forum is locked.");
-        if (!Functions.isValidCharacter(title)) return setError("Your title contains invalid characters.");
+        if (!isAdmin && !Functions.isValidCharacter(title)) {
+            return setError("Your title contains invalid characters.");
+        }
 
         Functions.firebase.createThread({
             id: (new Date().getTime()).toString(36),
             forumId: forum.id,
             title: title,
-            content: state.getCurrentContent().getPlainText(),
+            content: stateToHTML(state?.getCurrentContent()),
             locked: false,
             createdAt: Date.now(),
             createdBy: user?.uid ?? "",
@@ -67,7 +73,7 @@ const PostThread: React.FC = () => {
             updatedBy: null,
         })
             .then((res) => {
-                setSuccess("Thread posted successfully!");
+                setSuccess("Thread created successfully!");
                 setState(EditorState.createEmpty());
                 setTitle("");
                 setSelected(null);

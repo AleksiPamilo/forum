@@ -53,6 +53,9 @@ export const RootStoreModel = types.model("RootStore", {
             self.messages = cast(messages);
             self.categories = cast(categories);
         },
+        setMessages(messages: Message[]) {
+            self.messages = cast(messages);
+        },
     }))
     .views(self => ({
         getForumByName(forumName: string | null) {

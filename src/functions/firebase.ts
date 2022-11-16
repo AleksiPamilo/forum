@@ -246,6 +246,32 @@ export const deleteProfileMessage = async (message: IProfileMessage, profileOwne
 }
 
 /**
+ * @description Delete's a thread reply from the database
+ * @param reply The reply to delete
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export const deleteThreadReply = async (reply: Message) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (reply.createdBy !== user.uid) return { success: false, message: "You can't delete this reply!" };
+
+    const threadDoc = doc(firestoreInstance, "forumx", "message");
+    const replies = await getDoc(threadDoc).then((doc) => doc.data()?.messages ?? []);
+
+    const index = replies.findIndex((r: Message) => r?.id === reply.id);
+    if (index !== -1) {
+        replies.splice(index, 1);
+    }
+
+    try {
+        await updateDoc(threadDoc, { messages: replies });
+        return { success: true, message: "Reply deleted successfully!", replies: replies };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
  * @description Saves the thread reply to the database
  * @param reply The reply to save
  * @returns A promise that resolves to an object containing a success boolean and a message string
@@ -284,6 +310,32 @@ export const createThread = async (thread: Thread) => {
         await updateDoc(threadDoc, { threads: threads });
         const threadLocation = `/thread/${thread.title}.${thread.id}`;
         return { success: true, message: "Post created successfully", threadLocation: threadLocation };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Deletes a thread from the database
+ * @param Thread The thread to delete
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+*/
+export const deleteThread = async (thread: Thread) => {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (thread.createdBy !== user.uid) return { success: false, message: "You can't delete this thread!" };
+
+    const threadDoc = doc(firestoreInstance, "forumx", "thread")
+    const threads = await getDoc(threadDoc).then((doc) => doc.data()?.threads ?? []);
+
+    const index = threads.findIndex((t: Thread) => t?.id === thread.id);
+    if (index !== -1) {
+        threads.splice(index, 1);
+    }
+
+    try {
+        await updateDoc(threadDoc, { threads: threads });
+        return { success: true, message: "Thread deleted successfully!" };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
     }

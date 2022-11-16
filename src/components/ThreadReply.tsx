@@ -3,45 +3,47 @@ import DOMPurify from "dompurify";
 import Functions from "../functions";
 import { Link } from "react-router-dom";
 import { IUser } from "../interfaces/User";
-import { Thread } from "../mst";
+import { Message } from "../mst";
 import Dropdown from "./Dropdown";
-import { useAuth, useModal } from "../hooks";
+import { useAuth, useModal, useStores } from "../hooks";
 import { FiMoreHorizontal } from "react-icons/fi";
+import { FaTimes } from "react-icons/fa"
 import Button from "./Button";
-import { FaTimes } from "react-icons/fa";
 
-type ThreadPostProps = {
-    thread: Thread;
+type ThreadReplyProps = {
+    reply: Message;
 };
 
-const ThreadPost: React.FC<ThreadPostProps> = ({ thread }) => {
+const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
     const { user: currentUser } = useAuth();
-    const { setModalContent, setIsModalOpen } = useModal();
+    const { setMessages } = useStores();
+    const { setIsModalOpen, setModalContent } = useModal();
     const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
-        Functions.firebase.getUserByUID(thread.createdBy)
+        Functions.firebase.getUserByUID(reply.createdBy)
             .then((data) => {
                 setUser(data.user);
             });
-    }, [thread.createdBy]);
+    }, [reply.createdBy]);
 
     const dropdownOptions = [
         {
-            label: "Delete Thread",
+            label: "Delete Reply",
             onClick: () => {
-                Functions.firebase.deleteThread(thread)
-                    .then(() => {
-                        setModalContent(<div className="w-[20rem] bg-black text-white rounded-md border border-blue-600 shadow-glow-3">
+                Functions.firebase.deleteThreadReply(reply)
+                    .then((res) => {
+                        setModalContent(<div className="w-[25rem] bg-black text-white rounded-md border border-blue-600 shadow-glow-3">
                             <div className="p-4">
                                 <div className="flex flex-row justify-between items-center">
-                                    <h1 className="text-xl font-bold">Thread Deleted</h1>
+                                    <h1 className="text-xl font-bold">Reply Deleted</h1>
                                     <Button onClick={() => setIsModalOpen(false)}><FaTimes className="w-5 h-5" /></Button>
                                 </div>
-                                <p className="mt-2">The thread has been deleted successfully.</p>
+                                <p className="mt-2">The reply has been deleted successfully.</p>
                             </div>
                         </div>);
                         setIsModalOpen(true);
+                        setMessages(res.replies);
                     })
                     .catch((e) => {
                         console.log(e)
@@ -63,7 +65,7 @@ const ThreadPost: React.FC<ThreadPostProps> = ({ thread }) => {
 
     return (
         <div className="flex w-full relative rounded-md p-4 bg-zinc-900">
-            <div className="absolute right-0 top-0 p-2" hidden={thread.createdBy !== currentUser?.uid}>
+            <div className="absolute right-0 top-0 p-2" hidden={reply.createdBy !== currentUser?.uid}>
                 <Dropdown
                     label={
                         <FiMoreHorizontal className="w-5 h-5" />
@@ -77,12 +79,12 @@ const ThreadPost: React.FC<ThreadPostProps> = ({ thread }) => {
                 <div className="flex flex-row">
                     <Link to={`/profiles/${user?.username}`} className="font-bold text-blue-500 hover:cursor-pointer hover:underline">{user?.username ?? "Unknown User"}</Link>
                     <span className="mx-4">—</span>
-                    <h1 className="text-gray-400">{Functions.timeAgo(thread.createdAt)}</h1>
+                    <h1 className="text-gray-400">{Functions.timeAgo(reply.createdAt)}</h1>
                 </div>
-                <div className="max-w-[70rem] overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(thread.content) }} />
+                <div className="max-w-[70rem] overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(reply.content) }} />
             </div>
         </div>
     )
 }
 
-export default ThreadPost;
+export default ThreadReply;

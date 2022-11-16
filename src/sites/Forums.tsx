@@ -31,10 +31,10 @@ const Threads: React.FC = () => {
                         <ThreadCard thread={thread} />
                     ))
                     : forum?.locked
-                        ? <div className="bg-zinc-900 py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
+                        ? <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
                             Only admins can create threads in this forum.
                         </div>
-                        : <div className="bg-zinc-900 py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
+                        : <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
                             No threads have been created in this forum yet.
                         </div>
             }

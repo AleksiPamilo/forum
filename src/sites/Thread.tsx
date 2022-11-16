@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { Link, useParams } from "react-router-dom";
 import Editor from "../components/Editor";
 import ThreadPost from "../components/ThreadPost";
+import ThreadReply from "../components/ThreadReply";
 import Functions from "../functions";
 import { useAuth, useStores } from "../hooks";
 import { IUser } from "../interfaces/User";
@@ -34,8 +36,12 @@ const Thread: React.FC = () => {
 
     if (!thread) return (
         <div className="flex flex-col items-center mt-24">
-            <h1 className="text-4xl font-bold">404</h1>
-            <p className="text-xl">Thread not found</p>
+            <div className="flex flex-row gap-2 items-center mb-2">
+                <h1 className="text-4xl font-bold">404</h1>
+                <span>—</span>
+                <p className="text-xl">Thread not found</p>
+            </div>
+            <Link to="/" className="py-2 px-3 bg-blue-600 rounded-md hover:shadow-glow-6">Back to front page</Link>
         </div>
     );
 
@@ -59,7 +65,7 @@ const Thread: React.FC = () => {
             <div className="flex flex-col gap-2">
                 {
                     messages.map((message) => (
-                        <ThreadPost thread={message} />
+                        <ThreadReply reply={message} />
                     ))
                 }
             </div>
@@ -77,25 +83,26 @@ const Thread: React.FC = () => {
                                 <div className="flex flex-row w-full gap-2 justify-end items-center">
                                     <p className="text-gray-500 py-2 px-3 bg-zinc-800 rounded-md">{state.getCurrentContent().getPlainText().length}/{maxLength} characters</p>
                                     <Button onClick={() => {
-                                        if (currentUser) {
-                                            Functions.firebase.saveThreadReply({
-                                                id: uuid(),
-                                                threadId: thread.id,
-                                                content: stateToHTML(state.getCurrentContent()),
-                                                createdAt: new Date().getTime(),
-                                                createdBy: currentUser.uid ?? "",
-                                                updatedAt: null,
-                                                updatedBy: null,
-                                            }).then(() => {
-                                                setError(null);
-                                                setSuccess("Reply sent!");
-                                                setState(EditorState.createEmpty());
-                                                setTimeout(() => setSuccess(null), 5000);
-                                            }).catch((error) => {
-                                                setError(error.message);
-                                                setSuccess(null);
-                                            });
-                                        }
+                                        if (!currentUser) return setError("You must be logged in to reply to this thread.");
+
+                                        Functions.firebase.saveThreadReply({
+                                            id: uuid(),
+                                            threadId: thread.id,
+                                            content: stateToHTML(state.getCurrentContent()),
+                                            createdAt: new Date().getTime(),
+                                            createdBy: currentUser.uid ?? "",
+                                            updatedAt: null,
+                                            updatedBy: null,
+                                        }).then(() => {
+                                            setError(null);
+                                            setSuccess("Reply sent!");
+                                            setState(EditorState.createEmpty());
+                                            setTimeout(() => setSuccess(null), 5000);
+                                        }).catch((error) => {
+                                            setError(error.message);
+                                            setSuccess(null);
+                                        });
+
                                     }}>
                                         Reply
                                     </Button>
@@ -109,4 +116,4 @@ const Thread: React.FC = () => {
     );
 }
 
-export default Thread;
+export default observer(Thread);

@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+ul {
+    display: block;
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+ol {
+    display: block;
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
