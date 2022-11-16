@@ -112,7 +112,7 @@ const PostThread: React.FC = () => {
                     <div className="flex flex-col gap-y-2">
                         <p className="flex flex-col">
                             <span>Please select the forum you would like to post to.</span>
-                            <span>And wether the thread should be locked from conversation or not.</span>
+                            <span>And whether or not the thread should be locked from conversation.</span>
                         </p>
                         <div className="flex flex-row gap-2">
                             <SearchableDropdown onChange={(option) => setSelected(option)} options={options} label="Forum" selected={selected?.label} />
