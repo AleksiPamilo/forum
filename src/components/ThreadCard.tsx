@@ -12,7 +12,6 @@ type ThreadCardProps = {
 const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     const navigate = useNavigate();
     const { getMessagesByThreadId } = useStores();
-    const [threadCreator, setThreadCreator] = React.useState<IUser | null>(null);
     const [latestReply, setLatestReply] = React.useState<IUser | null>(null);
     const messages = getMessagesByThreadId(thread.id);
     const messageCount = messages?.length ?? 0;
@@ -20,11 +19,6 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
 
     getMessagesByThreadId(thread.id);
     React.useEffect(() => {
-        Functions.firebase.getUserByUID(thread.createdBy)
-            .then((data) => {
-                setThreadCreator(data.user);
-            });
-
         if (latestMessage) {
             Functions.firebase.getUserByUID(latestMessage.createdBy)
                 .then((data) => {
@@ -42,14 +36,14 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
                 </div>
                 <div className="col-start-3 col-end-7 md:col-end-8 text-left">
                     {
-                        thread ? (
+                        latestMessage ? (
                             <div className="flex flex-row text-center gap-2">
-                                <img src={latestReply?.photoUrl ?? threadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
+                                <img src={latestReply?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
                                 <div className="text-sm text-left text-gray-600 max-w-[10rem]">
                                     <p className="overflow-hidden text-ellipsis">Latest Reply</p>
                                     <div className="flex flex-row gap-1 items-center">
                                         <p className="text-xs text-gray-600">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)} •</p>
-                                        <Link to={`/profiles/${latestReply?.username ?? threadCreator?.username}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestReply?.username ?? threadCreator?.username}</Link>
+                                        <Link to={`/profiles/${latestReply?.username}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestReply?.username}</Link>
                                     </div>
                                 </div>
                             </div>
