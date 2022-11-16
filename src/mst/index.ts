@@ -74,6 +74,9 @@ export const RootStoreModel = types.model("RootStore", {
             const threads = self.threads.filter(thread => thread.forumId === forumId);
             return threads[threads.length - 1];
         },
+        getLatestThreads() {
+            return self.threads.slice(-5);
+        },
         getThreadById(threadId: Thread["id"] | null) {
             if (!threadId) return null;
             return self.threads.find(thread => thread.id === threadId);

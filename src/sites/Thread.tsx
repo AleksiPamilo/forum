@@ -71,7 +71,7 @@ const Thread: React.FC = () => {
             </div>
             {
                 thread?.locked
-                    ? <div className="bg-zinc-900 py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">This thread is locked from further communication by it's creator.</div>
+                    ? <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">This thread is locked from further communication by it's creator.</div>
                     : (
                         <div className="p-4 bg-zinc-900 rounded-md">
                             <Editor editorState={state} setEditorState={setState} placeholder="Write a reply..." maxLength={maxLength} />
