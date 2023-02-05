@@ -57,7 +57,7 @@
     "@types/dompurify": "^2.3.4",
     "@types/react-draft-wysiwyg": "^1.13.4",
     "@types/uuid": "^8.3.4",
-    "autoprefixer": "^10.4.12",
+    "autoprefixer": "^10.4.13",
     "concurrently": "^7.4.0",
     "postcss": "^8.4.21",
     "tailwind-config-viewer": "^1.7.2",
