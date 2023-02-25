@@ -9,7 +9,8 @@
     "appAssociation": "AUTO",
     "rewrites": [
       {
-        "source": "**"
+        "source": "!/__auth/**",
+        "destination": "/index.html"
       },
       {
         "source": "/__/auth/**",
