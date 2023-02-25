@@ -5,17 +5,19 @@ import Editor from "../components/Editor";
 import ThreadPost from "../components/ThreadPost";
 import ThreadReply from "../components/ThreadReply";
 import Functions from "../functions";
-import { useAuth, useStores } from "../hooks";
+import { useAuth, useModal, useStores } from "../hooks";
 import { IUser } from "../interfaces/User";
 import { EditorState } from "draft-js";
 import { v4 as uuid } from "uuid";
 import Button from "../components/Button";
 import { stateToHTML } from "draft-js-export-html";
+import VerifyEmail from "../components/modals/auth/VerifyEmail";
 
 const Thread: React.FC = () => {
     const { title_id } = useParams();
     const { user: currentUser } = useAuth();
     const { getThreadById, getMessagesByThreadId } = useStores();
+    const { setModalContent, setIsModalOpen } = useModal();
     const [user, setUser] = useState<IUser | null>(null);
     const [state, setState] = useState(EditorState.createEmpty());
     const [error, setError] = useState<string | null>(null);
@@ -35,13 +37,15 @@ const Thread: React.FC = () => {
     }, [thread]);
 
     if (!thread) return (
-        <div className="flex flex-col items-center mt-24">
-            <div className="flex flex-row gap-2 items-center mb-2">
-                <h1 className="text-4xl font-bold">404</h1>
-                <span>—</span>
-                <p className="text-xl">Thread not found</p>
+        <div className="w-full mt-32 flex items-center justify-center">
+            <div className="w-[23rem] border border-blue-600 flex flex-col items-center justify-center p-4 rounded-md">
+                <div className="flex flex-row gap-2 items-center mb-2">
+                    <h1 className="text-4xl font-bold">404</h1>
+                    <span>—</span>
+                    <p className="text-xl">Thread not found</p>
+                </div>
+                <Link to="/" className="py-2 px-3 bg-blue-600 rounded-md hover:shadow-glow-6">Back to front page</Link>
             </div>
-            <Link to="/" className="py-2 px-3 bg-blue-600 rounded-md hover:shadow-glow-6">Back to front page</Link>
         </div>
     );
 
@@ -83,7 +87,19 @@ const Thread: React.FC = () => {
                                 <div className="flex flex-row w-full gap-2 justify-end items-center">
                                     <p className="text-gray-500 py-2 px-3 bg-zinc-800 rounded-md">{state.getCurrentContent().getPlainText().length}/{maxLength} characters</p>
                                     <Button onClick={() => {
-                                        if (!currentUser) return setError("You must be logged in to reply to this thread.");
+                                        if (!currentUser) {
+                                            setError("You must be logged in to reply to this thread.");
+                                            return;
+                                        };
+
+                                        if (currentUser && !currentUser.emailVerified) {
+                                            setModalContent(<VerifyEmail />);
+                                            setIsModalOpen(true);
+                                            return;
+                                        };
+
+                                        if (state.getCurrentContent().getPlainText().length > maxLength) return setError("Your reply is too long. Please shorten it.");
+                                        if (state.getCurrentContent().getPlainText().length < 10) return setError("Your reply is too short. Please lengthen it.");
 
                                         Functions.firebase.saveThreadReply({
                                             id: uuid(),

@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 import { useModal } from "../context/ModalContext";
 import { stateToHTML } from "draft-js-export-html";
 import { EditorState } from "draft-js";
+import VerifyEmail from "../modals/auth/VerifyEmail";
 
 type ProfileMessagesProps = {
     user: IUser
@@ -60,7 +61,18 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                     <Button
                         colors={{ background: "bg-zinc-600 hover:bg-zinc-700", text: "text-white" }}
                         onClick={() => {
-                            if (currentUser || showEditor) {
+                            if (showEditor) {
+                                setShowEditor(!showEditor);
+                                return;
+                            }
+
+                            if (currentUser) {
+                                if (!currentUser.emailVerified) {
+                                    setModalContent(<VerifyEmail />);
+                                    setIsModalOpen(true);
+                                    return;
+                                }
+
                                 setError(null);
                                 setSuccess(null);
                                 setShowEditor(!showEditor);
@@ -71,7 +83,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                                             <h1 className="text-2xl font-bold">Error!</h1>
                                             <Button onClick={() => setIsModalOpen(false)}>Close</Button>
                                         </div>
-                                        <p className="mt-4 text-base font-bold">You must be logged in to comment on a profile!</p>
+                                        <p className="mt-4 text-base font-semibold">You must be logged in to comment on a profile!</p>
                                     </div>
                                 )
                                 setIsModalOpen(true);

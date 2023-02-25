@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import Functions from "../functions";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { stateToHTML } from "draft-js-export-html";
+import VerifyEmail from "../components/modals/auth/VerifyEmail";
 
 const PostThread: React.FC = () => {
     const { isLoggedIn, user, isAdmin } = useAuth();
@@ -61,6 +62,12 @@ const PostThread: React.FC = () => {
     const handlePost = () => {
         setError(null);
         setSuccess(null);
+
+        if (user && !user.emailVerified) {
+            setModalContent(<VerifyEmail />);
+            setIsModalOpen(true);
+            return;
+        }
 
         if (forum?.locked && !isAdmin) return setError("This forum is locked.");
         if (!user) return setError("You must be logged in to create a thread.");
@@ -116,7 +123,12 @@ const PostThread: React.FC = () => {
                         </p>
                         <div className="flex flex-row gap-2">
                             <SearchableDropdown onChange={(option) => setSelected(option)} options={options} label="Forum" selected={selected?.label} />
-                            <SearchableDropdown onChange={(option) => setLocked(option.value === "true")} options={[{ label: "Locked", value: "true" }, { label: "Unlocked", value: "false" }]} label="Locked" selected={locked ? "Locked" : "Unlocked"} />
+                            <SearchableDropdown
+                                onChange={(option) => setLocked(option.value === "true")}
+                                options={[{ label: "Locked", value: "true" }, { label: "Unlocked", value: "false" }]}
+                                selected={locked ? "Locked" : "Unlocked"}
+                                label="Select"
+                            />
                         </div>
                     </div>
                     <div>
