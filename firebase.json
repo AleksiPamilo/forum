@@ -6,11 +6,10 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "appAssociation": "AUTO",
     "rewrites": [
       {
-        "source": "/auth/action/**",
-        "dynamicLinks": true
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }
