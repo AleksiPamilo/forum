@@ -29,7 +29,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     }, [thread.createdBy, latestMessage]);
 
     return (
-        <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-black py-1 px-3 gap-2 border-2 border-blue-600 hover:shadow-glow-10 hover:cursor-pointer rounded-md" >
+        <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-black py-1 px-3 gap-2 border-2 hover:border-blue-600 hover:shadow-glow-10 hover:cursor-pointer rounded-md" >
             <div className="grid grid-cols-8 md:grid-cols-12 w-full items-center">
                 <div className="col-start-1 col-end-3 text-left">
                     <h2 className="font-bold">{thread.title}</h2>
