@@ -6,9 +6,10 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "appAssociation": "AUTO",
     "rewrites": [
       {
-        "source": "/**",
+        "source": "/auth/action/**",
         "dynamicLinks": true
       }
     ]
