@@ -9,11 +9,10 @@
     "appAssociation": "AUTO",
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "**"
       },
       {
-        "source": "__/auth/**",
+        "source": "/__/auth/**",
         "dynamicLinks": true
       }
     ]
