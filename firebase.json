@@ -13,7 +13,7 @@
         "destination": "/index.html"
       },
       {
-        "source": "/auth/**",
+        "source": "__/auth/**",
         "dynamicLinks": true
       }
     ]
