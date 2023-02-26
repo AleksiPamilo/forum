@@ -5,6 +5,7 @@ import UpdateUsername from "../../components/modals/Profile/UpdateUsername";
 import UpdateEmail from "../../components/modals/Profile/UpdateEmail";
 import UpdateProfilePicture from "../../components/modals/Profile/UpdateProfilePicture";
 import Functions from "../../functions";
+import VerificationSent from "../../components/modals/auth/VerificationSent";
 
 const Settings: React.FC = () => {
     const { user } = useAuth();
@@ -23,15 +24,17 @@ const Settings: React.FC = () => {
                     setModalContent(<UpdateEmail user={user} />);
                     setIsModalOpen(true);
                 }} />
-                <div hidden={user?.emailVerified}>
-                    <SettingsCard title="Verify Email" onClick={() => {
-                        Functions.firebase.sendEmailVerification();
-                    }} />
-                </div>
                 <SettingsCard title="Profile Picture" onClick={() => {
                     setModalContent(<UpdateProfilePicture user={user} />);
                     setIsModalOpen(true);
                 }} />
+                <div hidden={user?.emailVerified}>
+                    <SettingsCard title="Verify Email" label="Send Verification Email" onClick={() => {
+                        Functions.firebase.sendEmailVerification();
+                        setModalContent(<VerificationSent />);
+                        setIsModalOpen(true);
+                    }} />
+                </div>
             </div>
         </div>
     )
