@@ -30,7 +30,9 @@ const App: React.FC = () => {
   }
 
   return (
-    <Suspense fallback={<div />}>
+    <Suspense fallback={<div className="absolute z-50 w-screen h-screen flex items-center justify-center bg-black">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-zinc-900"></div>
+    </div>}>
       <RootStoreContextProvider value={state}>
         <FirestoreSnapshotProvider>
           <AuthContextProvider>
