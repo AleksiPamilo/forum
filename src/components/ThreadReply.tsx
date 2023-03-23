@@ -3,20 +3,19 @@ import DOMPurify from "dompurify";
 import Functions from "../functions";
 import { Link } from "react-router-dom";
 import { IUser } from "../interfaces/User";
-import { Message } from "../mst";
+import { Reply } from "../mst";
 import Dropdown from "./Dropdown";
-import { useAuth, useModal, useStores } from "../hooks";
+import { useAuth, useModal } from "../hooks";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaTimes } from "react-icons/fa"
 import Button from "./Button";
 
 type ThreadReplyProps = {
-    reply: Message;
+    reply: Reply;
 };
 
 const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
     const { user: currentUser } = useAuth();
-    const { setMessages } = useStores();
     const { setIsModalOpen, setModalContent } = useModal();
     const [user, setUser] = useState<IUser | null>(null);
 
@@ -32,7 +31,7 @@ const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
             label: "Delete Reply",
             onClick: () => {
                 Functions.firebase.deleteThreadReply(reply)
-                    .then((res) => {
+                    .then(() => {
                         setModalContent(<div className="w-[25rem] bg-black text-white rounded-md border border-blue-600 shadow-glow-3">
                             <div className="p-4">
                                 <div className="flex flex-row justify-between items-center">
@@ -43,7 +42,6 @@ const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
                             </div>
                         </div>);
                         setIsModalOpen(true);
-                        setMessages(res.replies);
                     })
                     .catch((e) => {
                         console.log(e)
@@ -59,19 +57,19 @@ const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
                         </div>)
                         setIsModalOpen(true);
                     });
-            },
-        },
+            }
+        }
     ];
 
     return (
-        <div className="flex w-full relative rounded-md p-4 bg-zinc-900">
+        <div className="flex w-full relative rounded-md p-4 bg-zinc-900 group">
             <div className="absolute right-0 top-0 p-2" hidden={reply.createdBy !== currentUser?.uid}>
                 <Dropdown
                     label={
                         <FiMoreHorizontal className="w-5 h-5" />
                     }
                     options={dropdownOptions}
-                    btnStyles="rounded-full py-2 px-2 bg-zinc-700 border hover:shadow-glow-2"
+                    btnStyles="rounded-full py-2 px-2 bg-zinc-700 border border-zinc-900 hover:bg-zinc-800 hidden group-hover:block"
                 />
             </div>
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={user?.photoUrl} />

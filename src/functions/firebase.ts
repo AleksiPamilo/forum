@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
 import { IUser } from "../interfaces/User";
 import { IProfileMessage } from "../interfaces/Message";
-import { Message, Thread } from "../mst";
+import { Reply, Thread } from "../mst";
 
 const firestoreInstance = FirebaseServices.getFirestoreInstance();
 const authInstance = FirebaseServices.getAuthInstance();
@@ -250,17 +250,23 @@ export const deleteProfileMessage = async (message: IProfileMessage, profileOwne
  * @param reply The reply to delete
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const deleteThreadReply = async (reply: Message) => {
+export const deleteThreadReply = async (reply: Reply) => {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
     if (reply.createdBy !== user.uid) return { success: false, message: "You can't delete this reply!" };
 
-    const threadDoc = doc(firestoreInstance, "forumx", "message");
-    const replies = await getDoc(threadDoc).then((doc) => doc.data()?.messages ?? []);
+    const threadDoc = doc(firestoreInstance, "forumx", "thread")
+    const threads = await getDoc(threadDoc).then((doc) => doc.data()?.threads);
+    const replies = threads.find((t: Thread) => t.id === reply.threadId)?.replies ?? [];
+    const replyIndex = replies.findIndex((r: Reply) => r?.id === reply.id);
+    const threadIndex = threads.findIndex((t: Thread) => t.id === reply.threadId);
 
-    const index = replies.findIndex((r: Message) => r?.id === reply.id);
-    if (index !== -1) {
-        replies.splice(index, 1);
+    if (replyIndex !== -1) {
+        replies.splice(replyIndex, 1);
+    }
+
+    if (threadIndex !== -1) {
+        threads[threadIndex].replies = replies;
     }
 
     try {
@@ -276,16 +282,22 @@ export const deleteThreadReply = async (reply: Message) => {
  * @param reply The reply to save
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const saveThreadReply = async (reply: Message) => {
+export const saveThreadReply = async (reply: Reply) => {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
-    const messageDoc = doc(firestoreInstance, "forumx", "message")
-    const messages = await getDoc(messageDoc).then((doc) => doc.data()?.messages ?? []);
-    messages.push(reply);
+    const threadDoc = doc(firestoreInstance, "forumx", "thread")
+    const threads = await getDoc(threadDoc).then((doc) => doc.data()?.threads);
+    const replies = threads.find((t: Thread) => t.id === reply.threadId)?.replies ?? [];
+    replies.push(reply)
+
+    const index = threads.findIndex((t: Thread) => t.id === reply.threadId);
+    if (index !== -1) {
+        threads[index].replies = replies;
+    }
 
     try {
-        await updateDoc(messageDoc, { messages: messages });
+        await updateDoc(threadDoc, { threads: threads });
         return { success: true, message: "Reply saved successfully" };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Thread } from "../mst";
-import { useStores } from "../hooks";
 import Functions from "../functions";
 import { IUser } from "../interfaces/User";
+import DOMPurify from "dompurify";
 
 type ThreadCardProps = {
     thread: Thread,
@@ -11,13 +11,10 @@ type ThreadCardProps = {
 
 const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     const navigate = useNavigate();
-    const { getMessagesByThreadId } = useStores();
     const [latestReply, setLatestReply] = React.useState<IUser | null>(null);
-    const messages = getMessagesByThreadId(thread.id);
-    const messageCount = messages?.length ?? 0;
-    const latestMessage = messages[messages.length - 1];
+    const replies = thread.replies;
+    const latestMessage = replies?.[replies.length - 1];
 
-    getMessagesByThreadId(thread.id);
     React.useEffect(() => {
         if (latestMessage) {
             Functions.firebase.getUserByUID(latestMessage.createdBy)
@@ -29,33 +26,18 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
     }, [thread.createdBy, latestMessage]);
 
     return (
-        <button onClick={() => navigate(`/thread/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex bg-black py-1 px-3 gap-2 border-2 hover:border-blue-600 hover:shadow-glow-10 hover:cursor-pointer rounded-md" >
-            <div className="grid grid-cols-8 md:grid-cols-12 w-full items-center">
-                <div className="col-start-1 col-end-3 text-left">
-                    <h2 className="font-bold">{thread.title}</h2>
+        <button onClick={() => navigate(`/threads/${thread.title.replace(/\s/g, "-")}.${thread.id}`)} key={thread.id} className="flex flex-col md:min-w-[35rem] bg-zinc-900 hover:bg-[#101010] p-4 gap-4 border border-zinc-800 rounded-md">
+            <h1 className="text-2xl">{thread.title}</h1>
+            <div className="flex items-center gap-4">
+                <img src={latestReply?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
+                <div className="text-left">
+                    <p>{latestReply?.username ?? "Username not found"}</p>
+                    <p className="text-gray-400">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)}</p>
                 </div>
-                <div className="col-start-3 col-end-7 md:col-end-8 text-left">
-                    {
-                        latestMessage ? (
-                            <div className="flex flex-row text-center gap-2">
-                                <img src={latestReply?.photoUrl ?? undefined} alt="" className="w-10 h-10 bg-gray-600 border border-white rounded-full" />
-                                <div className="text-sm text-left text-gray-600 max-w-[10rem]">
-                                    <p className="overflow-hidden text-ellipsis">Latest Reply</p>
-                                    <div className="flex flex-row gap-1 items-center">
-                                        <p className="text-xs text-gray-600">{Functions.timeAgo(latestMessage?.updatedAt ?? latestMessage?.createdAt ?? thread.createdAt)} •</p>
-                                        <Link to={`/profiles/${latestReply?.username}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestReply?.username}</Link>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : null
-                    }
-                </div>
-                <div className="col-start-8 md:col-start-12 md:self-end">
-                    <div className="mr-12">
-                        <p className="text-sm text-gray-600">Replies:</p>
-                        <p>{messageCount}</p>
-                    </div>
-                </div>
+            </div>
+            <div className="max-w-[70rem] break-words max-h-[3rem] overflow-hidden" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(thread.content) }} />
+            <div className="" onClick={e => e.stopPropagation()}>
+                <Link hidden={thread.locked} to={`/threads/${thread.title.replace(/\s/g, "-")}.${thread.id}#reply`} className="bg-blue-600 p-2 rounded-md">Reply to this thread</Link>
             </div>
         </button>
     )

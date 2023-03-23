@@ -1,9 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import Button from "../Button";
-import { useAuth } from "../context/AuthContext";
+import { useAuth, useModal } from "../../hooks";
 import Sidebar from "../Sidebar";
 import Login from "../modals/auth/LoginSignup";
-import { useModal } from "../context/ModalContext";
 
 const Layout = () => {
     const { isLoggedIn } = useAuth();

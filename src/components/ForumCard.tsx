@@ -24,7 +24,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
     }, [latestThread]);
 
     return (
-        <button onClick={() => navigate(`/forums/${forum.slug}`)} key={forum.id} className="flex bg-black hover:bg-[#101010] py-1 px-3 gap-2 hover:cursor-pointer rounded-b-md" >
+        <button onClick={() => navigate(`/${forum.slug}/threads`)} key={forum.id} className="flex dark:bg-zinc-900 dark:hover:bg-[#101010] p-4 gap-2 hover:cursor-pointer rounded-b-md" >
             <div className="grid grid-cols-8 md:grid-cols-12 w-full items-center">
                 <div className="col-start-1 col-end-3 text-left">
                     <h2 className="font-bold">{forum.name}</h2>
@@ -35,7 +35,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                             <div className="flex flex-row text-center gap-2">
                                 <img src={latestThreadCreator?.photoUrl ?? undefined} alt="" className="w-10 h-10 border bg-gray-500 border-white rounded-full" />
                                 <div className="text-sm text-left text-gray-600 max-w-[10rem]">
-                                    <Link to={`/thread/${latestThread.title}.${latestThread.id}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis cursor-pointer hover:underline hover:text-gray-400">{latestThread.title}</Link>
+                                    <Link to={`/threads/${latestThread.title}.${latestThread.id}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis cursor-pointer hover:underline hover:text-gray-400">{latestThread.title}</Link>
                                     <div className="flex flex-row gap-1 items-center">
                                         <p className="text-xs text-gray-600">{postedAgo} •</p>
                                         <Link to={`/profiles/${latestThreadCreator.username}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestThreadCreator.username}</Link>

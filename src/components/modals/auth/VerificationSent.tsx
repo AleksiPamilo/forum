@@ -1,7 +1,7 @@
 import React from "react";
 import Functions from "../../../functions";
 import Button from "../../Button";
-import { useModal } from "../../context/ModalContext";
+import { useModal } from "../../../hooks";
 
 const VerificationSent: React.FC = () => {
     const { closeModal } = useModal();

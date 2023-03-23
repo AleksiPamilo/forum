@@ -1,46 +1,37 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Button from "../components/Button";
-import ThreadCard from "../components/ThreadCard";
+import { observer } from "mobx-react-lite";
 import { useAuth, useStores } from "../hooks";
+import ForumCard from "../components/ForumCard";
+import CreateThread from "../components/CreateThread";
 
-const Threads: React.FC = () => {
-    const { slug } = useParams();
-    const { isAdmin } = useAuth();
-    const { getThreadsByForum, getForumBySlug } = useStores();
-    const navigate = useNavigate();
-    const threads = getThreadsByForum(slug ?? null);
-    const forum = getForumBySlug(slug ?? null);
+const Forums: React.FC = () => {
+    const { forums, categories } = useStores();
+    const { user } = useAuth();
 
-    document.title = `ForumX — ${forum?.name ?? "Threads"}`;
-
-    if (!slug || !threads) return (
-        <div className="flex flex-col items-center mt-24">
-            <h1 className="text-4xl font-bold">404</h1>
-            <p className="text-xl">Thread not found</p>
-        </div>
-    );
-
+    document.title = "ForumX — Forums";
     return (
-        <div className="mt-4 gap-4 flex flex-col">
-            <div className="text-right py-2 px-3 absolute right-0 top-16" hidden={forum?.locked && !isAdmin}>
-                <Button onClick={() => navigate("/post-thread?forum=" + forum?.slug)}>New Post</Button>
+        <div className="w-full">
+            <div className="mb-6">
+                {user?.displayName
+                    ? <h1 className="text-2xl">Welcome, {user?.displayName}</h1>
+                    : <h1 className="text-2xl">Welcome, Guest</h1>
+                }
             </div>
-            {
-                threads.length
-                    ? threads.map((thread) => (
-                        <ThreadCard thread={thread} />
-                    ))
-                    : forum?.locked
-                        ? <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
-                            Only admins can create threads in this forum.
-                        </div>
-                        : <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
-                            No threads have been created in this forum yet.
-                        </div>
-            }
+            <CreateThread />
+            <div className="flex mt-8 flex-col gap-8">
+                {categories.map((category) => (
+                    <div key={category.id} className="flex flex-col divide-y divide-zinc-800 border border-zinc-800 rounded-[5px] bg-[#141417]">
+                        <h2 className="text-xl font-bold p-4 border-b border-zinc-900 text-white rounded-t-sm">{category.name}</h2>
+                        {
+                            forums.map((forum) => (
+                                forum.categoryId === category.id ? <ForumCard forum={forum} /> : null
+                            ))
+                        }
+                    </div>
+                )
+                )}
+            </div>
         </div>
     )
 }
 
-export default Threads;
+export default observer(Forums);

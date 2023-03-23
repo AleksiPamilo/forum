@@ -3,7 +3,7 @@ import React from "react";
 import { FaTimes } from "react-icons/fa";
 import Functions from "../../../functions";
 import Button from "../../Button";
-import { useModal } from "../../context/ModalContext";
+import { useModal } from "../../../hooks";
 import Input from "../../Input";
 
 type UpdateEmailProps = {

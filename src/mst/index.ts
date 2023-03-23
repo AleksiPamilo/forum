@@ -28,9 +28,10 @@ const ThreadModel = types.model("Thread").props({
     createdBy: types.string,
     updatedAt: types.maybeNull(types.number),
     updatedBy: types.maybeNull(types.string),
+    replies: types.maybeNull(types.array(types.late(() => ReplyModel))),
 });
 
-const MessageModel = types.model("Message").props({
+const ReplyModel = types.model("Message").props({
     id: types.identifier,
     threadId: types.string,
     content: types.string,
@@ -43,18 +44,14 @@ const MessageModel = types.model("Message").props({
 export const RootStoreModel = types.model("RootStore", {
     forums: types.array(ForumModel),
     threads: types.array(ThreadModel),
-    messages: types.array(MessageModel),
+    messages: types.array(ReplyModel),
     categories: types.array(CategoryModel),
 })
     .actions(self => ({
-        setData(forums: Forum[], threads: Thread[], messages: Message[], categories: Category[]) {
+        setData(forums: Forum[], threads: Thread[], categories: Category[]) {
             self.forums = cast(forums);
             self.threads = cast(threads);
-            self.messages = cast(messages);
             self.categories = cast(categories);
-        },
-        setMessages(messages: Message[]) {
-            self.messages = cast(messages);
         },
     }))
     .views(self => ({
@@ -63,6 +60,9 @@ export const RootStoreModel = types.model("RootStore", {
         },
         getForumBySlug(forumSlug: string | null) {
             return self.forums.find(f => f.slug === forumSlug);
+        },
+        getForumById(forumId: Forum["id"] | null) {
+            return self.forums.find(f => f.id === forumId);
         },
         getForumNames() {
             return self.forums.map(f => f.name);
@@ -74,8 +74,8 @@ export const RootStoreModel = types.model("RootStore", {
             const threads = self.threads.filter(thread => thread.forumId === forumId);
             return threads[threads.length - 1];
         },
-        getLatestThreads() {
-            return self.threads.slice(-5).reverse();
+        getLatestThreads(amount: number) {
+            return self.threads.slice(-amount).reverse();
         },
         getThreadById(threadId: Thread["id"] | null) {
             if (!threadId) return null;
@@ -87,16 +87,13 @@ export const RootStoreModel = types.model("RootStore", {
 
             return self.threads.filter(thread => thread.forumId === forum.id);
         },
-        getMessagesByThreadId(threadId: Thread["id"] | null) {
-            return self.messages.filter(message => message.threadId === threadId);
-        },
     }));
 
 export const initializeRootStore = initialize;
 
 export interface Forum extends Instance<typeof ForumModel> { }
 export interface Thread extends Instance<typeof ThreadModel> { }
-export interface Message extends Instance<typeof MessageModel> { }
+export interface Reply extends Instance<typeof ReplyModel> { }
 export interface Category extends Instance<typeof CategoryModel> { }
 
 export interface RootStore extends Instance<typeof RootStoreModel> { };

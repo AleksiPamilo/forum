@@ -17,7 +17,7 @@ interface IAuthContext {
 
 const AuthContext = React.createContext<IAuthContext | undefined>(undefined);
 
-export const useAuth = () => {
+export const useAuthContext = () => {
     const context = React.useContext(AuthContext);
 
     if (context === undefined) {

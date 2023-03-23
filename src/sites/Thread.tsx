@@ -16,7 +16,7 @@ import VerifyEmail from "../components/modals/auth/VerifyEmail";
 const Thread: React.FC = () => {
     const { title_id } = useParams();
     const { user: currentUser } = useAuth();
-    const { getThreadById, getMessagesByThreadId } = useStores();
+    const { getThreadById } = useStores();
     const { setModalContent, setIsModalOpen } = useModal();
     const [user, setUser] = useState<IUser | null>(null);
     const [state, setState] = useState(EditorState.createEmpty());
@@ -25,7 +25,7 @@ const Thread: React.FC = () => {
     const maxLength = 10000;
     const id = title_id?.split(".")?.pop() ?? null;
     const thread = getThreadById(id);
-    const messages = getMessagesByThreadId(id);
+    // const messages = getMessagesByThreadId(id);
 
     useEffect(() => {
         if (thread) {
@@ -65,11 +65,12 @@ const Thread: React.FC = () => {
                 </div>
             </div>
 
-            <h1 className="" hidden={!messages.length}>Replies:</h1>
+            <h1 className="" hidden={!thread.replies?.length}>Replies:</h1>
             <div className="flex flex-col gap-2">
                 {
-                    messages.map((message) => (
-                        <ThreadReply reply={message} />
+                    !!thread.replies &&
+                    thread.replies.map((reply) => (
+                        <ThreadReply reply={reply} />
                     ))
                 }
             </div>
@@ -77,7 +78,7 @@ const Thread: React.FC = () => {
                 thread?.locked
                     ? <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">This thread is locked from further communication by it's creator.</div>
                     : (
-                        <div className="p-4 bg-zinc-900 rounded-md">
+                        <div className="p-4 bg-zinc-900 rounded-md" id="reply">
                             <Editor editorState={state} setEditorState={setState} placeholder="Write a reply..." maxLength={maxLength} />
                             <div className="flex flex-row items-center mt-2">
                                 <div className="flex flex-row w-full gap-2 justify-start">

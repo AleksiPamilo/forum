@@ -1,42 +1,55 @@
 import React from "react";
 import logo from "../assets/logo.png";
-import { sidebarItems } from "../common/NavItems";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "./Button";
-import { useAuth } from "../hooks";
+import { navItems } from "../common/NavItems";
+import { Link } from "react-router-dom";
+// import Button from "./Button";
+// import { useAuth } from "../hooks";
+// import Dropdown from "./Dropdown";
 
 const Sidebar: React.FC = () => {
-    const { logout } = useAuth();
-    const navigateTo = useNavigate();
+    // const { user } = useAuth();
+    // const { logout } = useAuth();
+    // const navigateTo = useNavigate();
+
+    // const dropdownOptions = [
+    //     {
+    //         label: "Profile",
+    //         navigateTo: "/profiles" + (user?.displayName ? `/${user.displayName}` : ""),
+    //     },
+    //     {
+    //         label: "Settings",
+    //         navigateTo: "/settings"
+    //     },
+    //     {
+    //         label: "Logout",
+    //         onClick: () => logout()
+    //     }
+    // ];
 
     return (
-        <div className="flex flex-col relative items-center w-[15rem] h-screen bg-zinc-900">
-            <Link to="/settings" className="pt-4">
-                <img src={logo} alt="logo" className="w-40 h-6" />
-                <h1 className="text-white text-xl font-semibold text-center mt-1">Settings</h1>
-            </Link>
-            <div className="flex pt-20">
-                <ul className="flex flex-col gap-2 list-none">
+        <div className="fixed w-60 h-full">
+            <div className="w-full h-full py-4 flex flex-col items-center bg-zinc-200 text-black dark:text-white dark:bg-[#101010]">
+                <Link to="/forums" className="w-40 h-6 select-none">
+                    <img src={logo} alt="ForumX" />
+                </Link>
+                <div className="flex flex-col mt-12 gap-2">
                     {
-                        sidebarItems.map((item, index) => (
-                            <li key={index}>
-                                <Link to={item.path}>
-                                    <div className="text-sm font-medium py-2 px-8 rounded-md border border-blue-600 hover:shadow-glow-3 text-gray-300 bg-zinc-800 hover:bg-zinc-700">
-                                        {item.title}
-                                    </div>
-                                </Link>
-                            </li>
+                        navItems.map((item) => (
+                            <Link to={item.path} className="text-center text-xl flex items-center gap-2 group">
+                                <p className="bg-zinc-900 p-2 rounded-md opacity-95">{item.icon}</p>
+                                <p className="text-xl group-hover:underline">{item.title}</p>
+                            </Link>
                         ))
                     }
-                    <li>
-                        <Button onClick={() => {
-                            logout();
-                            navigateTo("/");
-                        }} styles="text-sm font-medium py-2 px-8 rounded-md border border-blue-600 hover:shadow-glow-3 text-gray-300 bg-zinc-800 hover:bg-zinc-700">
-                            Logout
-                        </Button>
-                    </li>
-                </ul>
+                </div>
+                {/* <div className="absolute w-screen h-screen flex items-center justify-center">
+                    <Dropdown
+                        positionX="right"
+                        options={dropdownOptions}
+                        btnStyles="rounded-full w-10 h-10 bg-gray-500 border-2 border-blue-600 hover:shadow-[0_0_10px_7px_rgba(0,0,255,.35)]"
+                        label={<img className="w-full h-full rounded-full hover:opacity-80 hover:ease-in-out hover:duration-200" alt="" src={user?.photoURL!} />}
+                    />
+                </div> */}
             </div>
         </div>
     )
