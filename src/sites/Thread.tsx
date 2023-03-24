@@ -51,7 +51,7 @@ const Thread: React.FC = () => {
     return (
         <div className="flex flex-col mt-4 rounded-md gap-4 p-4">
             <div className="font-semibold">
-                <div className="flex flex-row justify-between w-full rounded-t-md bg-zinc-800 px-4 py-2">
+                <div className="flex flex-row justify-between w-full rounded-t-md bg-zinc-400 dark:bg-zinc-800 px-4 py-2">
                     <div className="flex flex-row gap-2">
                         <span>{thread.title}</span>
                         <span>•</span>
@@ -59,7 +59,7 @@ const Thread: React.FC = () => {
                     </div>
                     <span>{user?.username}</span>
                 </div>
-                <div className="w-full rounded-b-md bg-zinc-900 font-normal">
+                <div className="w-full rounded-b-md bg-zinc-300 dark:bg-zinc-900 font-normal">
                     <ThreadPost thread={thread} />
                 </div>
             </div>
@@ -75,9 +75,9 @@ const Thread: React.FC = () => {
             </div>
             {
                 thread?.locked
-                    ? <div className="bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">This thread is locked from further communication by it's creator.</div>
+                    ? <div className="bg-light-primary dark:bg-dark-primary py-2 px-3 rounded-md text-center border border-zinc-500 dark:border-zinc-700 shadow-glow-5">This thread is locked from further communication by it's creator.</div>
                     : (
-                        <div className="p-4 bg-zinc-900 rounded-md" id="reply">
+                        <div className="p-4 bg-zinc-300 dark:bg-zinc-900 rounded-md" id="reply">
                             <Editor editorState={state} setEditorState={setState} placeholder="Write a reply..." maxLength={maxLength} />
                             <div className="flex flex-row items-center mt-2">
                                 <div className="flex flex-row w-full gap-2 justify-start">
@@ -85,7 +85,7 @@ const Thread: React.FC = () => {
                                     <span hidden={!!!success} className="py-2 px-3 bg-zinc-800 rounded-md text-green-500">{success}</span>
                                 </div>
                                 <div className="flex flex-row w-full gap-2 justify-end items-center">
-                                    <p className="text-gray-500 py-2 px-3 bg-zinc-800 rounded-md">{state.getCurrentContent().getPlainText().length}/{maxLength} characters</p>
+                                    <p className="text-gray-600 py-2 px-3 bg-zinc-400 dark:bg-zinc-800 rounded-md">{state.getCurrentContent().getPlainText().length}/{maxLength} characters</p>
                                     <Button onClick={() => {
                                         if (!currentUser) {
                                             setError("You must be logged in to reply to this thread.");

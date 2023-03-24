@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import Button from "./Button";
 
 type DropdownOptions = {
@@ -12,61 +13,47 @@ type DropdownOptions = {
 type DropdownProps = {
     options: DropdownOptions[];
     label?: JSX.Element | string,
-    selected?: string;
+    icon?: JSX.Element,
     btnStyles?: string;
     onChange?: (option: string) => void;
-    positionX?: "left" | "right";
-    positionY?: "top" | "bottom";
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, btnStyles, positionX = "left", positionY = "bottom", onChange }) => {
-    const ref = useRef<HTMLDivElement>(null);
+const Dropdown: React.FC<DropdownProps> = ({ label, options, icon, btnStyles, onChange }) => {
     const [open, setOpen] = useState<boolean>(false);
     const navigate = useNavigate();
     const handleDropdown = () => setOpen(!open);
 
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) {
-                setOpen(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [ref])
-
     return (
-        <div ref={ref} className="relative">
-            <Button styles={btnStyles} onClick={handleDropdown}>
-                {label ?? selected ?? "Select an option"}
+        <div>
+            <Button onClick={handleDropdown} styles={btnStyles ?? "text-black dark:text-white text-center text-xl flex items-center gap-2 group flex items-center w-full rounded-lg group hover:bg-light-secondary dark:bg-dark-primary dark:text-white dark:hover:bg-dark-secondary"}>
+                <p className="text-xl text-left bg-zinc-300 dark:bg-zinc-900 p-2 rounded-md opacity-95">{icon}</p>
+                <p className="text-xl">{label}</p>
+                {open ? <AiOutlineUp className="text-xl" /> : <AiOutlineDown className="text-xl" />}
             </Button>
+            <li className="list-none">
+                <ul id="dropdown-example" className={`${open ? "block" : "hidden"} py-2 space-y-2`}>
+                    {
+                        options.map((option) => (
+                            <li className="flex items-center w-full p-2 text-base font-normal text-gray-900  rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+                                <button className="w-full h-full " onClick={() => {
+                                    if (option.navigateTo) {
+                                        navigate(option.navigateTo);
+                                    }
+                                    if (option.onClick) {
+                                        option.onClick();
+                                    }
 
-            {open && (
-                <div className={`absolute bottom-0 text-right mt-2 z-50 w-full min-w-[15rem] rounded-md border divide-gray-100 shadow bg-gray-300 dark:bg-gray-700 select-none cursor-pointer ${positionX === "left" ? "right-0" : "left-0"}`} >
-                    {options.map((option, index) => (
-                        <div
-                            key={index}
-                            className="py-2 px-4 bg-gray-800 hover:bg-gray-700 text-white :first-child:rounded-t-md :last-child:rounded-b-md"
-                            onClick={() => {
-                                if (option.navigateTo) {
-                                    navigate(option.navigateTo);
-                                } else if (option.onClick) {
-                                    option.onClick();
-                                }
-
-                                onChange?.(typeof option.label === "string" ? option.label : option.value!);
-                                handleDropdown();
-                            }}
-                        >
-                            {option.label}
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+                                    onChange?.(option?.value ?? "");
+                                    handleDropdown();
+                                }}>
+                                    {option.label}
+                                </button>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </li>
+        </div >
     )
 }
 

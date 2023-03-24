@@ -11,7 +11,11 @@ const WhatsNew: React.FC = () => {
             <h1 className="text-4xl font-bold my-2">Newest Posts!</h1>
             <div className="flex flex-wrap gap-4">
                 {
-                    latestThreads.map((thread) => (
+                    latestThreads.sort((a, b) => {
+                        if (a.createdAt < b.createdAt) return 1;
+                        if (a.createdAt > b.createdAt) return -1;
+                        return 0;
+                    }).map((thread) => (
                         <ThreadCard thread={thread} />
                     ))
                 }

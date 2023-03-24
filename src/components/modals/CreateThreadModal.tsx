@@ -77,7 +77,7 @@ const CreateThreadModal: React.FC<CreateThreadModalProps> = ({ title: titleProp,
     }
 
     return (
-        <div className="w-[50rem] min-h-[23rem] max-h-[30rem] p-4 rounded-md shadow-glow-2 text-white bg-zinc-200 dark:bg-black">
+        <div className="w-[50rem] min-h-[23rem] max-h-[30rem] p-4 rounded-md border border-zinc-900 text-black dark:text-white bg-zinc-200 dark:bg-dark-primary">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-semibold">Create Thread</h1>
                 <Button onClick={closeModal}><FaTimes /></Button>
@@ -91,7 +91,7 @@ const CreateThreadModal: React.FC<CreateThreadModalProps> = ({ title: titleProp,
             <div className="flex flex-col gap-3">
                 <div>
                     <label htmlFor="title" className="">Title</label>
-                    <input type="text" id="title" placeholder="Create a thread" className="w-full p-2 my-1 dark:bg-zinc-900 shadow-3xl rounded-md" value={title} />
+                    <input type="text" id="title" placeholder="Create a thread" className="w-full p-2 my-1 bg-zinc-400 dark:bg-zinc-900 shadow-3xl rounded-md placeholder:text-gray-500" value={title} onChange={e => setTitle(String(e.target.value))} />
                 </div>
                 <Editor editorState={editorState} setEditorState={setEditorState} placeholder="Thread Content..." maxLength={5000} />
             </div>

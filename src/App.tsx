@@ -6,6 +6,7 @@ import { RootStoreContextProvider } from './components/context/RootStoreContext'
 import { RootStore, initializeRootStore } from './mst';
 import FirestoreSnapshotProvider from './components/context/FirestoreSnapshotProvider';
 import { ThemeContextProvider } from './components/context/ThemeContext';
+import NotFound from './sites/NotFound';
 
 const Layout = lazy(() => import('./components/Layouts/Layout'));
 const SettingsLayout = lazy(() => import('./components/Layouts/SettingsLayout'));
@@ -46,7 +47,7 @@ const App: React.FC = () => {
                     <Route element={<Layout />}>
                       <Route path="/whats-new" element={<WhatsNew />} />
                       <Route path="/profile" element={<Profile />} />
-                      <Route path="/:username/profile" element={<Profile />} />
+                      <Route path="/profile/:username" element={<Profile />} />
                       <Route path="/thread" element={<Thread />} />
                       <Route path="/threads/:title_id" element={<Thread />} />
                       <Route path="/forums" element={<Forums />} />
@@ -57,6 +58,7 @@ const App: React.FC = () => {
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/settings/social" element={<SocialSettings />} />
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </BrowserRouter>
               </ModalContextProvider>

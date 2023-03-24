@@ -22,19 +22,23 @@ const Threads: React.FC = () => {
     return (
         <div className="gap-4 flex flex-col">
             <div className="my-2">
-                <h1 className="text-4xl font-bold">{forum?.name}</h1>
+                <h1 className="text-2xl font-bold">{forum?.name}</h1>
             </div>
             <CreateThread forumId={forum?.id} />
             {
                 threads.length
-                    ? threads.map((thread) => (
+                    ? threads.sort((a, b) => {
+                        if (a.createdAt < b.createdAt) return 1;
+                        if (a.createdAt > b.createdAt) return -1;
+                        return 0;
+                    }).map((thread) => (
                         <ThreadCard thread={thread} />
                     ))
                     : forum?.locked
-                        ? <div className="bg-white dark:bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
+                        ? <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
                             Only admins can create threads in this forum.
                         </div>
-                        : <div className="bg-white dark:bg-black py-2 px-3 rounded-md text-center border border-blue-600 shadow-glow-5">
+                        : <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
                             No threads have been created in this forum yet.
                         </div>
             }
