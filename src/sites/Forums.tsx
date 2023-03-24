@@ -10,7 +10,7 @@ const Forums: React.FC = () => {
     document.title = "ForumX — Forums";
     return (
         <div className="w-full">
-            <div className="mb-6">
+            <div className="my-6">
                 {user?.displayName
                     ? <h1 className="text-2xl">Welcome, {user?.displayName}</h1>
                     : <h1 className="text-2xl">Welcome, Guest</h1>

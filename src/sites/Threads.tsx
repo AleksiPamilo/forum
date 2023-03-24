@@ -20,7 +20,10 @@ const Threads: React.FC = () => {
     );
 
     return (
-        <div className="mt-4 gap-4 flex flex-col">
+        <div className="gap-4 flex flex-col">
+            <div className="my-2">
+                <h1 className="text-4xl font-bold">{forum?.name}</h1>
+            </div>
             <CreateThread forumId={forum?.id} />
             {
                 threads.length

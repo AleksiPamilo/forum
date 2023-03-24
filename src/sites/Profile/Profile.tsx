@@ -5,9 +5,11 @@ import ProfileHeader from "../../components/Profile/ProfileHeader";
 import ProfileMessages from "../../components/Profile/ProfileMessages";
 import Socials from "../../components/Profile/Socials";
 import Functions from "../../functions";
+import { useAuth } from "../../hooks";
 import { IUser } from "../../interfaces/User";
 
 const Profile: React.FC = () => {
+    const { user: currentUser } = useAuth();
     const [loading, setLoading] = React.useState(false);
     const [user, setUser] = React.useState<IUser | null>(null);
     const { username } = useParams();
@@ -21,19 +23,24 @@ const Profile: React.FC = () => {
         });
     }, [username]);
 
+    if (!user || !user?.username || !username || !currentUser?.displayName) {
+        return (
+            <div className="flex flex-col justify-center items-center mt-60">
+                <h1 className="text-2xl font-bold">User not found!</h1>
+            </div>
+        )
+    } else {
+        Functions.firebase.getUserByUsername(currentUser.displayName).then(data => {
+            setUser(data?.user);
+            setLoading(false);
+        });
+    }
+
     if (loading) {
         return (
             <div className="flex flex-col justify-center items-center mt-60">
                 <FaSpinner className="animate-spin w-40 h-40" />
                 <h1 className="mt-2 text-2xl font-bold">Loading...</h1>
-            </div>
-        )
-    }
-
-    if (!user?.username) {
-        return (
-            <div className="flex flex-col justify-center items-center mt-60">
-                <h1 className="text-2xl font-bold">User not found!</h1>
             </div>
         )
     }

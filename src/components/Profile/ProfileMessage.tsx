@@ -20,7 +20,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
     const { setModalContent, setIsModalOpen } = useModal();
 
     return (
-        <div className="flex relative bg-zinc-800 rounded-md border border-blue-600 shadow-glow-1">
+        <div className="flex relative bg-zinc-800 rounded-md border border-zinc-700 shadow-glow-1">
             <div className="absolute right-0 top-0 p-2" hidden={message.createdBy.uid !== user?.uid}>
                 <Dropdown
                     label={
@@ -60,7 +60,7 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
                     <span className="mx-4">—</span>
                     <h1 className="text-gray-400">{Functions.timeAgo(message.createdAt)}</h1>
                 </div>
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
+                <div className="editorstyles" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
             </div>
         </div>
     )

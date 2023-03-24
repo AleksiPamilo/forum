@@ -16,7 +16,7 @@ const Login: React.FC<LoginProps> = ({ isLogin }) => {
     const { setModalContent, setIsModalOpen, closeModal } = useModal();
     const { login: loginWithEmailAndPassword, signUp } = useAuth();
 
-    const [login, setLogin] = useState<boolean>(isLogin ?? true);
+    const [login, setLogin] = useState<boolean>(isLogin ?? false);
     const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");

@@ -7,8 +7,8 @@ const WhatsNew: React.FC = () => {
     document.title = "ForumX — Whats New";
 
     return (
-        <div className="flex flex-col gap-y-2 mt-2">
-            <h1 className="text-xl font-semibold">Newest posts!</h1>
+        <div className="flex flex-col gap-y-2">
+            <h1 className="text-4xl font-bold my-2">Newest Posts!</h1>
             <div className="flex flex-wrap gap-4">
                 {
                     latestThreads.map((thread) => (

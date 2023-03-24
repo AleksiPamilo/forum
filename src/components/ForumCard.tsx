@@ -38,7 +38,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                                     <Link to={`/threads/${latestThread.title}.${latestThread.id}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis cursor-pointer hover:underline hover:text-gray-400">{latestThread.title}</Link>
                                     <div className="flex flex-row gap-1 items-center">
                                         <p className="text-xs text-gray-600">{postedAgo} •</p>
-                                        <Link to={`/profiles/${latestThreadCreator.username}`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestThreadCreator.username}</Link>
+                                        <Link to={`/${latestThreadCreator.username}/profile`} onClick={e => e.stopPropagation()} className="overflow-hidden text-ellipsis hover:underline hover:text-gray-400">{latestThreadCreator.username}</Link>
                                     </div>
                                 </div>
                             </div>

@@ -16,9 +16,10 @@ type DropdownProps = {
     btnStyles?: string;
     onChange?: (option: string) => void;
     positionX?: "left" | "right";
+    positionY?: "top" | "bottom";
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, btnStyles, positionX = "left", onChange }) => {
+const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, btnStyles, positionX = "left", positionY = "bottom", onChange }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, btnStyles
             </Button>
 
             {open && (
-                <div className={`absolute text-right mt-2 z-50 w-full min-w-[15rem] rounded-md border divide-gray-100 shadow bg-gray-300 dark:bg-gray-700 select-none cursor-pointer ${positionX === "left" ? "right-0" : "left-0"}`} >
+                <div className={`absolute bottom-0 text-right mt-2 z-50 w-full min-w-[15rem] rounded-md border divide-gray-100 shadow bg-gray-300 dark:bg-gray-700 select-none cursor-pointer ${positionX === "left" ? "right-0" : "left-0"}`} >
                     {options.map((option, index) => (
                         <div
                             key={index}

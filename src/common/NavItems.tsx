@@ -1,4 +1,5 @@
-import { AiFillHome, AiTwotoneSound } from "react-icons/ai"
+import { AiFillHome, AiTwotoneSound, AiFillSetting } from "react-icons/ai";
+import { FaUserAlt } from "react-icons/fa";
 
 interface INavItem {
     title: string,
@@ -19,17 +20,15 @@ export const navItems: INavItem[] = [
     },
 ];
 
-export const sidebarItems: INavItem[] = [
+export const ProfileItems: INavItem[] = [
     {
-        title: "Forums",
-        path: "/forums",
+        title: "Profile",
+        path: "/profile",
+        icon: <FaUserAlt />
     },
     {
-        title: "General",
+        title: "Settings",
         path: "/settings",
+        icon: <AiFillSetting />
     },
-    {
-        title: "Social",
-        path: "/settings/social",
-    }
 ];

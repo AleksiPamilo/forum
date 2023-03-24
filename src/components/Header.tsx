@@ -19,7 +19,7 @@ const Header = () => {
     const dropdownOptions = [
         {
             label: "Profile",
-            navigateTo: "/profiles" + (user?.displayName ? `/${user.displayName}` : ""),
+            navigateTo: user?.displayName ? `/${user.displayName}/profile` : "",
         },
         {
             label: "Settings",

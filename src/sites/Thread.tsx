@@ -25,7 +25,6 @@ const Thread: React.FC = () => {
     const maxLength = 10000;
     const id = title_id?.split(".")?.pop() ?? null;
     const thread = getThreadById(id);
-    // const messages = getMessagesByThreadId(id);
 
     useEffect(() => {
         if (thread) {
@@ -123,7 +122,6 @@ const Thread: React.FC = () => {
                                     }}>
                                         Reply
                                     </Button>
-
                                 </div>
                             </div>
                         </div>

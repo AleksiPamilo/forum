@@ -79,7 +79,7 @@ const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
                     <span className="mx-4">—</span>
                     <h1 className="text-gray-400">{Functions.timeAgo(reply.createdAt)}</h1>
                 </div>
-                <div className="max-w-[70rem] overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(reply.content) }} />
+                <div className="max-w-[70rem] overflow-hidden break-words editorstyles" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(reply.content) }} />
             </div>
         </div>
     )

@@ -77,7 +77,7 @@ const ThreadPost: React.FC<ThreadPostProps> = ({ thread }) => {
                     <span className="mx-4">—</span>
                     <h1 className="text-gray-400">{Functions.timeAgo(thread.createdAt)}</h1>
                 </div>
-                <div className="max-w-[70rem] overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(thread.content) }} />
+                <div className="max-w-[70rem] overflow-hidden break-words editorstyles" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(thread.content) }} />
             </div>
         </div>
     )

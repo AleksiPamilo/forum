@@ -45,8 +45,8 @@ const App: React.FC = () => {
                     <Route path="/" element={<LandingPage />} />
                     <Route element={<Layout />}>
                       <Route path="/whats-new" element={<WhatsNew />} />
-                      <Route path="/profiles" element={<Profile />} />
-                      <Route path="/profiles/:username" element={<Profile />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/:username/profile" element={<Profile />} />
                       <Route path="/thread" element={<Thread />} />
                       <Route path="/threads/:title_id" element={<Thread />} />
                       <Route path="/forums" element={<Forums />} />
