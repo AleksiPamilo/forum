@@ -1,4 +1,5 @@
-import { AiFillHome, AiTwotoneSound, AiFillSetting } from "react-icons/ai";
+import { AiTwotoneSound, AiFillSetting } from "react-icons/ai";
+import { MdForum } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import { DropdownOptions } from "../components/Dropdown";
 
@@ -20,20 +21,21 @@ type DropdownNavItem = {
 type DividerNavItem = {
     type: "divider",
     divider: boolean,
+    text?: string,
 };
 
 export type NavItem = LinkNavItem | DropdownNavItem | DividerNavItem;
 
 const settingOptions: DropdownOptions[] = [
     {
-        label: <div className="flex items-center gap-3 text-lg">
+        label: <div className="flex items-center gap-3 text-base">
             <AiFillSetting />
             <p>Profile</p>
         </div>,
         value: "/settings",
     },
     {
-        label: <div className="flex items-center gap-3 text-lg">
+        label: <div className="flex items-center gap-3 text-base">
             <AiFillSetting />
             <p>Social</p>
         </div>,
@@ -46,7 +48,7 @@ export const navItems: NavItem[] = [
         type: "link",
         title: "Forums",
         path: "/forums",
-        icon: <AiFillHome />
+        icon: <MdForum />
     },
     {
         type: "link",
@@ -56,7 +58,7 @@ export const navItems: NavItem[] = [
     },
     {
         type: "divider",
-        divider: true
+        divider: true,
     },
     {
         type: "link",

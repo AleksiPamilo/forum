@@ -10,6 +10,7 @@ import NotFound from './sites/NotFound';
 
 const Layout = lazy(() => import('./components/Layouts/Layout'));
 const SettingsLayout = lazy(() => import('./components/Layouts/SettingsLayout'));
+const SecuredLayout = lazy(() => import('./components/Layouts/SecuredLayout'));
 const LandingPage = lazy(() => import('./sites/LandingPage'));
 const Forums = lazy(() => import("./sites/Forums"));
 const WhatsNew = lazy(() => import("./sites/WhatsNew"));
@@ -19,6 +20,8 @@ const SocialSettings = lazy(() => import("./sites/Profile/SocialSettings"));
 const Threads = lazy(() => import("./sites/Threads"));
 const Thread = lazy(() => import("./sites/Thread"));
 const PostThread = lazy(() => import("./sites/PostThread"));
+const AdminPage = lazy(() => import("./sites/Admin"));
+const AdminForums = lazy(() => import("./sites/Admin/ManageForums"));
 
 const App: React.FC = () => {
   const [state, setState] = useState<RootStore | undefined>();
@@ -57,6 +60,10 @@ const App: React.FC = () => {
                     <Route element={<SettingsLayout />}>
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/settings/social" element={<SocialSettings />} />
+                    </Route>
+                    <Route element={<SecuredLayout />}>
+                      <Route path="/admin" element={<AdminPage />} />
+                      <Route path="/admin/forums" element={<AdminForums />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Routes>

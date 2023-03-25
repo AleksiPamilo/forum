@@ -3,6 +3,7 @@ import Button from "../Button";
 import { useAuth, useModal } from "../../hooks";
 import Sidebar from "../Sidebar";
 import LoginSignup from "../modals/auth/LoginSignup";
+import { navItems } from "../../common/NavItems";
 
 const Layout = () => {
     const { isLoggedIn } = useAuth();
@@ -10,11 +11,11 @@ const Layout = () => {
 
     return (
         <div className="flex min-w-[100vw] min-h-[100vh] overflow-hidden bg-light-primary text-black dark:bg-dark-primary dark:text-white">
-            <Sidebar />
+            <Sidebar NavItems={navItems} />
             {
                 isLoggedIn
                     ? (
-                        <div className="md:ml-64 mt-10 mr-4">
+                        <div className="md:ml-[21rem] mt-10 mr-4">
                             <Outlet />
                         </div>
                     ) : (
