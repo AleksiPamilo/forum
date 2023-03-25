@@ -12,8 +12,8 @@ const Forums: React.FC = () => {
         <div className="w-full">
             <div className="my-6">
                 {user?.displayName
-                    ? <h1 className="text-2xl">Welcome, {user?.displayName}</h1>
-                    : <h1 className="text-2xl">Welcome, Guest</h1>
+                    ? <h1 className="text-2xl">Welcome, {user?.displayName}!</h1>
+                    : <h1 className="text-2xl">Welcome, Guest!</h1>
                 }
             </div>
             <CreateThread />

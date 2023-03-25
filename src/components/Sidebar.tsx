@@ -21,21 +21,20 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
     const { setModalContent, setIsModalOpen } = useModal();
     const { theme, setTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
-    const logo = theme === "dark" ? logoWhite : window.matchMedia("(prefers-color-scheme: dark)").matches ? logoWhite : logoBlack;
+    const logo = theme === "dark" ? logoWhite : (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? logoWhite : logoBlack;
 
     const themeOptions = [
         {
             label: <div className="flex items-center gap-3 text-lg">
                 <BsFillMoonStarsFill />
-                <p className="">Dark</p>
+                <p>Dark</p>
             </div>,
             value: "dark",
         },
         {
             label: <div className="flex items-center gap-3 text-lg">
                 <BsFillSunFill />
-                <p className="">Light</p>
+                <p>Light</p>
             </div>,
             value: "light",
         },
@@ -43,11 +42,11 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
             label:
                 <div className="flex items-center gap-3 text-lg">
                     <BsFillDisplayFill />
-                    <p className="">System</p>
+                    <p>System</p>
                 </div>,
             value: "system",
         }
-    ]
+    ];
 
     return (
         <>
@@ -88,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                         <hr className="border-t border-2 my-4 border-zinc-900" />
                         <Dropdown options={themeOptions}
                             label="Theme"
-                            icon={theme === "dark" ? <BsFillMoonStarsFill /> : (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? <BsFillMoonStarsFill /> : <BsFillSunFill />}
+                            icon={theme === "dark" ? <BsFillMoonStarsFill /> : (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? <BsFillMoonStarsFill /> : <BsFillSunFill />}
                             onChange={(value) => { setTheme(value) }}
                         />
                         <hr className="border-t border-2 my-4 border-zinc-900" />

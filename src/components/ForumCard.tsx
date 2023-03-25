@@ -29,7 +29,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                 <div className="col-start-1 col-end-3 text-left">
                     <h2 className="font-bold">{forum.name}</h2>
                 </div>
-                <div className="col-start-3 col-end-7 md:col-end-8 text-left">
+                <div className="col-start-5 col-end-8 md:col-start-5 md:col-end-9 lg:col-start-4 lg:col-end-8 text-left">
                     {
                         latestThread ? (
                             <div className="flex flex-row text-center gap-2">
@@ -45,7 +45,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
                         ) : null
                     }
                 </div>
-                <div className="col-start-8 md:col-start-12 self-end">
+                <div className="hidden md:block md:col-start-11 lg:col-start-12 col-end-12 self-end">
                     <div className="mr-12">
                         <p className="text-sm text-gray-600">Threads:</p>
                         <p>{getThreadCount(forum.id)}</p>

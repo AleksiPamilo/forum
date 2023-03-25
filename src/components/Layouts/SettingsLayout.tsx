@@ -10,17 +10,13 @@ const Layout = () => {
     const { setModalContent, setIsModalOpen } = useModal();
 
     return (
-        <div className="flex min-w-[100vw] min-h-[100vh] bg-dark-primary text-white">
+        <div className="flex min-w-[100vw] min-h-[100vh] bg-light-primary text-black dark:bg-dark-primary dark:text-white">
+            <Sidebar NavItems={SettingItems} />
             {
                 isLoggedIn
-                    ? (
-                        <>
-                            <Sidebar NavItems={SettingItems} />
-                            <Outlet />
-                        </>
-                    )
+                    ? <Outlet />
                     : (
-                        <div className="w-screen h-screen flex flex-col items-center justify-center bg-dark-primary text-white">
+                        <div className="w-screen h-screen flex flex-col items-center justify-center">
                             <span className="flex gap-2 items-center text-2xl">
                                 <h1 className="text-4xl font-bold text-center">401</h1>
                                 <p>-</p>
