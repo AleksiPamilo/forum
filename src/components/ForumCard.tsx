@@ -24,7 +24,7 @@ const ForumCard: React.FC<ForumCardProps> = ({ forum }) => {
     }, [latestThread]);
 
     return (
-        <button onClick={() => navigate(`/${forum.slug}/threads`)} key={forum.id} className="flex bg-zinc-300 hover:bg-light-primary dark:bg-zinc-900 dark:hover:bg-dark-primary p-4 gap-2 hover:cursor-pointer rounded-b-md" >
+        <button onClick={() => navigate(`/${forum.slug}/threads`)} key={forum.id} className="flex bg-light-secondary hover:bg-light-primary dark:bg-zinc-900 dark:hover:bg-dark-primary p-4 gap-2 hover:cursor-pointer rounded-b-md" >
             <div className="grid grid-cols-8 md:grid-cols-12 w-full items-center">
                 <div className="col-start-1 col-end-3 text-left">
                     <h2 className="font-bold">{forum.name}</h2>

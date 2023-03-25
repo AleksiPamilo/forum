@@ -3,19 +3,21 @@ import Button from "../Button";
 import { useAuth, useModal } from "../../hooks";
 import Sidebar from "../Sidebar";
 import LoginSignup from "../modals/auth/LoginSignup";
-import { SettingItems } from "../../common/NavItems";
 
 const Layout = () => {
     const { isLoggedIn } = useAuth();
     const { setModalContent, setIsModalOpen } = useModal();
 
     return (
-        <div className="flex min-w-[100vw] min-h-[100vh] bg-light-primary text-black dark:bg-dark-primary dark:text-white">
-            <Sidebar NavItems={SettingItems} />
+        <div className="flex min-w-[100vw] min-h-[100vh] overflow-hidden bg-light-primary text-black dark:bg-dark-primary dark:text-white">
+            <Sidebar />
             {
                 isLoggedIn
-                    ? <Outlet />
-                    : (
+                    ? (
+                        <div className="md:ml-64 mt-10 mr-4">
+                            <Outlet />
+                        </div>
+                    ) : (
                         <div className="w-screen h-screen flex flex-col items-center justify-center">
                             <span className="flex gap-2 items-center text-2xl">
                                 <h1 className="text-4xl font-bold text-center">401</h1>

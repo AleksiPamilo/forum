@@ -77,7 +77,7 @@ const CreateThreadModal: React.FC<CreateThreadModalProps> = ({ title: titleProp,
     }
 
     return (
-        <div className="w-[50rem] min-h-[23rem] max-h-[30rem] p-4 rounded-md border border-zinc-900 text-black dark:text-white bg-zinc-200 dark:bg-dark-primary">
+        <div className="md:w-[50rem] min-h-[23rem] max-h-[30rem] p-4 rounded-md border border-zinc-900 text-black dark:text-white bg-zinc-200 dark:bg-dark-primary">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-semibold">Create Thread</h1>
                 <Button onClick={closeModal}><FaTimes /></Button>

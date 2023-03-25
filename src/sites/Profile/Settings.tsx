@@ -12,7 +12,7 @@ const Settings: React.FC = () => {
     const { setModalContent, setIsModalOpen } = useModal();
 
     return (
-        <div className="flex justify-center mt-14 w-full">
+        <div className="flex w-full">
             <div className="w-[40rem] h-min p-4 rounded-md bg-zinc-900">
                 <h1 className="text-2xl font-bold text-white">General Settings</h1>
                 <div className="w-full border border-white mt-2 rounded-full" />

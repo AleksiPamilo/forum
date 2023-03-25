@@ -1,47 +1,73 @@
 import { AiFillHome, AiTwotoneSound, AiFillSetting } from "react-icons/ai";
 import { FaUserAlt } from "react-icons/fa";
+import { DropdownOptions } from "../components/Dropdown";
 
-export interface INavItem {
+type LinkNavItem = {
+    type: "link",
     title: string,
     path: string,
     icon?: JSX.Element,
-}
+};
 
-export const navItems: INavItem[] = [
+type DropdownNavItem = {
+    type: "dropdown",
+    label: string,
+    icon?: JSX.Element,
+    options: DropdownOptions[],
+    onChange?: (option: string) => void,
+};
+
+type DividerNavItem = {
+    type: "divider",
+    divider: boolean,
+};
+
+export type NavItem = LinkNavItem | DropdownNavItem | DividerNavItem;
+
+const settingOptions: DropdownOptions[] = [
     {
+        label: <div className="flex items-center gap-3 text-lg">
+            <AiFillSetting />
+            <p>Profile</p>
+        </div>,
+        value: "/settings",
+    },
+    {
+        label: <div className="flex items-center gap-3 text-lg">
+            <AiFillSetting />
+            <p>Social</p>
+        </div>,
+        value: "/settings/social",
+    }
+];
+
+export const navItems: NavItem[] = [
+    {
+        type: "link",
         title: "Forums",
         path: "/forums",
         icon: <AiFillHome />
     },
     {
+        type: "link",
         title: "What's New",
         path: "/whats-new",
         icon: <AiTwotoneSound />
     },
-];
-
-export const ProfileItems: INavItem[] = [
     {
+        type: "divider",
+        divider: true
+    },
+    {
+        type: "link",
         title: "Profile",
         path: "/profile",
         icon: <FaUserAlt />
     },
     {
-        title: "Settings",
-        path: "/settings",
-        icon: <AiFillSetting />
+        type: "dropdown",
+        label: "Settings",
+        icon: <AiFillSetting />,
+        options: settingOptions,
     },
 ];
-
-export const SettingItems: INavItem[] = [
-    {
-        title: "Forums",
-        path: "/forums",
-        icon: <AiFillHome />
-    },
-    {
-        title: "What's New",
-        path: "/whats-new",
-        icon: <AiTwotoneSound />
-    },
-]

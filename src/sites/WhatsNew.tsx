@@ -9,7 +9,7 @@ const WhatsNew: React.FC = () => {
     return (
         <div className="flex flex-col gap-y-2">
             <h1 className="text-4xl font-bold my-2">Newest Posts!</h1>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col gap-4">
                 {
                     latestThreads.sort((a, b) => {
                         if (a.createdAt < b.createdAt) return 1;
