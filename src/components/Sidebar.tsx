@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                 }
             </Button>
 
-            <div id="sidebar" className={`z-40 fixed max-sm:w-screen h-screen bg-transparent transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`} onClick={handleIsMenuOpen}>
+            <div id="sidebar" className={`z-40 fixed max-md:w-screen h-screen transition-all duration-500 ${isMenuOpen ? "translate-x-0 bg-[rgba(0,0,0,0.1)]" : "-translate-x-full md:translate-x-0 bg-transparent"}`} onClick={handleIsMenuOpen}>
                 <div className="w-80 h-full" onClick={e => e.stopPropagation()}>
                     <div className="w-full h-full py-4 flex flex-col items-center bg-light-primary text-black dark:text-white dark:bg-dark-primary ">
                         <Link to="/forums" className="w-40 h-6 select-none">
