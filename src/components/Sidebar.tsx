@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                 }
             </Button>
 
-            <div id="sidebar" className="hidden md:block z-40 fixed max-sm:w-screen h-screen bg-transparent" onClick={handleIsMenuOpen}>
+            <div id="sidebar" className={`z-40 fixed max-sm:w-screen h-screen bg-transparent transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`} onClick={handleIsMenuOpen}>
                 <div className="w-80 h-full" onClick={e => e.stopPropagation()}>
                     <div className="w-full h-full py-4 flex flex-col items-center bg-light-primary text-black dark:text-white dark:bg-dark-primary ">
                         <Link to="/forums" className="w-40 h-6 select-none">
@@ -96,12 +96,12 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                                                     !!item?.text
                                                         ? (
                                                             <div className="relative flex items-center">
-                                                                <div className="flex-grow border-t-2 border-zinc-400 dark:border-zinc-900"></div>
+                                                                <div className="flex-grow border-t-2 border-zinc-300 dark:border-zinc-900"></div>
                                                                 <span className="flex-shrink mx-2 text-zinc-600">{item.text}</span>
-                                                                <div className="flex-grow border-t-2 border-zinc-400 dark:border-zinc-900"></div>
+                                                                <div className="flex-grow border-t-2 border-zinc-300 dark:border-zinc-900"></div>
                                                             </div>
                                                         ) : (
-                                                            <hr className="border-t-2 my-4 border-zinc-400 dark:border-zinc-900" />
+                                                            <hr className="border-t-2 my-4 border-zinc-300 dark:border-zinc-900" />
                                                         )
                                                 }
                                             </>
@@ -109,13 +109,13 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                                     } else return null;
                                 })
                             }
-                            <hr className="border-t-2 my-4 border-zinc-400 dark:border-zinc-900" />
+                            <hr className="border-t-2 my-4 border-zinc-300 dark:border-zinc-900" />
                             <Dropdown options={themeOptions}
                                 label="Theme"
                                 icon={theme === "dark" ? <BsFillMoonStarsFill /> : (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? <BsFillMoonStarsFill /> : <BsFillSunFill />}
                                 onChange={(value) => { setTheme(value); handleIsMenuOpen(); }}
                             />
-                            <hr className="border-t-2 my-4 border-zinc-400 dark:border-zinc-900" />
+                            <hr className="border-t-2 my-4 border-zinc-300 dark:border-zinc-900" />
                             {
                                 user ? (
                                     <Button onClick={() => { logout(); handleIsMenuOpen() }} styles="text-center text-lg flex items-center gap-2 group">
