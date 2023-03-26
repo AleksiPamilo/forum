@@ -16,16 +16,16 @@ export const adminNavItems: NavItem[] = [
         path: "/profile",
         icon: <FaUserAlt />
     },
-    { type: "divider", divider: true, text: "Admin" },
+    { type: "divider", text: "Admin" },
     {
         type: "link",
-        title: "Dashborad",
+        title: "Dashboard",
         path: "/admin",
         icon: <MdDashboardCustomize />
     },
     {
         type: "link",
-        title: "Forums",
+        title: "Manage Forums",
         path: "/admin/forums",
         icon: <MdForum />
     },

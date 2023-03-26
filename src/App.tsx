@@ -31,20 +31,20 @@ const App: React.FC = () => {
     setState(initializeRootStore());
   }, []);
 
-  if (!state) {
-    return <div>Loading...</div>;
-  }
+  const loading = <div className="absolute z-50 w-screen h-screen flex items-center justify-center bg-black">
+    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-zinc-900"></div>
+  </div>
+
+  if (!state) { return loading; }
 
   return (
-    <Suspense fallback={<div className="absolute z-50 w-screen h-screen flex items-center justify-center bg-black">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-zinc-900"></div>
-    </div>}>
+    <Suspense fallback={loading}>
       <RootStoreContextProvider value={state}>
         <FirestoreSnapshotProvider>
           <AuthContextProvider>
             <ThemeContextProvider>
-              <ModalContextProvider>
-                <BrowserRouter>
+              <BrowserRouter>
+                <ModalContextProvider>
                   <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route element={<Layout />}>
@@ -67,8 +67,8 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Routes>
-                </BrowserRouter>
-              </ModalContextProvider>
+                </ModalContextProvider>
+              </BrowserRouter>
             </ThemeContextProvider>
           </AuthContextProvider>
         </FirestoreSnapshotProvider>

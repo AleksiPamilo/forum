@@ -20,7 +20,6 @@ type DropdownNavItem = {
 
 type DividerNavItem = {
     type: "divider",
-    divider: boolean,
     text?: string,
 };
 
@@ -56,10 +55,7 @@ export const navItems: NavItem[] = [
         path: "/whats-new",
         icon: <AiTwotoneSound />
     },
-    {
-        type: "divider",
-        divider: true,
-    },
+    { type: "divider", },
     {
         type: "link",
         title: "Profile",

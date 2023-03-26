@@ -60,7 +60,7 @@ const SecuredLayout: React.FC = () => {
     return (
         <div className="min-w-[100vw] min-h-[100vh] shadow-xl bg-light-primary dark:bg-dark-primary text-black dark:text-white overflow-hidden pl-4 md:pl-0">
             <Sidebar NavItems={adminNavItems} />
-            <div className="md:ml-[21rem] mt-6 pr-4 md:mt-0">
+            <div className="md:ml-[21rem] pt-6 pr-4 md:mt-0">
                 <Outlet />
             </div>
         </div>

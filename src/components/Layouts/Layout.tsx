@@ -6,9 +6,9 @@ import Sidebar from "../Sidebar";
 const Layout: FC = () => {
 
     return (
-        <div className="min-w-[100vw] min-h-[100vh] shadow-xl bg-light-primary dark:bg-dark-primary text-black dark:text-white overflow-hidden pl-4 md:pl-0">
+        <div className="min-w-[100vw] min-h-[100vh] shadow-xl bg-light-primary dark:bg-dark-primary text-black dark:text-white p-4 md:pl-0 overflow-y-scroll">
             <Sidebar NavItems={navItems} />
-            <div className="md:ml-[21rem] mt-6 pr-4 md:mt-0">
+            <div className="md:ml-[21rem] mt-6 mr-4 md:mt-0">
                 <Outlet />
             </div>
         </div>

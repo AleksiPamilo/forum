@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Thread } from "../mst";
-import Functions from "../functions";
-import { IUser } from "../interfaces/User";
+import { Thread } from "../../mst";
+import Functions from "../../functions";
+import { IUser } from "../../interfaces/User";
 import DOMPurify from "dompurify";
 
 type ThreadCardProps = {

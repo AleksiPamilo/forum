@@ -87,6 +87,9 @@ export const RootStoreModel = types.model("RootStore", {
 
             return self.threads.filter(thread => thread.forumId === forum.id);
         },
+        getCategoryById(categoryId: Category["id"] | null) {
+            return self.categories.find(c => c.id === categoryId);
+        },
     }));
 
 export const initializeRootStore = initialize;

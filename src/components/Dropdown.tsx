@@ -25,8 +25,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, icon, btnStyles, on
 
     return (
         <div>
-            <Button onClick={handleDropdown} styles={btnStyles ?? "text-black dark:text-white text-center text-lg flex items-center gap-2 group flex items-center w-full rounded-lg group hover:bg-light-secondary dark:bg-dark-primary dark:text-white dark:hover:bg-dark-secondary"}>
-                <p className="text-lg text-left bg-zinc-200 dark:bg-zinc-900 p-2 rounded-md opacity-95">{icon}</p>
+            <Button onClick={handleDropdown} styles={btnStyles ?? "text-black dark:text-white text-center text-lg flex items-center gap-2 group py-2 flex items-center w-full rounded-lg group hover:bg-light-secondary dark:bg-dark-primary dark:text-white dark:hover:bg-dark-secondary"}>
+                <p hidden={!!!icon} className="text-lg text-left bg-zinc-200 dark:bg-zinc-900 p-2 rounded-md opacity-95">{icon}</p>
                 <p className="text-lg">{label}</p>
                 {open ? <AiOutlineCaretUp className="text-lg" /> : <AiOutlineCaretDown className="text-lg" />}
             </Button>

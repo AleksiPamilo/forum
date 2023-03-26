@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                                 NavItems.map((item) => {
                                     if (item.type === "link") {
                                         return (
-                                            <Link to={item.path} className="text-center text-lg flex items-center gap-2 group" onClick={handleIsMenuOpen}>
+                                            <Link to={item.path} className="text-left text-lg flex items-center gap-2 group" onClick={handleIsMenuOpen}>
                                                 <p className="bg-zinc-300 dark:bg-zinc-900 p-2 rounded-md opacity-95">{item.icon}</p>
                                                 <p className="text-lg group-hover:underline">{item.title}</p>
                                             </Link>
@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                                                 onChange={(value) => { navigate(value); handleIsMenuOpen(); }}
                                             />
                                         );
-                                    } else if (item.type === "divider" && item.divider) {
+                                    } else if (item.type === "divider") {
                                         return (
                                             <>
                                                 {

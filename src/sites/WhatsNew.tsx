@@ -1,4 +1,4 @@
-import ThreadCard from "../components/ThreadCard";
+import ThreadCard from "../components/Thread/Card";
 import { useStores } from "../hooks";
 
 const WhatsNew: React.FC = () => {

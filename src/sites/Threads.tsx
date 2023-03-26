@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import CreateThread from "../components/CreateThread";
-import ThreadCard from "../components/ThreadCard";
+import ThreadCard from "../components/Thread/Card";
 import { useStores } from "../hooks";
 
 const Threads: React.FC = () => {
@@ -25,6 +25,11 @@ const Threads: React.FC = () => {
                 <h1 className="text-2xl font-bold">{forum?.name}</h1>
             </div>
             <CreateThread forumId={forum?.id} />
+
+            <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
+                Only admins can create threads in this forum.
+            </div>
+
             {
                 threads.length
                     ? threads.sort((a, b) => {
@@ -34,13 +39,9 @@ const Threads: React.FC = () => {
                     }).map((thread) => (
                         <ThreadCard thread={thread} />
                     ))
-                    : forum?.locked
-                        ? <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
-                            Only admins can create threads in this forum.
-                        </div>
-                        : <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
-                            No threads have been created in this forum yet.
-                        </div>
+                    : <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
+                        No threads have been created in this forum yet.
+                    </div>
             }
         </div>
     )
