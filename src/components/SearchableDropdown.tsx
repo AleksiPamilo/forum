@@ -25,7 +25,7 @@ const SearchableDropdown: React.FC<SearchableDropdownType> = ({ selected, label,
                 <p>{selected ?? label ?? "Select"}</p>
                 {open ? <AiFillCaretUp /> : <AiFillCaretDown />}
             </button>
-            <div hidden={!open} className="min-w-[10rem] mt-2 rounded-md absolute border bg-zinc-400 dark:bg-dark-secondary">
+            <div hidden={!open} className="min-w-[10rem] max-h-40 overflow-y-scroll mt-2 rounded-md absolute border bg-zinc-400 dark:bg-dark-secondary">
                 {
                     options.map((option, index) => (
                         <div key={index} onClick={() => {

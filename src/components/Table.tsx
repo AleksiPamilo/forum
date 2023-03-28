@@ -1,17 +1,38 @@
 import React from "react";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 import Button from "./Button";
 
 type TableProps = {
     headers: string[] | JSX.Element[];
     rows: (string | JSX.Element | undefined)[][];
-    showRowsFrom?: number;
-    showRowsTo?: number;
-    showRowsAmount?: number;
+    rowsPerPage?: number,
 }
-const Table: React.FC<TableProps> = ({ headers, rows, showRowsFrom = 0, showRowsTo = 5, showRowsAmount = 5 }) => {
-    const [showRowsFromState, setShowRowsFromState] = React.useState(showRowsFrom);
-    const [showRowsToState, setShowRowsToState] = React.useState(showRowsTo);
-    const rowsToDisplay = rows.slice(showRowsFromState, showRowsToState);
+
+const Table: React.FC<TableProps> = ({ headers, rows, rowsPerPage = 5 }) => {
+    const [rowsPerPageState, setRowsPerPageState] = React.useState(rowsPerPage);
+    const [pageState, setPageState] = React.useState(1);
+
+    const calculatePageAmount = (rows: TableProps["rows"], rowsPerPage: number) => {
+        const range = [];
+        const num = Math.ceil(rows.length / rowsPerPage);
+        for (let i = 1; i <= num; i++) {
+            range.push(i);
+        }
+        return range;
+    }
+
+    const pageAmount = calculatePageAmount(rows, rowsPerPageState).length;
+    const data = rows.slice((pageState - 1) * rowsPerPageState, pageState * rowsPerPageState);
+    const handlePageChange = (page: number) => {
+        setPageState(page);
+    }
+
+    const handleRowsPerPageChange = (rowsPerPage: number) => {
+        if (pageAmount < pageState) {
+            setPageState(pageAmount);
+        }
+        setRowsPerPageState(rowsPerPage);
+    }
 
     return (
         <div className="flex flex-col min-w-full rounded-md overflow-hidden bg-zinc-100 dark:bg-dark-secondary">
@@ -27,11 +48,11 @@ const Table: React.FC<TableProps> = ({ headers, rows, showRowsFrom = 0, showRows
                 </thead>
                 <tbody>
                     {
-                        rowsToDisplay.map((row, index) => (
-                            <tr key={index} className="bg-zinc-100 hover:bg-zinc-200 hover:dark:bg-zinc-800 dark:bg-dark-secondary text-black dark:text-white" style={{ display: index >= showRowsFrom && index < showRowsTo ? "table-row" : "none" }}>
+                        data.map((row, index) => (
+                            <tr key={index} className="bg-zinc-100 hover:bg-zinc-200 hover:dark:bg-zinc-800 dark:bg-dark-secondary text-black dark:text-white">
                                 {
-                                    row.map((cell, index) => (
-                                        <td key={index} className="px-4 py-2 border-y border-zinc-300 dark:border-zinc-900">{cell}</td>
+                                    row.map((cell, i) => (
+                                        <td key={i + index} className="px-4 py-2 border-y border-zinc-300 dark:border-zinc-900">{cell}</td>
                                     ))
                                 }
                             </tr>
@@ -41,19 +62,37 @@ const Table: React.FC<TableProps> = ({ headers, rows, showRowsFrom = 0, showRows
             </table>
 
             <div className="flex max-sm:flex-col items-center justify-between p-4">
-                <p>Showing rows {showRowsFromState} ─ {rows.length < showRowsToState ? rows.length : showRowsToState}, Total {rows.length}</p>
-
+                <div className="flex items-center">
+                    <p>Showing rows {pageState === 1 ? 1 : (pageState - 1) * rowsPerPageState + 1} ─ {pageState === pageAmount ? rows.length : pageState * rowsPerPageState}, Total {rows.length}</p>
+                    <select className="ml-2 rounded-md p-1 dark:bg-zinc-800" name="rowsPerPage" id="rowsPerPage" onChange={(e) => handleRowsPerPageChange(parseInt(e.target.value))}>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
                 <div className="flex flex-row gap-2 justify-center mt-2">
                     <Button onClick={() => {
-                        if (showRowsFromState <= 0) return;
-                        setShowRowsFromState(showRowsFromState - showRowsAmount);
-                        setShowRowsToState(showRowsToState - showRowsAmount);
-                    }} styles={`${showRowsFromState <= 0 && "hover:cursor-not-allowed"} px-4 py-2 bg-light-primary dark:bg-dark-primary text-black dark:text-white rounded-md`}>Previous</Button>
+                        if (pageState > 1) {
+                            handlePageChange(pageState - 1);
+                        }
+                    }} disabled={pageState === 1} styles="h-10 px-4 py-2 bg-light-primary dark:bg-dark-primary text-black dark:text-white rounded-md"><AiOutlineCaretLeft /></Button>
+                    {
+                        calculatePageAmount(rows, rowsPerPageState).map((page, index) => {
+                            if (page === pageState) {
+                                return <Button key={index} onClick={() => handlePageChange(page)} styles="h-10 px-4 py-2 bg-zinc-300 dark:bg-zinc-800 text-black dark:text-white rounded-md">{page}</Button>
+                            } else if (page === pageState - 1 || page === pageState + 1) {
+                                return <Button key={index} onClick={() => handlePageChange(page)} styles="h-10 px-4 py-2 bg-light-primary dark:bg-dark-primary text-black dark:text-white rounded-md">{page}</Button>
+                            } else if (page === pageState - 2 || page === pageState + 2) {
+                                return <Button key={index} onClick={() => handlePageChange(page)} styles="h-10 px-4 py-2 bg-light-primary dark:bg-dark-primary text-black dark:text-white rounded-md hidden md:block">...</Button>
+                            } else return null;
+                        })
+                    }
                     <Button onClick={() => {
-                        if (showRowsToState >= rows.length) return;
-                        setShowRowsFromState(showRowsFromState + showRowsAmount);
-                        setShowRowsToState(showRowsToState + showRowsAmount);
-                    }} styles={`${showRowsToState >= rows.length && "hover:cursor-not-allowed"} px-4 py-2 bg-light-primary dark:bg-dark-primary text-black dark:text-white rounded-md`}>Next</Button>
+                        if (pageState < pageAmount) {
+                            handlePageChange(pageState + 1);
+                        }
+                    }} disabled={pageState === pageAmount} styles="h-10 px-4 py-2 bg-light-primary dark:bg-dark-primary text-black dark:text-white rounded-md"><AiOutlineCaretRight /></Button>
                 </div>
             </div>
         </div>

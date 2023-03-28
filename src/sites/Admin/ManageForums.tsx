@@ -22,20 +22,21 @@ const ManageForums: React.FC = () => {
         return [
             category.name,
             <div className="flex justify-center">
-                <button onClick={() => openModal(<EditCategoryForum categoryId={category.id} />)} className="mx-3"><FaEdit className="text-xl hover:text-zinc-500" /></button>
-                <button onClick={() => openModal(<ConfirmDelete categoryId={category.id} />)}><FaTrash className="text-xl hover:text-zinc-500" /></button>
+                <button onClick={() => openModal(<EditCategoryForum categoryId={category.id} />)} className="mx-3"><FaEdit className="text-xl text-zinc-600 hover:text-zinc-800 dark:text-zinc-400 hover:dark:text-zinc-100" /></button>
+                <button onClick={() => openModal(<ConfirmDelete categoryId={category.id} />)}><FaTrash className="text-xl text-zinc-600 hover:text-zinc-800 dark:text-zinc-400 hover:dark:text-zinc-100" /></button>
             </div>
         ]
     });
 
+    const test = Array(300).fill(forums[Math.floor(Math.random() * forums.length)]);
     const headers2 = ["Forum", "In Category", "Manage Forum"];
-    const rows2 = forums.map(forum => {
+    const rows2 = test.map(forum => {
         return [
             forum.name,
             getCategoryById(forum.categoryId)?.name,
             <div className="flex justify-center">
-                <button onClick={() => openModal(<EditCategoryForum forumId={forum.id} />)} className="mx-3"><FaEdit className="text-xl hover:text-zinc-500" /></button>
-                <button onClick={() => openModal(<ConfirmDelete forumId={forum.id} />)}><FaTrash className="text-xl hover:text-zinc-500" /></button>
+                <button onClick={() => openModal(<EditCategoryForum forumId={forum.id} />)} className="mx-3"><FaEdit className="text-xl text-zinc-600 hover:text-zinc-800 dark:text-zinc-400 hover:dark:text-zinc-100" /></button>
+                <button onClick={() => openModal(<ConfirmDelete forumId={forum.id} />)}><FaTrash className="text-xl text-zinc-600 hover:text-zinc-800 dark:text-zinc-400 hover:dark:text-zinc-100" /></button>
             </div>
         ]
     });
@@ -49,7 +50,6 @@ const ManageForums: React.FC = () => {
                     <Button onClick={() => openModal(<CreateForum />)}>Create a Forum</Button>
                 </div>
             </div>
-
 
             <div className="flex flex-col mt-10 gap-10">
                 <Table {...{ headers, rows }} />

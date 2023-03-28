@@ -2,9 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import CreateThread from "../components/CreateThread";
 import ThreadCard from "../components/Thread/Card";
-import { useStores } from "../hooks";
+import { useAuth, useStores } from "../hooks";
 
 const Threads: React.FC = () => {
+    const { isAdmin } = useAuth();
     const { slug } = useParams();
     const { getThreadsByForum, getForumBySlug } = useStores();
     const threads = getThreadsByForum(slug ?? null);
@@ -24,7 +25,7 @@ const Threads: React.FC = () => {
             <div className="my-2">
                 <h1 className="text-2xl font-bold">{forum?.name}</h1>
             </div>
-            <CreateThread forumId={forum?.id} />
+            <span hidden={!isAdmin}><CreateThread forumId={forum?.id} /></span>
 
             <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
                 Only admins can create threads in this forum.

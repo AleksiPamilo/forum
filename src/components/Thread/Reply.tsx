@@ -21,7 +21,9 @@ const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
 
     return (
         <div className="flex w-full relative rounded-md p-4 bg-zinc-300 dark:bg-zinc-900 group">
-            {/* TODO: Dropdown for deleting replies */}
+            <div className="absolute right-0 top-0 p-2" hidden={reply.createdBy !== user?.uid}>
+                {/** TODO: Controls to delete thread post */}
+            </div>
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={user?.photoUrl} />
             <div className="mt-2">
                 <div className="flex flex-row">
