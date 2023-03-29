@@ -50,7 +50,7 @@ const Profile: React.FC = () => {
             <div className="flex flex-col justify-center items-center mt-60">
                 <h1 className="text-2xl font-bold">User not found</h1>
                 <p className="mt-2">The user you are looking for doesn't exist.</p>
-                <Link to="/forums" className="mt-2 px-4 py-2 bg-zinc-600 hover:bg-zinc-700 rounded-md shadow-lg text-white">
+                <Link to="/" className="mt-2 px-4 py-2 bg-zinc-600 hover:bg-zinc-700 rounded-md shadow-lg text-white">
                     Back To Forums
                 </Link>
             </div>

@@ -31,7 +31,7 @@ const SecuredLayout: React.FC = () => {
                         }
                         }>Register</Button>
                     </div>
-                    <Link to="/forums" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
+                    <Link to="/" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
                         Back To Forums
                     </Link>
                 </div>
@@ -49,7 +49,7 @@ const SecuredLayout: React.FC = () => {
                 </span>
                 <p className="text-2xl text-center">You are not authorized to view this page!</p>
                 <div className="flex flex-col justify-center mt-4">
-                    <Link to="/forums" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
+                    <Link to="/" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
                         Back To Forums
                     </Link>
                 </div>

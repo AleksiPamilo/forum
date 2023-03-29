@@ -7,7 +7,7 @@ export const adminNavItems: NavItem[] = [
     {
         type: "link",
         title: "Forums",
-        path: "/forums",
+        path: "/",
         icon: <MdForum />
     },
     {

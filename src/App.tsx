@@ -11,7 +11,6 @@ import NotFound from './sites/NotFound';
 const Layout = lazy(() => import('./components/Layouts/Layout'));
 const SettingsLayout = lazy(() => import('./components/Layouts/SettingsLayout'));
 const SecuredLayout = lazy(() => import('./components/Layouts/SecuredLayout'));
-const LandingPage = lazy(() => import('./sites/LandingPage'));
 const Forums = lazy(() => import("./sites/Forums"));
 const WhatsNew = lazy(() => import("./sites/WhatsNew"));
 const Profile = lazy(() => import("./sites/Profile/Profile"));
@@ -46,14 +45,13 @@ const App: React.FC = () => {
               <BrowserRouter>
                 <ModalContextProvider>
                   <Routes>
-                    <Route path="/" element={<LandingPage />} />
                     <Route element={<Layout />}>
+                      <Route path="/" element={<Forums />} />
                       <Route path="/whats-new" element={<WhatsNew />} />
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/profile/:username" element={<Profile />} />
                       <Route path="/thread" element={<Thread />} />
                       <Route path="/threads/:title_id" element={<Thread />} />
-                      <Route path="/forums" element={<Forums />} />
                       <Route path="/:slug/threads" element={<Threads />} />
                       <Route path="/post-thread" element={<PostThread />} />
                       <Route path="*" element={<NotFound />} />

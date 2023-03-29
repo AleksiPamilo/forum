@@ -68,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
             <div id="sidebar" className={`z-40 fixed max-md:w-screen h-screen transition-all duration-500 ${isMenuOpen ? "translate-x-0 bg-[rgba(0,0,0,0.1)]" : "-translate-x-full md:translate-x-0 bg-transparent"}`} onClick={handleIsMenuOpen}>
                 <div className="w-80 h-full" onClick={e => e.stopPropagation()}>
                     <div className="w-full h-full py-4 flex flex-col items-center bg-light-primary text-black dark:text-white dark:bg-dark-primary ">
-                        <Link to="/forums" className="w-40 h-6 select-none">
+                        <Link to="/" className="w-40 h-6 select-none">
                             <img src={logo} alt="ForumX" />
                         </Link>
                         <div className="flex flex-col w-4/5 mt-12 gap-3">

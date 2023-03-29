@@ -46,7 +46,7 @@ export const navItems: NavItem[] = [
     {
         type: "link",
         title: "Forums",
-        path: "/forums",
+        path: "/",
         icon: <MdForum />
     },
     {

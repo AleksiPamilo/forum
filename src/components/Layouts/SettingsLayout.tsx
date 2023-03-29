@@ -37,7 +37,7 @@ const Layout = () => {
                                         setIsModalOpen(true);
                                     }}>Register</Button>
                                 </div>
-                                <Link to="/forums" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
+                                <Link to="/" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
                                     Back To Forums
                                 </Link>
                             </div>
