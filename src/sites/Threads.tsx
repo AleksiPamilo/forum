@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import CreateThread from "../components/CreateThread";
 import ThreadCard from "../components/Thread/Card";
 import { useAuth, useStores } from "../hooks";
+import NotFound from "./NotFound";
 
 const Threads: React.FC = () => {
     const { isAdmin } = useAuth();
@@ -14,10 +15,7 @@ const Threads: React.FC = () => {
     document.title = `ForumX — ${forum?.name ?? "Threads"}`;
 
     if (!slug || !threads) return (
-        <div className="flex flex-col items-center mt-24">
-            <h1 className="text-4xl font-bold">404</h1>
-            <p className="text-xl">Thread not found</p>
-        </div>
+        <NotFound />
     );
 
     return (
@@ -27,7 +25,7 @@ const Threads: React.FC = () => {
             </div>
             <span hidden={!isAdmin}><CreateThread forumId={forum?.id} /></span>
 
-            <div className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
+            <div hidden={!forum?.locked} className="bg-white dark:bg-dark-primary py-2 px-3 rounded-md text-center border-2 border-zinc-800 shadow-glow-5">
                 Only admins can create threads in this forum.
             </div>
 

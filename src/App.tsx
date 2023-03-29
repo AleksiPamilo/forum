@@ -56,6 +56,7 @@ const App: React.FC = () => {
                       <Route path="/forums" element={<Forums />} />
                       <Route path="/:slug/threads" element={<Threads />} />
                       <Route path="/post-thread" element={<PostThread />} />
+                      <Route path="*" element={<NotFound />} />
                     </Route>
                     <Route element={<SettingsLayout />}>
                       <Route path="/settings" element={<Settings />} />
@@ -65,7 +66,6 @@ const App: React.FC = () => {
                       <Route path="/admin" element={<AdminPage />} />
                       <Route path="/admin/forums" element={<AdminForums />} />
                     </Route>
-                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </ModalContextProvider>
               </BrowserRouter>

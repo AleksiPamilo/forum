@@ -1,7 +1,7 @@
 import { AiTwotoneSound, AiFillSetting } from "react-icons/ai";
 import { MdForum } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
-import { DropdownOptions } from "../components/Dropdown";
+import { DropdownOptions } from "../components/SidebarDropdown";
 
 type LinkNavItem = {
     type: "link",

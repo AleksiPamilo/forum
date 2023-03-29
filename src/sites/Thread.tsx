@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Editor from "../components/Editor";
 import ThreadPost from "../components/Thread/Post";
 import ThreadReply from "../components/Thread/Reply";
@@ -12,6 +12,7 @@ import { v4 as uuid } from "uuid";
 import Button from "../components/Button";
 import { stateToHTML } from "draft-js-export-html";
 import VerifyEmail from "../components/modals/auth/VerifyEmail";
+import NotFound from "./NotFound";
 
 const Thread: React.FC = () => {
     const { title_id } = useParams();
@@ -36,16 +37,7 @@ const Thread: React.FC = () => {
     }, [thread]);
 
     if (!thread) return (
-        <div className="w-full mt-32 flex items-center justify-center">
-            <div className="w-[23rem] border border-blue-600 flex flex-col items-center justify-center p-4 rounded-md">
-                <div className="flex flex-row gap-2 items-center mb-2">
-                    <h1 className="text-4xl font-bold">404</h1>
-                    <span>—</span>
-                    <p className="text-xl">Thread not found</p>
-                </div>
-                <Link to="/" className="py-2 px-3 bg-blue-600 rounded-md hover:shadow-glow-6">Back to front page</Link>
-            </div>
-        </div>
+        <NotFound />
     );
 
     return (

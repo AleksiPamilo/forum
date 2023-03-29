@@ -1,59 +1,56 @@
-import { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 import Button from "./Button";
 
-export type DropdownOptions = {
-    label: string | JSX.Element,
-    value?: string,
-    navigateTo?: string,
-    onClick?: () => void,
-}
+type DropdownOptions = {
+    label: string,
+    value: string,
+} & (
+        | {
+            onClick: () => void,
+        }
+        | {
+            href: string,
+        }
+    )
 
 type DropdownProps = {
-    options: DropdownOptions[];
-    label?: JSX.Element | string,
-    icon?: JSX.Element,
-    btnStyles?: string;
-    onChange?: (option: string) => void;
-}
+    label: string | JSX.Element,
+    options?: DropdownOptions[],
+    onChange?: (value: string) => void,
+    colors?: string,
+};
 
-const Dropdown: React.FC<DropdownProps> = ({ label, options, icon, btnStyles, onChange }) => {
-    const [open, setOpen] = useState<boolean>(false);
+const Dropdown: React.FC<DropdownProps> = ({ label, options, colors, onChange }) => {
+    const [open, setOpen] = React.useState<boolean>(false);
     const navigate = useNavigate();
-    const handleDropdown = () => setOpen(!open);
 
     return (
-        <div>
-            <Button onClick={handleDropdown} styles={btnStyles ?? "text-black dark:text-white text-center text-lg flex items-center gap-2 group py-2 flex items-center w-full rounded-lg group hover:bg-light-secondary dark:bg-dark-primary dark:text-white dark:hover:bg-dark-secondary"}>
-                <p hidden={!!!icon} className="text-lg text-left bg-zinc-200 dark:bg-zinc-900 p-2 rounded-md opacity-95">{icon}</p>
-                <p className="text-lg">{label}</p>
-                {open ? <AiOutlineCaretUp className="text-lg" /> : <AiOutlineCaretDown className="text-lg" />}
-            </Button>
-            <li className="list-none">
-                <ul className={`${open ? "block" : "hidden"} py-2 space-y-2`}>
-                    {
-                        options.map((option) => (
-                            <li className="flex items-center w-full p-2 text-xl font-normal text-gray-900 rounded-lg group hover:bg-zinc-200 dark:text-white dark:hover:bg-zinc-700 pl-11">
-                                <button className="w-full h-full " onClick={() => {
-                                    if (option.navigateTo) {
-                                        navigate(option.navigateTo);
-                                    }
-                                    if (option.onClick) {
-                                        option.onClick();
-                                    }
+        <div className="relative">
+            <Button onClick={() => setOpen(!open)} colors={{ background: `${colors ? colors : "bg-zinc-400 hover:bg-zinc-500 dark:bg-zinc-800 hover:dark:bg-zinc-700"}` }}>{label}</Button>
+            <div hidden={!open} className={`absolute max-w-[10rem] max-h-[10rem] overflow-y-auto right-0 mt-2 rounded-md divide-y ${colors ? colors : "divide-zinc-300 bg-zinc-100 dark:bg-zinc-800 dark:divide-zinc-700"}`}>
+                {
+                    options?.map((option, index) => (
+                        <button
+                            key={index}
+                            className={`block px-4 py-2 text-sm first:rounded-t-md last:rounded-b-md ${colors ? colors : "text-gray-700 dark:text-gray-500 hover:bg-zinc-200 dark:hover:bg-dark-primary"}`}
+                            onClick={() => {
+                                onChange?.(option.label);
+                                setOpen(false);
 
-                                    onChange?.(option?.value ?? "");
-                                    handleDropdown();
-                                }}>
-                                    {option.label}
-                                </button>
-                            </li>
-                        ))
-                    }
-                </ul>
-            </li>
-        </div >
+                                if ("onClick" in option) {
+                                    option.onClick();
+                                } else {
+                                    navigate(option.href);
+                                }
+                            }}
+                        >
+                            {option.label}
+                        </button>
+                    ))
+                }
+            </div>
+        </div>
     )
 }
 

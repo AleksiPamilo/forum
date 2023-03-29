@@ -28,9 +28,8 @@ const ManageForums: React.FC = () => {
         ]
     });
 
-    const test = Array(300).fill(forums[Math.floor(Math.random() * forums.length)]);
     const headers2 = ["Forum", "In Category", "Manage Forum"];
-    const rows2 = test.map(forum => {
+    const rows2 = forums.map(forum => {
         return [
             forum.name,
             getCategoryById(forum.categoryId)?.name,

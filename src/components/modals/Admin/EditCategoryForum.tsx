@@ -2,7 +2,7 @@ import React from "react";
 import Functions from "../../../functions";
 import { useAuth, useModal, useStores } from "../../../hooks";
 import Button from "../../Button";
-import Dropdown from "../../Dropdown";
+import SidebarDropdown from "../../SidebarDropdown";
 
 type EditCategoryForumProps = {
     forumId?: string;
@@ -15,12 +15,13 @@ const EditCategoryForum: React.FC<EditCategoryForumProps> = ({ forumId, category
     const { closeModal } = useModal();
     const nameRef = React.useRef<HTMLInputElement>(null);
 
-    const [status, setStatus] = React.useState<{ success: boolean, message: string } | null>(null);
-    const [selected, setSelected] = React.useState<string | null>(null);
-
     const forum = forumId ? getForumById(forumId) : null;
     const category = categoryId ? getCategoryById(categoryId) : null;
     const dropdownOptions = categories.map((category) => { return { value: category.id, label: category.name } });
+
+    const [status, setStatus] = React.useState<{ success: boolean, message: string } | null>(null);
+    const [selected, setSelected] = React.useState<string | null>(null);
+    const [locked, setLocked] = React.useState<boolean | null>(forum ? forum.locked : null);
 
     return (
         <div className="w-[30rem] rounded-md bg-light-secondary text-black dark:bg-dark-secondary dark:text-white border border-zinc-300 dark:border-zinc-700">
@@ -33,11 +34,11 @@ const EditCategoryForum: React.FC<EditCategoryForumProps> = ({ forumId, category
 
                     <div className={`${!forumId && !!categoryId ? "hidden" : "flex"} gap-2`}>
                         <label htmlFor="locked">Locked</label>
-                        <input type="checkbox" name="locked" id="locked" className="flex p-2 rounded-md bg-light-primary dark:bg-dark-primary" />
+                        <input type="checkbox" name="locked" id="locked" className="flex p-2 rounded-md bg-light-primary dark:bg-dark-primary" defaultChecked={locked ?? false} onChange={e => setLocked(e.target.checked)} />
                     </div>
 
                     <div hidden={!forumId && !!categoryId}>
-                        <Dropdown
+                        <SidebarDropdown
                             label="Category"
                             options={dropdownOptions}
                             onChange={(value) => setSelected(value)}

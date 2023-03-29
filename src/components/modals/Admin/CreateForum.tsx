@@ -3,7 +3,7 @@ import Functions from "../../../functions";
 import { useAuth, useStores } from "../../../hooks";
 import { Category } from "../../../mst";
 import Button from "../../Button";
-import Dropdown from "../../Dropdown";
+import SidebarDropdown from "../../SidebarDropdown";
 
 const CreateForum: React.FC = () => {
     const { user } = useAuth();
@@ -34,12 +34,12 @@ const CreateForum: React.FC = () => {
 
                     <label htmlFor="category">Category</label>
                     <div className="flex flex-col gap-2 w-full items-center justify-center">
-                        <Dropdown label={category?.name ?? "Select a category"} options={categories.map(x => ({ label: x.name, value: x.id }))} onChange={v => setCategory(categories.find(x => x.id === v) ?? null)} />
+                        <SidebarDropdown label={category?.name ?? "Select a category"} options={categories.map(x => ({ label: x.name, value: x.id }))} onChange={v => setCategory(categories.find(x => x.id === v) ?? null)} />
                     </div>
 
                     <label htmlFor="locked">Locked</label>
                     <div className="flex flex-col gap-2 w-full items-center justify-center">
-                        <Dropdown label={dropdownOptions.find(x => x.value === selected)?.label ?? "Is this forum locked?"} options={dropdownOptions} onChange={v => setSelected(v)} />
+                        <SidebarDropdown label={dropdownOptions.find(x => x.value === selected)?.label ?? "Is this forum locked?"} options={dropdownOptions} onChange={v => setSelected(v)} />
                     </div>
 
                     <div className="flex items-center justify-between mt-2">

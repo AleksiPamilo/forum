@@ -8,7 +8,7 @@ import logoWhite from "../assets/logo.png";
 import logoBlack from "../assets/logo-black.png";
 import LoginSignup from "./modals/auth/LoginSignup";
 import Button from "./Button";
-import Dropdown from "./Dropdown";
+import SidebarDropdown from "./SidebarDropdown";
 
 import type { NavItem } from "../common/NavItems";
 
@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                                         )
                                     } else if (item.type === "dropdown") {
                                         return (
-                                            <Dropdown options={item.options}
+                                            <SidebarDropdown options={item.options}
                                                 label={item.label}
                                                 icon={item.icon}
                                                 onChange={(value) => { navigate(value); handleIsMenuOpen(); }}
@@ -110,7 +110,7 @@ const Sidebar: React.FC<SidebarProps> = ({ NavItems }) => {
                                 })
                             }
                             <hr className="border-t-2 my-4 border-zinc-300 dark:border-zinc-900" />
-                            <Dropdown options={themeOptions}
+                            <SidebarDropdown options={themeOptions}
                                 label="Theme"
                                 icon={theme === "dark" ? <BsFillMoonStarsFill /> : (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? <BsFillMoonStarsFill /> : <BsFillSunFill />}
                                 onChange={(value) => { setTheme(value); handleIsMenuOpen(); }}

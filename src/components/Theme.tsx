@@ -1,14 +1,14 @@
 import React from "react";
 import { FiSun, FiMoon, FiSettings } from "react-icons/fi";
 import { useTheme } from "../hooks";
-import Dropdown from "./Dropdown";
+import SidebarDropdown from "./SidebarDropdown";
 
 const Darkmode: React.FC = () => {
     const { theme, setTheme } = useTheme();
     const icon = theme === "dark" ? <FiMoon /> : !("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches ? <FiMoon /> : <FiSun />
 
     return (
-        <Dropdown
+        <SidebarDropdown
             label={icon}
             options={[
                 {

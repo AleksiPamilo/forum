@@ -261,6 +261,7 @@ export async function deleteThreadReply(reply: Reply) {
     const replyIndex = replies.findIndex((r: Reply) => r?.id === reply.id);
     const threadIndex = threads.findIndex((t: Thread) => t.id === reply.threadId);
 
+
     if (replyIndex !== -1) {
         replies.splice(replyIndex, 1);
     }
@@ -270,7 +271,7 @@ export async function deleteThreadReply(reply: Reply) {
     }
 
     try {
-        await updateDoc(threadDoc, { messages: replies });
+        await updateDoc(threadDoc, { threads: threads });
         return { success: true, message: "Reply deleted successfully!", replies: replies };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };

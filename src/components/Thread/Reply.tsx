@@ -4,12 +4,17 @@ import Functions from "../../functions";
 import { Link } from "react-router-dom";
 import { IUser } from "../../interfaces/User";
 import { Reply } from "../../mst";
+import Dropdown from "../Dropdown";
+import { BsThreeDots } from "react-icons/bs";
+import { useModal } from "../../hooks";
+import InfoModal from "../modals/InfoModal";
 
 type ThreadReplyProps = {
     reply: Reply;
 };
 
 const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
+    const { setModalContent, setIsModalOpen } = useModal();
     const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
@@ -22,7 +27,23 @@ const ThreadReply: React.FC<ThreadReplyProps> = ({ reply }) => {
     return (
         <div className="flex w-full relative rounded-md p-4 bg-zinc-300 dark:bg-zinc-900 group">
             <div className="absolute right-0 top-0 p-2" hidden={reply.createdBy !== user?.uid}>
-                {/** TODO: Controls to delete thread post */}
+                <Dropdown label={<BsThreeDots />} options={[
+                    {
+                        label: "Delete",
+                        value: "delete",
+                        onClick: () => {
+                            Functions.firebase.deleteThreadReply(reply)
+                                .then((res) => {
+                                    if (res.success) {
+                                        setModalContent(<InfoModal status="success" title="Success" description="Reply deleted successfully" />);
+                                    } else {
+                                        setModalContent(<InfoModal status="error" title="Error" description="Reply deletion failed, please try again later." />);
+                                    }
+                                })
+                            setIsModalOpen(true);
+                        }
+                    }
+                ]} />
             </div>
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={user?.photoUrl} />
             <div className="mt-2">
