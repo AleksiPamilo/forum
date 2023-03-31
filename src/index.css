@@ -2,16 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-ul {
+.editorstyles ul {
     display: block;
     list-style-type: disc;
     padding-left: 20px;
 }
 
-ol {
+.editorstyles ol {
     display: block;
     list-style-type: decimal;
     padding-left: 20px;
+}
+
+.editorstyles a {
+    color: #00bfff;
+    text-decoration: none;
+}
+
+.editorstyles a:hover {
+    text-decoration: underline;
 }
 
 input:-webkit-autofill,
@@ -20,4 +29,8 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: gray;
+}
+
+body {
+    overflow-x: hidden;
 }

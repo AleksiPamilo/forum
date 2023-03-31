@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import FirebaseServices from "../firebase/FirebaseServices";
 import { IUser } from "../interfaces/User";
 import { IProfileMessage } from "../interfaces/Message";
-import { Message, Thread } from "../mst";
+import { Category, Forum, Reply, Thread } from "../mst";
 
 const firestoreInstance = FirebaseServices.getFirestoreInstance();
 const authInstance = FirebaseServices.getAuthInstance();
@@ -17,7 +17,7 @@ const storageInstance = FirebaseServices.getStorageInstance();
  * @param email The email of the user
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const requestPasswordReset = async (email: string) => {
+export async function requestPasswordReset(email: string) {
     try {
         await sendPasswordResetEmail(authInstance, email);
         return { success: true, message: "Password reset email sent" };
@@ -30,7 +30,7 @@ export const requestPasswordReset = async (email: string) => {
  * @description Sends an email verification to the user
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const sendEmailVerification = async () => {
+export async function sendEmailVerification() {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
@@ -49,7 +49,7 @@ export const sendEmailVerification = async () => {
  * @param photoFile The photo file to upload
  * @returns A promise that resolves to an object containing a success boolean, a message string, and the url of the uploaded photo
  */
-export const uploadPhoto = async (photoFile: File) => {
+export async function uploadPhoto(photoFile: File) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in", url: null };
 
@@ -71,7 +71,7 @@ export const uploadPhoto = async (photoFile: File) => {
 * @param photoFile The profile photo of the user
 * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const updateProfile = async ({ username, photoFile }: { username?: string, photoFile?: File }) => {
+export async function updateProfile({ username, photoFile }: { username?: string, photoFile?: File }) {
     const user = authInstance.currentUser;
     let photoUrl: string | null = null;
 
@@ -117,7 +117,7 @@ export const updateProfile = async ({ username, photoFile }: { username?: string
  * @param email The new email address
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const updateEmailAddress = async (email: string) => {
+export async function updateEmailAddress(email: string) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
@@ -134,7 +134,7 @@ export const updateEmailAddress = async (email: string) => {
  * @param username The username to check
  * @returns A promise that resolves to a boolean
  */
-export const isUsernameAvailable = async (username: string) => {
+export async function isUsernameAvailable(username: string) {
     if (username.length >= 3 && username.length <= 20) {
         const q = query(collection(firestoreInstance, "users"), where("usernameLowercase", "==", username));
         const querySnapshot = await getDocs(q);
@@ -150,7 +150,7 @@ export const isUsernameAvailable = async (username: string) => {
  * @param uid The user's uid
  * @returns A promise that resolves to an object containing the user's data
  */
-export const getUserByUID = async (uid: string) => {
+export async function getUserByUID(uid: string) {
     if (!uid) return { success: false, message: "User not logged in", user: null };
 
     const snap = await getDoc(doc(firestoreInstance, "users", uid));
@@ -166,7 +166,7 @@ export const getUserByUID = async (uid: string) => {
  * @param username The user's username
  * @returns A promise that resolves to an object containing the user's data
  */
-export const getUserByUsername = async (username?: string) => {
+export async function getUserByUsername(username?: string) {
     if (!username) return { success: false, message: "User Not Found", user: null };
 
     const q = query(collection(firestoreInstance, "users"), where("usernameLowercase", "==", username.toLowerCase()));
@@ -184,7 +184,7 @@ export const getUserByUsername = async (username?: string) => {
  * @param aboutMe The user's about me
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const updateAboutMe = async (aboutMe: string) => {
+export async function updateAboutMe(aboutMe: string) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
@@ -202,7 +202,7 @@ export const updateAboutMe = async (aboutMe: string) => {
  * @param message The message to save
  * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const saveProfileMessage = async (message: IProfileMessage, profileOwnerUid: string) => {
+export async function saveProfileMessage(message: IProfileMessage, profileOwnerUid: string) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
@@ -224,7 +224,7 @@ export const saveProfileMessage = async (message: IProfileMessage, profileOwnerU
  * @param message The message to delete
  * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const deleteProfileMessage = async (message: IProfileMessage, profileOwnerUid: string) => {
+export async function deleteProfileMessage(message: IProfileMessage, profileOwnerUid: string) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
     if (message.createdBy.uid !== user.uid) return { success: false, message: "You can't delete this message!" };
@@ -250,21 +250,28 @@ export const deleteProfileMessage = async (message: IProfileMessage, profileOwne
  * @param reply The reply to delete
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const deleteThreadReply = async (reply: Message) => {
+export async function deleteThreadReply(reply: Reply) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
     if (reply.createdBy !== user.uid) return { success: false, message: "You can't delete this reply!" };
 
-    const threadDoc = doc(firestoreInstance, "forumx", "message");
-    const replies = await getDoc(threadDoc).then((doc) => doc.data()?.messages ?? []);
+    const threadDoc = doc(firestoreInstance, "forumx", "thread")
+    const threads = await getDoc(threadDoc).then((doc) => doc.data()?.threads);
+    const replies = threads.find((t: Thread) => t.id === reply.threadId)?.replies ?? [];
+    const replyIndex = replies.findIndex((r: Reply) => r?.id === reply.id);
+    const threadIndex = threads.findIndex((t: Thread) => t.id === reply.threadId);
 
-    const index = replies.findIndex((r: Message) => r?.id === reply.id);
-    if (index !== -1) {
-        replies.splice(index, 1);
+
+    if (replyIndex !== -1) {
+        replies.splice(replyIndex, 1);
+    }
+
+    if (threadIndex !== -1) {
+        threads[threadIndex].replies = replies;
     }
 
     try {
-        await updateDoc(threadDoc, { messages: replies });
+        await updateDoc(threadDoc, { threads: threads });
         return { success: true, message: "Reply deleted successfully!", replies: replies };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
@@ -276,16 +283,22 @@ export const deleteThreadReply = async (reply: Message) => {
  * @param reply The reply to save
  * @returns A promise that resolves to an object containing a success boolean and a message string
  */
-export const saveThreadReply = async (reply: Message) => {
+export async function saveThreadReply(reply: Reply) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
-    const messageDoc = doc(firestoreInstance, "forumx", "message")
-    const messages = await getDoc(messageDoc).then((doc) => doc.data()?.messages ?? []);
-    messages.push(reply);
+    const threadDoc = doc(firestoreInstance, "forumx", "thread")
+    const threads = await getDoc(threadDoc).then((doc) => doc.data()?.threads);
+    const replies = threads.find((t: Thread) => t.id === reply.threadId)?.replies ?? [];
+    replies.push(reply)
+
+    const index = threads.findIndex((t: Thread) => t.id === reply.threadId);
+    if (index !== -1) {
+        threads[index].replies = replies;
+    }
 
     try {
-        await updateDoc(messageDoc, { messages: messages });
+        await updateDoc(threadDoc, { threads: threads });
         return { success: true, message: "Reply saved successfully" };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
@@ -297,7 +310,7 @@ export const saveThreadReply = async (reply: Message) => {
  * @param thread The post to create
  * @returns A promise that resolves to an object containing a success boolean, a message string and thread location
  */
-export const createThread = async (thread: Thread) => {
+export async function createThread(thread: Thread) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
 
@@ -320,7 +333,7 @@ export const createThread = async (thread: Thread) => {
  * @param Thread The thread to delete
  * @returns A promise that resolves to an object containing a success boolean and a message string
 */
-export const deleteThread = async (thread: Thread) => {
+export async function deleteThread(thread: Thread) {
     const user = authInstance.currentUser;
     if (!user) return { success: false, message: "User not logged in" };
     if (thread.createdBy !== user.uid) return { success: false, message: "You can't delete this thread!" };
@@ -336,6 +349,156 @@ export const deleteThread = async (thread: Thread) => {
     try {
         await updateDoc(threadDoc, { threads: threads });
         return { success: true, message: "Thread deleted successfully!" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Create a Category in the database
+ * @param category The category to create
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export async function createCategory(category: Category) {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (!(await user.getIdTokenResult().then((idTokenResult) => idTokenResult.claims.admin))) return { success: false, message: "You don't have permission to do this!" };
+
+    const categoryDoc = doc(firestoreInstance, "forumx", "category")
+    const categories = await getDoc(categoryDoc).then((doc) => doc.data()?.categories ?? []);
+
+    categories.push(category);
+
+    try {
+        await updateDoc(categoryDoc, { categories: categories });
+        return { success: true, message: "Category created successfully" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Create a Forum in the database
+ * @param forum The forum to create
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+*/
+export async function createForum(forum: Forum) {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (!(await user.getIdTokenResult().then((idTokenResult) => idTokenResult.claims.admin))) return { success: false, message: "You don't have permission to do this!" };
+
+    const forumDoc = doc(firestoreInstance, "forumx", "forum")
+    const forums = await getDoc(forumDoc).then((doc) => doc.data()?.forums ?? []);
+
+    forums.push(forum);
+
+    try {
+        await updateDoc(forumDoc, { forums: forums });
+        return { success: true, message: "Forum created successfully" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Deletes a category from the database
+ * @param category The category to delete
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export async function deleteCategory(category: Category) {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (!(await user.getIdTokenResult().then((idTokenResult) => idTokenResult.claims.admin))) return { success: false, message: "You don't have permission to do this!" };
+
+    const categoryDoc = doc(firestoreInstance, "forumx", "category")
+    const categories = await getDoc(categoryDoc).then((doc) => doc.data()?.categories ?? []);
+
+    const index = categories.findIndex((c: Category) => c?.id === category.id);
+    if (index !== -1) {
+        categories.splice(index, 1);
+    }
+
+    try {
+        await updateDoc(categoryDoc, { categories: categories });
+        return { success: true, message: "Category deleted successfully!" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Deletes a forum from the database
+ * @param forum The forum to delete
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+*/
+export async function deleteForum(forum: Forum) {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (!(await user.getIdTokenResult().then((idTokenResult) => idTokenResult.claims.admin))) return { success: false, message: "You don't have permission to do this!" };
+
+    const forumDoc = doc(firestoreInstance, "forumx", "forum")
+    const forums = await getDoc(forumDoc).then((doc) => doc.data()?.forums ?? []);
+
+    const index = forums.findIndex((f: Forum) => f?.id === forum.id);
+    if (index !== -1) {
+        forums.splice(index, 1);
+    }
+
+    try {
+        await updateDoc(forumDoc, { forums: forums });
+        return { success: true, message: "Forum deleted successfully!" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Updates a category in the database
+ * @param category The category to update
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+*/
+export async function updateCategory(category: Category) {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (!(await user.getIdTokenResult().then((idTokenResult) => idTokenResult.claims.admin))) return { success: false, message: "You don't have permission to do this!" };
+
+    const categoryDoc = doc(firestoreInstance, "forumx", "category")
+    const categories = await getDoc(categoryDoc).then((doc) => doc.data()?.categories ?? []);
+
+    const index = categories.findIndex((c: Category) => c?.id === category.id);
+    if (index !== -1) {
+        categories[index] = category;
+    }
+
+    try {
+        await updateDoc(categoryDoc, { categories: categories });
+        return { success: true, message: "Category updated successfully!" };
+    } catch {
+        return { success: false, message: "Something unexpected happened. Try again!" };
+    }
+}
+
+/**
+ * @description Updates a forum in the database
+ * @param forum The forum to update
+ * @returns A promise that resolves to an object containing a success boolean and a message string
+ */
+export async function updateForum(forum: Forum) {
+    const user = authInstance.currentUser;
+    if (!user) return { success: false, message: "User not logged in" };
+    if (!(await user.getIdTokenResult().then((idTokenResult) => idTokenResult.claims.admin))) return { success: false, message: "You don't have permission to do this!" };
+
+    const forumDoc = doc(firestoreInstance, "forumx", "forum")
+    const forums = await getDoc(forumDoc).then((doc) => doc.data()?.forums ?? []);
+
+    const index = forums.findIndex((f: Forum) => f?.id === forum.id);
+    if (index !== -1) {
+        forums[index] = forum;
+    }
+
+    try {
+        await updateDoc(forumDoc, { forums: forums });
+        return { success: true, message: "Forum updated successfully!" };
     } catch {
         return { success: false, message: "Something unexpected happened. Try again!" };
     }

@@ -90,6 +90,7 @@ const PostThread: React.FC = () => {
             createdBy: user?.uid ?? "",
             updatedAt: null,
             updatedBy: null,
+            replies: null,
         })
             .then((res) => {
                 setSuccess("Thread created successfully!");

@@ -4,7 +4,7 @@ import { FaTimes } from "react-icons/fa";
 import Functions from "../../../functions";
 import { IUser } from "../../../interfaces/User";
 import Button from "../../Button";
-import { useModal } from "../../context/ModalContext";
+import { useModal } from "../../../hooks";
 
 type UpdateAboutMeProps = {
     user: User | null,

@@ -1,30 +1,71 @@
-interface INavItem {
+import { AiTwotoneSound, AiFillSetting } from "react-icons/ai";
+import { MdForum } from "react-icons/md";
+import { FaUserAlt } from "react-icons/fa";
+import { DropdownOptions } from "../components/SidebarDropdown";
+
+type LinkNavItem = {
+    type: "link",
     title: string,
     path: string,
-}
+    icon?: JSX.Element,
+};
 
-export const navItems: INavItem[] = [
+type DropdownNavItem = {
+    type: "dropdown",
+    label: string,
+    icon?: JSX.Element,
+    options: DropdownOptions[],
+    onChange?: (option: string) => void,
+};
+
+type DividerNavItem = {
+    type: "divider",
+    text?: string,
+};
+
+export type NavItem = LinkNavItem | DropdownNavItem | DividerNavItem;
+
+const settingOptions: DropdownOptions[] = [
     {
-        title: "Forums",
-        path: "/",
+        label: <div className="flex items-center gap-3 text-base">
+            <AiFillSetting />
+            <p>Profile</p>
+        </div>,
+        value: "/settings",
     },
     {
-        title: "What's New",
-        path: "/whats-new",
-    },
+        label: <div className="flex items-center gap-3 text-base">
+            <AiFillSetting />
+            <p>Social</p>
+        </div>,
+        value: "/settings/social",
+    }
 ];
 
-export const sidebarItems: INavItem[] = [
+export const navItems: NavItem[] = [
     {
+        type: "link",
         title: "Forums",
         path: "/",
+        icon: <MdForum />
     },
     {
-        title: "General",
-        path: "/settings",
+        type: "link",
+        title: "What's New",
+        path: "/whats-new",
+        icon: <AiTwotoneSound />
+    },
+    { type: "divider", },
+    {
+        type: "link",
+        title: "Profile",
+        path: "/profile",
+        icon: <FaUserAlt />
     },
     {
-        title: "Social",
-        path: "/settings/social",
-    }
+        type: "dropdown",
+        label: "Settings",
+        icon: <AiFillSetting />,
+        options: settingOptions,
+    },
 ];

@@ -1,5 +1,3 @@
-import { IUser } from "./User";
-
 export interface IProfileMessage {
     id: string,
     content: string,

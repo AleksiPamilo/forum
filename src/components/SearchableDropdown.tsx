@@ -21,17 +21,17 @@ const SearchableDropdown: React.FC<SearchableDropdownType> = ({ selected, label,
 
     return (
         <div className="relative text-white select-none">
-            <button onClick={() => setOpen(!open)} className="py-2 px-3 border border-blue-600 hover:shadow-glow-2 rounded-md flex flex-row items-center gap-2">
+            <button onClick={() => setOpen(!open)} className="py-2 px-3 border bg-zinc-400 border-zinc-500 dark:border-zinc-900 dark:bg-dark-secondary rounded-md flex flex-row items-center gap-2">
                 <p>{selected ?? label ?? "Select"}</p>
                 {open ? <AiFillCaretUp /> : <AiFillCaretDown />}
             </button>
-            <div hidden={!open} className="min-w-[10rem] mt-2 rounded-md absolute border border-blue-600 bg-black">
+            <div hidden={!open} className="min-w-[10rem] max-h-40 overflow-y-scroll mt-2 rounded-md absolute border bg-zinc-400 dark:bg-dark-secondary">
                 {
                     options.map((option, index) => (
                         <div key={index} onClick={() => {
                             onChange(option);
                             setOpen(false);
-                        }} className="py-2 px-3 cursor-pointer hover:bg-blue-600 hover:text-white">
+                        }} className="py-2 px-3 cursor-pointer hover:bg-zinc-300 hover:dark:bg-dark-primary hover:text-white">
                             {option.label}
                         </div>
                     ))

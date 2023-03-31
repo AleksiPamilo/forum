@@ -12,7 +12,7 @@ interface IModalContext {
 
 const ModalContext = React.createContext<IModalContext | undefined>(undefined);
 
-export const useModal = () => {
+export const useModalContext = () => {
     const context = React.useContext(ModalContext);
 
     if (context === undefined) {

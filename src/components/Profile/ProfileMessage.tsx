@@ -2,13 +2,12 @@ import React from "react";
 import DOMPurify from "dompurify";
 import Functions from "../../functions";
 import { IProfileMessage } from "../../interfaces/Message";
-import { FiMoreHorizontal } from "react-icons/fi";
-import Dropdown from "../Dropdown";
-import { useAuth } from "../context/AuthContext";
-import { useModal } from "../context/ModalContext";
-import Button from "../Button";
 import { IUser } from "../../interfaces/User";
 import { Link } from "react-router-dom";
+import Dropdown from "../Dropdown";
+import { BsThreeDots } from "react-icons/bs";
+import { useAuth, useModal } from "../../hooks";
+import InfoModal from "../modals/InfoModal";
 
 type ProfileMessageProps = {
     message: IProfileMessage,
@@ -21,47 +20,37 @@ const ProfilePost: React.FC<ProfileMessageProps> = ({ message, profileOwner, set
     const { setModalContent, setIsModalOpen } = useModal();
 
     return (
-        <div className="flex relative bg-zinc-800 rounded-md border border-blue-600 shadow-glow-1">
+        <div className="flex relative bg-zinc-400 dark:bg-zinc-800 rounded-md border border-zinc-500 dark:border-zinc-700">
             <div className="absolute right-0 top-0 p-2" hidden={message.createdBy.uid !== user?.uid}>
-                <Dropdown
-                    label={
-                        <FiMoreHorizontal className="w-5 h-5" />
-                    }
+                <Dropdown label={<BsThreeDots />}
+                    colors="text-gray-700 dark:text-white bg-zinc-300 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-dark-primary"
                     options={[
                         {
-                            label: "Delete Message",
+                            label: "Delete",
+                            value: "delete",
                             onClick: () => {
                                 Functions.firebase.deleteProfileMessage(message, profileOwner.uid)
-                                    .then((r) => {
-                                        setModalContent(
-                                            <div className="bg-black flex flex-col w-[25rem] rounded-md border border-blue-600 shadow-glow-5 p-4 text-white">
-                                                <div className="flex flex-row justify-between">
-                                                    <h1 className="text-2xl font-bold">{r.success ? "Success!" : "Error!"}</h1>
-                                                    <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-                                                </div>
-                                                <p className="mt-12 text-xl font-bold">{r.message}</p>
-                                            </div>
-                                        );
-                                        setIsModalOpen(true);
-
-                                        if (r.success) {
+                                    .then((res) => {
+                                        if (res.success) {
                                             setMessages((prev) => prev.filter((m) => m.id !== message.id));
+                                            setModalContent(<InfoModal status="success" title="Success" description="Reply deleted successfully" />);
+                                        } else {
+                                            setModalContent(<InfoModal status="error" title="Error" description="Reply deletion failed, please try again later." />);
                                         }
                                     })
-                            },
-                        },
-                    ]}
-                    btnStyles="rounded-full py-2 px-2 bg-zinc-700 hover:bg-zinc-600"
-                />
+                                setIsModalOpen(true);
+                            }
+                        }
+                    ]} />
             </div>
             <img className="w-28 h-28 border border-white rounded-full m-4" alt="" src={message.createdBy.photoUrl} />
             <div className="mt-2">
                 <div className="flex flex-row">
-                    <Link to={`/profiles/${message.createdBy.username}`} className="font-bold text-blue-500 hover:cursor-pointer hover:underline">{message.createdBy.username}</Link>
+                    <Link to={`/profile/${message.createdBy.username}`} className="font-bold text-blue-500 hover:cursor-pointer hover:underline">{message.createdBy.username}</Link>
                     <span className="mx-4">—</span>
-                    <h1 className="text-gray-400">{Functions.timeAgo(message.createdAt)}</h1>
+                    <h1 className="text-gray-600 dark:text-gray-400">{Functions.timeAgo(message.createdAt)}</h1>
                 </div>
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
+                <div className="editorstyles" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
             </div>
         </div>
     )

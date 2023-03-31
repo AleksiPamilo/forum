@@ -13,6 +13,12 @@ import {
     createThread,
     deleteThreadReply,
     deleteThread,
+    createCategory,
+    createForum,
+    deleteCategory,
+    deleteForum,
+    updateCategory,
+    updateForum,
 } from "./firebase"
 
 /**
@@ -54,9 +60,29 @@ const isValidCharacter = (text: string): boolean => {
     return validCharacterRegex.test(text);
 }
 
+/**
+ * @description Generates a ID
+ * @returns string
+ */
+const generateId = (): string => {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2);
+}
+
+/**
+ * @description Generate slug froms tring
+ */
+const generateSlug = (text: string): string => {
+    return text
+        .toLowerCase()
+        .replace(/ /g, "-")
+        .replace(/[^\w-]+/g, "");
+}
+
 const Functions = {
     timeAgo,
     isValidCharacter,
+    generateId,
+    generateSlug,
     firebase: {
         requestPasswordReset,
         sendEmailVerification,
@@ -72,6 +98,12 @@ const Functions = {
         createThread,
         deleteThreadReply,
         deleteThread,
+        createCategory,
+        createForum,
+        deleteCategory,
+        deleteForum,
+        updateCategory,
+        updateForum,
     }
 }
 

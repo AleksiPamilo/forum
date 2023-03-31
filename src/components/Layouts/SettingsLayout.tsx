@@ -1,43 +1,45 @@
-import { Outlet, useNavigate } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import Button from "../Button";
-import { useAuth } from "../context/AuthContext";
+import { useAuth, useModal } from "../../hooks";
 import Sidebar from "../Sidebar";
-import Login from "../modals/auth/LoginSignup";
-import { useModal } from "../context/ModalContext";
+import LoginSignup from "../modals/auth/LoginSignup";
+import { navItems } from "../../common/NavItems";
 
 const Layout = () => {
     const { isLoggedIn } = useAuth();
     const { setModalContent, setIsModalOpen } = useModal();
-    const navigateTo = useNavigate();
 
     return (
-        <div className="flex min-w-[100vw] min-h-[100vh] bg-black">
+        <div className="flex min-w-[100vw] min-h-[100vh] overflow-hidden bg-light-primary text-black dark:bg-dark-primary dark:text-white">
+            <Sidebar NavItems={navItems} />
             {
                 isLoggedIn
                     ? (
-                        <>
-                            <Sidebar />
+                        <div className="md:ml-[21rem] mt-10 mr-4">
                             <Outlet />
-                        </>
-                    )
-                    : (
-                        <div className="flex w-screen h-screen justify-center items-center text-white">
-                            <div className="flex flex-col p-4 bg-zinc-600 rounded-md shadow-xl">
-                                <div className="flex flex-row justify-between mb-4">
-                                    <h1 className="text-4xl font-bold">Error</h1>
-                                    <Button onClick={() => navigateTo("/")}>Back To Home Page</Button>
-                                </div>
-                                <p>You must be logged in to view profile settings.</p>
-                                <div className="mt-4 justify-end flex flex-row gap-2">
+                        </div>
+                    ) : (
+                        <div className="w-screen h-screen flex flex-col items-center justify-center">
+                            <span className="flex gap-2 items-center text-2xl">
+                                <h1 className="text-4xl font-bold text-center">401</h1>
+                                <p>-</p>
+                                <p className="text-center">Unauthorized</p>
+                            </span>
+                            <p className="text-2xl text-center">You have to login to view your account's settings!</p>
+                            <div className="flex flex-col justify-center mt-4">
+                                <div className="flex gap-4 mb-4">
                                     <Button onClick={() => {
-                                        setModalContent(<Login />);
+                                        setModalContent(<LoginSignup isLogin />);
                                         setIsModalOpen(true);
                                     }}>Login</Button>
-                                    <Button colors={{ background: "bg-green-600 hover:bg-green-700" }} onClick={() => {
-                                        setModalContent(<Login isLogin={false} />);
+                                    <Button onClick={() => {
+                                        setModalContent(<LoginSignup />);
                                         setIsModalOpen(true);
                                     }}>Register</Button>
                                 </div>
+                                <Link to="/" className="px-4 py-2 bg-zinc-600 text-center rounded-md shadow-lg text-white">
+                                    Back To Forums
+                                </Link>
                             </div>
                         </div>
                     )

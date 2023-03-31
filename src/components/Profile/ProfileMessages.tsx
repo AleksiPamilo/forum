@@ -4,9 +4,8 @@ import { IUser } from "../../interfaces/User";
 import Button from "../Button";
 import Editor from "../Editor";
 import ProfileMessage from "./ProfileMessage";
-import { useAuth } from "../context/AuthContext";
+import { useAuth, useModal } from "../../hooks";
 import { v4 as uuid } from "uuid";
-import { useModal } from "../context/ModalContext";
 import { stateToHTML } from "draft-js-export-html";
 import { EditorState } from "draft-js";
 import VerifyEmail from "../modals/auth/VerifyEmail";
@@ -78,7 +77,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                                 setShowEditor(!showEditor);
                             } else {
                                 setModalContent(
-                                    <div className="flex flex-col w-[25rem] text-white p-4 bg-black rounded-md border border-blue-600 shadow-glow-5">
+                                    <div className="flex flex-col w-[25rem] text-black dark:text-white p-4 bg-light-primary dark:bg-dark-primary rounded-md border border-blue-600 shadow-glow-5">
                                         <div className="flex justify-between">
                                             <h1 className="text-2xl font-bold">Error!</h1>
                                             <Button onClick={() => setIsModalOpen(false)}>Close</Button>
@@ -95,7 +94,7 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                 </div>
             </div>
             <div className="flex flex-col w-full">
-                <div className="mt-4 bg-zinc-800 rounded-md p-2" hidden={!showEditor}>
+                <div className="mt-4 bg-zinc-400 dark:bg-zinc-800 rounded-md p-2" hidden={!showEditor}>
                     <Editor
                         placeholder="Leave a comment..."
                         editorState={editorState}
@@ -104,11 +103,11 @@ const ProfileMessages: React.FC<ProfileMessagesProps> = ({ user }) => {
                     />
                     <div className="flex flex-row gap-2 items-center">
                         <div className="flex flex-row w-full justify-start mt-2">
-                            <span hidden={!!!error} className="py-2 px-3 text-red-500 bg-zinc-900 rounded-md border border-blue-600 hover:shadow-glow-5">{error}</span>
-                            <span hidden={!!!success} className="py-2 px-3 text-green-500 bg-zinc-900 rounded-md border border-blue-600 hover:shadow-glow-5">{success}</span>
+                            <span hidden={!!!error} className="py-2 px-3 text-red-500 bg-zinc-500 dark:bg-zinc-900 rounded-md">{error}</span>
+                            <span hidden={!!!success} className="py-2 px-3 text-green-500 bg-zinc-500 dark:bg-zinc-900 rounded-md">{success}</span>
                         </div>
                         <div className="flex flex-row w-full gap-2 text-right justify-end items-center mt-2">
-                            <span className="py-2 px-3 bg-zinc-900 rounded-md text-gray-500 border border-blue-600 hover:shadow-glow-2">{editorState.getCurrentContent().getPlainText().length}/1000 characters</span>
+                            <span className="py-2 px-3 bg-zinc-500 dark:bg-zinc-900 rounded-md text-gray-700 dark:text-gray-500 hover:shadow-glow-2">{editorState.getCurrentContent().getPlainText().length}/1000 characters</span>
                             <Button onClick={handleSaveMessage}>Send</Button>
                         </div>
                     </div>

@@ -16,7 +16,7 @@ const FirestoreSnapshotProvider: React.FC<React.PropsWithChildren> = ({ children
                 obj[doc.id] = doc.data();
             });
 
-            setData(obj.forum.forums, obj.thread.threads, obj.message.messages, obj.category.categories);
+            setData(obj.forum.forums, obj.thread.threads, obj.category.categories);
 
         });
 
