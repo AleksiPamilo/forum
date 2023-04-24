@@ -8,7 +8,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.15.2",
-    "@types/react": "^18.0.27",
+    "@types/react": "^18.0.38",
     "@types/react-dom": "^18.0.6",
     "dompurify": "^3.0.1",
     "draft-js-export-html": "^1.4.1",
